@@ -813,49 +813,85 @@
             analyzeImage();
         }
         
-        // 使用 GPT-4o API 分析圖片
-        async function analyzeImage() {
-            // 顯示載入動畫
-            loadingOverlay.classList.add('active');
+// 使用 GPT-4o API 分析圖片
+async function analyzeImage() {
+    // 顯示載入動畫
+    loadingOverlay.classList.add('active');
+    
+    try {
+        // 將 canvas 轉換為 blob
+        const blob = await new Promise(resolve => {
+            photoCanvas.toBlob(resolve, 'image/jpeg', 0.8);
+        });
+        
+        // 準備 FormData
+        const formData = new FormData();
+        formData.append('image', blob, 'capture.jpg');
+        
+        // 呼叫後端 API
+        const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
+        
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error('API 請求失敗');
+        }
+        
+        const result = await response.json();
+        console.log('API 回應:', result); // 除錯用
+        
+        // 隱藏載入動畫
+        loadingOverlay.classList.remove('active');
+        
+        if (result.success && result.data) {
+            // 確保所有欄位都有預設值
+            const data = {
+                name: result.data.name || "未知物品",
+                price: result.data.price || "NT$ ???",
+                priceNote: result.data.priceNote || "價格評估中",
+                description: result.data.description || "正在分析此物品...",
+                origin: result.data.origin || "歷史資料載入中...",
+                material: result.data.material || "材質分析中...",
+                usage: result.data.usage || "用途識別中...",
+                category: result.data.category || "一般物品",
+                brand: result.data.brand || "通用品牌",
+                size: result.data.size || "標準尺寸",
+                weight: result.data.weight || "視規格而定",
+                warranty: result.data.warranty || "依廠商規定",
+                availability: result.data.availability || "市面可購得",
+                popularityScore: result.data.popularityScore || 75,
+                ecoScore: result.data.ecoScore || 70,
+                durability: result.data.durability || "3-5年",
+                maintenance: result.data.maintenance || "定期保養",
+                tips: result.data.tips || [
+                    "選購時注意品質認證",
+                    "比較不同品牌價格",
+                    "考慮售後服務"
+                ],
+                relatedItems: result.data.relatedItems || [
+                    { icon: "🔧", name: "配件" },
+                    { icon: "📦", name: "替代品" },
+                    { icon: "🛡️", name: "保護套" }
+                ]
+            };
             
-            try {
-                // 將 canvas 轉換為 blob
-                const blob = await new Promise(resolve => {
-                    photoCanvas.toBlob(resolve, 'image/jpeg', 0.8);
-                });
-                
-                // 準備 FormData
-                const formData = new FormData();
-                formData.append('image', blob, 'capture.jpg');
-                
-                // 呼叫後端 API
-                // 注意：這裡需要替換成您的後端 API 網址
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze'; // 替換成實際網址
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API 請求失敗');
-                }
-                
-                const result = await response.json();
-                
-                // 隱藏載入動畫
-                loadingOverlay.classList.remove('active');
-                
-                if (result.success) {
-                    // 顯示結果
-                    showResult(result.data);
-                } else {
-                    alert('分析失敗：' + (result.error || '未知錯誤'));
-                }
-                
-            } catch (error) {
-                console.error('分析錯誤:', error);
-                loadingOverlay.classList.remove('active');
+            // 顯示結果
+            showResult(data);
+        } else {
+            throw new Error(result.error || '分析失敗');
+        }
+        
+    } catch (error) {
+        console.error('分析錯誤:', error);
+        loadingOverlay.classList.remove('active');
+        
+        // 顯示錯誤訊息
+        alert('分析失敗：' + error.message + '\n請確認網路連線並重試');
+    }
+}
                 
                 // 如果 API 失敗，使用模擬數據
                 alert('API 連接失敗，使用模擬數據展示');
