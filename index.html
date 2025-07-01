@@ -799,192 +799,344 @@
             }
         }
         
-        // 拍照功能
+        // 拍照功能（含圖片壓縮）
         function capturePhoto() {
             const context = photoCanvas.getContext('2d');
-            photoCanvas.width = cameraFeed.videoWidth;
-            photoCanvas.height = cameraFeed.videoHeight;
-            context.drawImage(cameraFeed, 0, 0);
             
-            // 轉換為 base64
-            capturedImage = photoCanvas.toDataURL('image/jpeg');
+            // 設定較小的尺寸以加快處理
+            const maxWidth = 800;
+            const maxHeight = 800;
+            
+            let width = cameraFeed.videoWidth;
+            let height = cameraFeed.videoHeight;
+            
+            // 計算縮放比例
+            if (width > maxWidth || height > maxHeight) {
+                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                width *= ratio;
+                height *= ratio;
+            }
+            
+            photoCanvas.width = width;
+            photoCanvas.height = height;
+            context.drawImage(cameraFeed, 0, 0, width, height);
+            
+            // 轉換為 base64 (使用較低品質以加快速度)
+            capturedImage = photoCanvas.toDataURL('image/jpeg', 0.7);
             
             // 觸發分析
             analyzeImage();
         }
         
-// 使用 GPT-4o API 分析圖片
-async function analyzeImage() {
-    // 顯示載入動畫
-    loadingOverlay.classList.add('active');
-    
-    try {
-        // 將 canvas 轉換為 blob
-        const blob = await new Promise(resolve => {
-            photoCanvas.toBlob(resolve, 'image/jpeg', 0.8);
-        });
-        
-        // 準備 FormData
-        const formData = new FormData();
-        formData.append('image', blob, 'capture.jpg');
-        
-        // 呼叫後端 API
-        const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
-        
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            body: formData
-        });
-        
-        if (!response.ok) {
-            throw new Error('API 請求失敗');
+        // 使用 GPT-4o API 分析圖片
+        async function analyzeImage() {
+            // 顯示載入動畫
+            loadingOverlay.classList.add('active');
+            
+            try {
+                // 將 canvas 轉換為 blob
+                const blob = await new Promise(resolve => {
+                    photoCanvas.toBlob(resolve, 'image/jpeg', 0.7);
+                });
+                
+                // 準備 FormData
+                const formData = new FormData();
+                formData.append('image', blob, 'capture.jpg');
+                
+                // 呼叫後端 API
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API 請求失敗');
+                }
+                
+                const result = await response.json();
+                console.log('API 回應:', result); // 除錯用
+                
+                // 隱藏載入動畫
+                loadingOverlay.classList.remove('active');
+                
+                if (result.success && result.data) {
+                    // 確保所有欄位都有預設值
+                    const data = {
+                        name: result.data.name || "未知物品",
+                        price: result.data.price || "NT$ ???",
+                        priceNote: result.data.priceNote || "價格評估中",
+                        description: result.data.description || "正在分析此物品...",
+                        origin: result.data.origin || "歷史資料載入中...",
+                        material: result.data.material || "材質分析中...",
+                        usage: result.data.usage || "用途識別中...",
+                        category: result.data.category || "一般物品",
+                        brand: result.data.brand || "通用品牌",
+                        size: result.data.size || "標準尺寸",
+                        weight: result.data.weight || "視規格而定",
+                        warranty: result.data.warranty || "依廠商規定",
+                        availability: result.data.availability || "市面可購得",
+                        popularityScore: result.data.popularityScore || 75,
+                        ecoScore: result.data.ecoScore || 70,
+                        durability: result.data.durability || "3-5年",
+                        maintenance: result.data.maintenance || "定期保養",
+                        tips: result.data.tips || [
+                            "選購時注意品質認證",
+                            "比較不同品牌價格",
+                            "考慮售後服務"
+                        ],
+                        relatedItems: result.data.relatedItems || [
+                            { icon: "🔧", name: "配件" },
+                            { icon: "📦", name: "替代品" },
+                            { icon: "🛡️", name: "保護套" }
+                        ]
+                    };
+                    
+                    // 顯示結果
+                    showResult(data);
+                } else {
+                    throw new Error(result.error || '分析失敗');
+                }
+                
+            } catch (error) {
+                console.error('分析錯誤:', error);
+                loadingOverlay.classList.remove('active');
+                
+                // 顯示錯誤訊息
+                alert('分析失敗：' + error.message + '\n請確認網路連線並重試');
+            }
         }
         
-        const result = await response.json();
-        console.log('API 回應:', result); // 除錯用
-        
-        // 隱藏載入動畫
-        loadingOverlay.classList.remove('active');
-        
-        if (result.success && result.data) {
-            // 確保所有欄位都有預設值
-            const data = {
-                name: result.data.name || "未知物品",
-                price: result.data.price || "NT$ ???",
-                priceNote: result.data.priceNote || "價格評估中",
-                description: result.data.description || "正在分析此物品...",
-                origin: result.data.origin || "歷史資料載入中...",
-                material: result.data.material || "材質分析中...",
-                usage: result.data.usage || "用途識別中...",
-                category: result.data.category || "一般物品",
-                brand: result.data.brand || "通用品牌",
-                size: result.data.size || "標準尺寸",
-                weight: result.data.weight || "視規格而定",
-                warranty: result.data.warranty || "依廠商規定",
-                availability: result.data.availability || "市面可購得",
-                popularityScore: result.data.popularityScore || 75,
-                ecoScore: result.data.ecoScore || 70,
-                durability: result.data.durability || "3-5年",
-                maintenance: result.data.maintenance || "定期保養",
-                tips: result.data.tips || [
+        // 顯示結果
+        function showResult(data) {
+            // 擴展數據結構，加入更多資訊
+            const extendedData = {
+                ...data,
+                category: data.category || "一般商品",
+                brand: data.brand || "通用品牌",
+                size: data.size || "標準尺寸",
+                weight: data.weight || "視規格而定",
+                warranty: data.warranty || "依廠商規定",
+                availability: data.availability || "市面可購得",
+                popularityScore: data.popularityScore || Math.floor(Math.random() * 30 + 70),
+                ecoScore: data.ecoScore || Math.floor(Math.random() * 20 + 60),
+                durability: data.durability || "3-5年",
+                maintenance: data.maintenance || "定期保養",
+                tips: data.tips || [
                     "選購時注意品質認證",
                     "比較不同品牌價格",
                     "考慮售後服務"
                 ],
-                relatedItems: result.data.relatedItems || [
+                relatedItems: data.relatedItems || [
                     { icon: "🔧", name: "配件" },
                     { icon: "📦", name: "替代品" },
                     { icon: "🛡️", name: "保護套" }
                 ]
             };
             
-            // 顯示結果
-            showResult(data);
-        } else {
-            throw new Error(result.error || '分析失敗');
-        }
-        
-    } catch (error) {
-        console.error('分析錯誤:', error);
-        loadingOverlay.classList.remove('active');
-        
-        // 顯示錯誤訊息
-        alert('分析失敗：' + error.message + '\n請確認網路連線並重試');
-    }
-}
-                
-                // 如果 API 失敗，使用模擬數據
-                alert('API 連接失敗，使用模擬數據展示');
-                
-                // 模擬數據
-                const mockResult = {
-                    name: "未知物品",
-                    price: "NT$ ???",
-                    priceNote: "請確認 API 設定",
-                    description: "無法連接到 GPT-4o API，請檢查後端服務是否正常運行。",
-                    origin: "請確認後端 API 網址是否正確設定。",
-                    material: "API_URL 需要替換成實際的後端網址。",
-                    usage: "確保 CORS 設定允許您的 GitHub Pages 網址。",
-                    category: "系統訊息",
-                    brand: "N/A",
-                    size: "N/A",
-                    weight: "N/A",
-                    warranty: "N/A",
-                    availability: "請設定 API",
-                    popularityScore: 0,
-                    ecoScore: 0,
-                    durability: "N/A",
-                    maintenance: "請先設定好 API 連接",
-                    tips: [
-                        "檢查後端服務是否已部署",
-                        "確認 API Key 是否正確",
-                        "驗證 CORS 設定"
-                    ],
-                    relatedItems: [
-                        { icon: "⚙️", name: "API 設定" },
-                        { icon: "🔧", name: "後端部署" },
-                        { icon: "📚", name: "使用文檔" }
-                    ]
-                };
-                
-                showResult(mockResult);
-            }
-        }
-        
-        // 顯示結果
-        function showResult(data) {
             resultContent.innerHTML = `
                 <img src="${capturedImage}" alt="拍攝的物品" class="result-image">
                 
-                <div class="price-section">
-                    <div class="price-label">預估價格</div>
-                    <div class="price-value">${data.price}</div>
-                    <div class="price-note">${data.priceNote}</div>
+                <!-- 物品名稱和標籤 -->
+                <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 10px;">${extendedData.name}</h2>
+                
+                <div class="feature-tags">
+                    <span class="feature-tag highlight">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        可信度 ${extendedData.popularityScore}%
+                    </span>
+                    <span class="feature-tag">📍 ${extendedData.availability}</span>
+                    <span class="feature-tag">🏷️ ${extendedData.category}</span>
                 </div>
                 
-                <div class="info-section">
-                    <h3 class="info-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#4CAF50">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                        </svg>
-                        基本資訊
-                    </h3>
-                    <p class="info-content">${data.description}</p>
+                <!-- 標籤頁 -->
+                <div class="tab-container">
+                    <button class="tab-button active" onclick="switchTab('overview', this)">總覽</button>
+                    <button class="tab-button" onclick="switchTab('details', this)">詳細規格</button>
+                    <button class="tab-button" onclick="switchTab('guide', this)">使用指南</button>
                 </div>
                 
-                <div class="info-section">
-                    <h3 class="info-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9800">
-                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
-                        </svg>
-                        歷史起源
-                    </h3>
-                    <p class="info-content">${data.origin}</p>
+                <!-- 總覽標籤頁 -->
+                <div id="overview" class="tab-content active">
+                    <div class="price-section">
+                        <div class="price-label">預估價格</div>
+                        <div class="price-value">${extendedData.price}</div>
+                        <div class="price-note">${extendedData.priceNote}</div>
+                    </div>
+                    
+                    <div class="spec-grid">
+                        <div class="spec-card">
+                            <div class="spec-value">⭐ ${extendedData.popularityScore}%</div>
+                            <div class="spec-label">熱門程度</div>
+                        </div>
+                        <div class="spec-card">
+                            <div class="spec-value">🌱 ${extendedData.ecoScore}%</div>
+                            <div class="spec-label">環保指數</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="info-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#4CAF50">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                            </svg>
+                            基本資訊
+                        </h3>
+                        <p class="info-content">${extendedData.description}</p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="info-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9800">
+                                <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                            </svg>
+                            歷史起源
+                        </h3>
+                        <p class="info-content">${extendedData.origin}</p>
+                    </div>
                 </div>
                 
-                <div class="info-section">
-                    <h3 class="info-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#2196F3">
-                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                        </svg>
-                        材質規格
-                    </h3>
-                    <p class="info-content">${data.material}</p>
+                <!-- 詳細規格標籤頁 -->
+                <div id="details" class="tab-content">
+                    <div class="detail-list">
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                品牌
+                            </div>
+                            <div class="detail-value">${extendedData.brand}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                </svg>
+                                材質
+                            </div>
+                            <div class="detail-value">${extendedData.material}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+                                </svg>
+                                尺寸
+                            </div>
+                            <div class="detail-value">${extendedData.size}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                重量
+                            </div>
+                            <div class="detail-value">${extendedData.weight}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                                </svg>
+                                保固
+                            </div>
+                            <div class="detail-value">${extendedData.warranty}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#666">
+                                    <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                </svg>
+                                耐用度
+                            </div>
+                            <div class="detail-value">${extendedData.durability}</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="info-section">
-                    <h3 class="info-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9C27B0">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        功能用途
-                    </h3>
-                    <p class="info-content">${data.usage}</p>
+                <!-- 使用指南標籤頁 -->
+                <div id="guide" class="tab-content">
+                    <div class="guide-card">
+                        <div class="guide-title">💡 選購建議</div>
+                        <div class="guide-tips">
+                            ${extendedData.tips.map(tip => `
+                                <div class="tip-item">
+                                    <div class="tip-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="tip-text">${tip}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="info-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#9C27B0">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            功能用途
+                        </h3>
+                        <p class="info-content">${extendedData.usage}</p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="info-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#673AB7">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            保養維護
+                        </h3>
+                        <p class="info-content">${extendedData.maintenance}</p>
+                    </div>
+                    
+                    <div class="related-section">
+                        <h3 class="related-title">相關推薦</h3>
+                        <div class="related-grid">
+                            ${extendedData.relatedItems.map(item => `
+                                <div class="related-item">
+                                    <div class="related-icon">${item.icon}</div>
+                                    <div class="related-name">${item.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
                 </div>
+                
+                <div class="swipe-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#999">
+                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
+                    </svg>
+                    向上滑動查看更多
+                </div>
+                
+                <div class="bottom-safe-area"></div>
             `;
             
             // 顯示結果面板
             resultPanel.classList.add('active');
+        }
+        
+        // 切換標籤頁
+        window.switchTab = function(tabName, button) {
+            // 切換按鈕狀態
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            // 切換內容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
         }
         
         // 事件監聽器
