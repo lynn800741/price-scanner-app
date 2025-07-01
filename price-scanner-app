@@ -1,0 +1,121 @@
+// server.js
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const OpenAI = require('openai');
+require('dotenv').config();
+
+const app = express();
+const upload = multer({ 
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB 限制
+  storage: multer.memoryStorage()
+});
+
+// 設定 CORS - 記得替換成您的 GitHub Pages 網址
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'https://你的用戶名.github.io'  // 替換成您的 GitHub 用戶名
+  ]
+}));
+
+app.use(express.json());
+
+// 初始化 OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+// 主要的圖片分析端點
+app.post('/api/analyze', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: '請提供圖片' });
+    }
+
+    // 將圖片轉換為 base64
+    const base64Image = req.file.buffer.toString('base64');
+
+    // 準備 GPT-4o 提示詞
+    const prompt = `你是一個專業的物品鑑定專家和價格評估師。請分析這張圖片中的物品，並提供以下資訊：
+
+1. 物品名稱：識別這是什麼物品
+2. 預估價格：給出合理的價格範圍（使用台幣 NT$）
+3. 價格說明：簡短說明價格的依據
+4. 基本描述：2-3句話描述這個物品
+5. 歷史起源：簡述這類物品的歷史背景
+6. 材質規格：說明可能的材質和規格
+7. 功能用途：說明主要用途和功能
+
+特別規則：
+- 如果是無法購買的物品（如太陽、月亮、名勝古蹟），請用幽默的方式給出天文數字價格
+- 如果是動物或人，請估算其"價值"但強調無價
+- 回應請用繁體中文
+- 價格要具體，不要只說"無價"
+- 保持專業但帶點幽默感
+
+請以 JSON 格式回應，包含以下欄位：
+{
+  "name": "物品名稱",
+  "price": "NT$ XXX",
+  "priceNote": "價格說明",
+  "description": "基本描述",
+  "origin": "歷史起源",
+  "material": "材質規格",
+  "usage": "功能用途"
+}`;
+
+    // 呼叫 GPT-4o API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",  // 使用 GPT-4o 模型
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: prompt
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/jpeg;base64,${base64Image}`,
+                detail: "high"  // 使用高解析度分析
+              }
+            }
+          ]
+        }
+      ],
+      max_tokens: 1000,
+      temperature: 0.7,
+      response_format: { type: "json_object" }  // 確保返回 JSON 格式
+    });
+
+    // 解析 GPT-4o 的回應
+    const result = JSON.parse(response.choices[0].message.content);
+    
+    res.json({
+      success: true,
+      data: result
+    });
+
+  } catch (error) {
+    console.error('分析錯誤:', error);
+    res.status(500).json({ 
+      success: false,
+      error: '分析失敗，請稍後再試',
+      details: error.message 
+    });
+  }
+});
+
+// 健康檢查端點
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'GPT-4o 價格掃描器 API' });
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`伺服器運行在 port ${PORT}`);
+});
