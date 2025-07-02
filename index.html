@@ -860,6 +860,12 @@
 
             <!-- 底部控制 -->
             <div class="camera-controls">
+                            <div class="custom-question" style="margin: 0 20px 20px; display: none;" id="questionBox">
+                <input type="text" class="question-input" id="customQuestion" 
+                       placeholder="問個問題，例如：這個多少錢？哪裡買？做什麼用的？" 
+                       value="這個東西多少錢？哪裡可以買到？">
+                <button class="question-btn" onclick="updateQuestion()">更新</button>
+            </div>
                 <div class="controls-container">
                     <button class="side-button" id="galleryBtn">
                         <svg viewBox="0 0 24 24">
@@ -1189,6 +1195,23 @@
                     </div>
                     
                     ${purchaseLinksHTML}
+
+                    <div class="share-section">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">
+                            🔥 覺得有趣？分享給朋友！
+                        </div>
+                        <div class="share-buttons">
+                            <button class="share-btn" onclick="shareAsImage()">
+                                📸 儲存分享圖
+                            </button>
+                            <button class="share-btn" onclick="shareToLine()">
+                                💚 分享到 LINE
+                            </button>
+                            <button class="share-btn" onclick="copyShareText()">
+                                📋 複製分享文字
+                            </button>
+                        </div>
+                    </div>
                     
                     <div class="info-section">
                         <h3 class="info-title">
@@ -1334,6 +1357,181 @@
             
             // 顯示結果面板
             resultPanel.classList.add('active');
+            // 保存數據供分享使用
+    saveAnalysisData(data);
+    saveScanHistory(data);
+        }
+
+        // 分享功能
+        let currentAnalysisData = null;
+        
+        // 保存當前分析數據
+        function saveAnalysisData(data) {
+            currentAnalysisData = data;
+        }
+        
+        // 生成分享圖卡
+        async function shareAsImage() {
+            if (!currentAnalysisData || !capturedImage) {
+                alert('請先拍照分析！');
+                return;
+            }
+            
+            // 創建畫布
+            const canvas = document.createElement('canvas');
+            canvas.width = 1080;
+            canvas.height = 1350;
+            const ctx = canvas.getContext('2d');
+            
+            // 背景
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 載入原始圖片
+            const img = new Image();
+            img.onload = function() {
+                // 繪製圖片（保持比例）
+                const imgHeight = 600;
+                const imgWidth = canvas.width;
+                ctx.drawImage(img, 0, 0, imgWidth, imgHeight);
+                
+                // 半透明遮罩
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.fillRect(0, 0, imgWidth, imgHeight);
+                
+                // 標題背景
+                ctx.fillStyle = '#4CAF50';
+                ctx.fillRect(0, imgHeight, canvas.width, 100);
+                
+                // 標題文字
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(currentAnalysisData.name, canvas.width / 2, imgHeight + 65);
+                
+                // 價格區塊
+                ctx.fillStyle = '#f5f5f5';
+                ctx.fillRect(0, imgHeight + 100, canvas.width, 150);
+                
+                // 價格文字
+                ctx.fillStyle = '#4CAF50';
+                ctx.font = 'bold 72px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(currentAnalysisData.price, canvas.width / 2, imgHeight + 195);
+                
+                // 描述區塊
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, imgHeight + 250, canvas.width, 400);
+                
+                // 描述文字（自動換行）
+                ctx.fillStyle = '#333333';
+                ctx.font = '32px Arial';
+                ctx.textAlign = 'left';
+                const description = currentAnalysisData.description;
+                const lines = wrapText(ctx, description, 50, imgHeight + 300, 980, 40);
+                
+                // 底部品牌區
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+                
+                // 品牌文字
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 36px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('🔍 萬物價格掃描器', canvas.width / 2, canvas.height - 40);
+                
+                // 浮水印
+                ctx.fillStyle = 'rgba(76, 175, 80, 0.1)';
+                ctx.font = 'bold 120px Arial';
+                ctx.textAlign = 'center';
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(-Math.PI / 6);
+                ctx.fillText('AI SCANNER', 0, 0);
+                ctx.restore();
+                
+                // 下載圖片
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `價格掃描_${currentAnalysisData.name}_${new Date().getTime()}.jpg`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }, 'image/jpeg', 0.9);
+            };
+            img.src = capturedImage;
+        }
+        
+        // 文字自動換行
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            const words = text.split('');
+            let line = '';
+            let lines = [];
+            
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n];
+                const metrics = context.measureText(testLine);
+                const testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n];
+                    y += lineHeight;
+                    lines.push(line);
+                } else {
+                    line = testLine;
+                }
+            }
+            context.fillText(line, x, y);
+            lines.push(line);
+            return lines;
+        }
+        
+        // 分享到 LINE
+        function shareToLine() {
+            if (!currentAnalysisData) {
+                alert('請先拍照分析！');
+                return;
+            }
+            
+            const text = `我發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n使用萬物價格掃描器查詢`;
+            const url = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+        
+        // 複製分享文字
+        function copyShareText() {
+            if (!currentAnalysisData) {
+                alert('請先拍照分析！');
+                return;
+            }
+            
+            const text = `【萬物價格掃描器】
+物品：${currentAnalysisData.name}
+價格：${currentAnalysisData.price}
+說明：${currentAnalysisData.description}
+
+在哪買：${currentAnalysisData.availability}
+
+👉 拍照就能查價格，超神奇！`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('已複製分享文字！');
+            });
+        }
+        
+        // 儲存掃描記錄（未來可連接資料庫）
+        function saveScanHistory(data) {
+            // 暫時存在 localStorage
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            history.unshift({
+                ...data,
+                timestamp: new Date().toISOString(),
+                image: capturedImage
+            });
+            // 只保留最新 50 筆
+            history = history.slice(0, 50);
+            localStorage.setItem('scanHistory', JSON.stringify(history));
         }
         
         // 切換標籤頁
