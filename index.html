@@ -994,6 +994,9 @@
                 // 準備 FormData
                 const formData = new FormData();
                 formData.append('image', blob, 'capture.jpg');
+                // 加入自定義問題
+                const question = document.getElementById('customQuestion')?.value || "這個東西多少錢？哪裡可以買到？";
+                formData.append('question', question);
                 
                 // 呼叫後端 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
