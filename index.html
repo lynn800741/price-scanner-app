@@ -892,6 +892,34 @@
                             { icon: "🛡️", name: "保護套" }
                         ]
                     };
+
+                            // 取得平台 URL
+        function getPlatformUrl(platform, searchTerm) {
+            const urls = {
+                '蝦皮購物': `https://shopee.tw/search?keyword=${encodeURIComponent(searchTerm)}`,
+                'PChome 24h': `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(searchTerm)}`,
+                'momo購物網': `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(searchTerm)}`,
+                'Amazon JP': `https://www.amazon.co.jp/s?k=${encodeURIComponent(searchTerm)}`,
+                '淘寶/天貓': `https://s.taobao.com/search?q=${encodeURIComponent(searchTerm)}`,
+                'Yahoo購物': `https://tw.buy.yahoo.com/search/product?p=${encodeURIComponent(searchTerm)}`,
+                '博客來': `https://search.books.com.tw/search/query/key/${encodeURIComponent(searchTerm)}`
+            };
+            return urls[platform] || '#';
+        }
+        
+        // 取得平台圖示
+        function getPlatformIcon(platform) {
+            const icons = {
+                '蝦皮購物': '🛍️',
+                'PChome 24h': '🚚',
+                'momo購物網': '🛒',
+                'Amazon JP': '📦',
+                '淘寶/天貓': '🏪',
+                'Yahoo購物': '🎯',
+                '博客來': '📚'
+            };
+            return icons[platform] || '🛒';
+        }
                     
                     // 顯示結果
                     showResult(data);
@@ -932,8 +960,44 @@
                     { icon: "🔧", name: "配件" },
                     { icon: "📦", name: "替代品" },
                     { icon: "🛡️", name: "保護套" }
-                ]
+                ],
+                purchaseLinks: data.purchaseLinks || {
+                    online: [],
+                    offline: []
+                }
             };
+            
+            // 生成購買連結HTML
+            let purchaseLinksHTML = '';
+            if (extendedData.purchaseLinks.online && extendedData.purchaseLinks.online.length > 0) {
+                purchaseLinksHTML = `
+                    <div class="info-section">
+                        <h3 class="info-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#E91E63">
+                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                            </svg>
+                            購買管道
+                        </h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                            ${extendedData.purchaseLinks.online.map(link => `
+                                <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                                   target="_blank" 
+                                   style="display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; background: #f0f0f0; border-radius: 20px; text-decoration: none; color: #333; font-size: 14px; transition: all 0.3s;"
+                                   onmouseover="this.style.background='#e0e0e0'; this.style.transform='translateY(-2px)'"
+                                   onmouseout="this.style.background='#f0f0f0'; this.style.transform='translateY(0)'">
+                                    ${getPlatformIcon(link.platform)} ${link.platform}
+                                </a>
+                            `).join('')}
+                        </div>
+                        ${extendedData.purchaseLinks.offline && extendedData.purchaseLinks.offline.length > 0 ? `
+                            <div style="margin-top: 10px;">
+                                <strong style="color: #666; font-size: 14px;">實體店面：</strong>
+                                <span style="color: #888; font-size: 14px;">${extendedData.purchaseLinks.offline.join('、')}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
             
             resultContent.innerHTML = `
                 <img src="${capturedImage}" alt="拍攝的物品" class="result-image">
@@ -977,6 +1041,8 @@
                             <div class="spec-label">環保指數</div>
                         </div>
                     </div>
+                    
+                    ${purchaseLinksHTML}
                     
                     <div class="info-section">
                         <h3 class="info-title">
