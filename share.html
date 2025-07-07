@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萬物價格掃描器 - 分享內容</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-container {
+            max-width: 500px;
+            width: 90%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        .share-header {
+            background: #FF6B35;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .share-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .share-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .share-content {
+            padding: 20px;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .item-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .price-section {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .price-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .price-note {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .info-section {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .info-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #ff5252;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="share-container">
+        <div class="share-header">
+            <h1 class="share-title">萬物價格掃描器</h1>
+            <p class="share-subtitle">AI 智能價格分析</p>
+        </div>
+        
+        <div class="share-content" id="shareContent">
+            <div class="loading">載入中...</div>
+        </div>
+    </div>
+
+    <script>
+        // 獲取 URL 參數
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 載入分享內容
+        async function loadShareContent() {
+            const shareId = getUrlParam('id');
+            const shareContent = document.getElementById('shareContent');
+            
+            if (!shareId) {
+                shareContent.innerHTML = '<div class="error">無效的分享連結</div>';
+                return;
+            }
+            
+            try {
+                // 呼叫後端 API 獲取分享內容
+                const API_URL = `https://price-scanner-backend.vercel.app/api/share/${shareId}`;
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error('無法載入分享內容');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    displayShareContent(result.data);
+                } else {
+                    throw new Error(result.error || '載入失敗');
+                }
+                
+            } catch (error) {
+                console.error('載入錯誤:', error);
+                // 如果 API 還未實現，顯示錯誤訊息
+                shareContent.innerHTML = `
+                    <div class="error">
+                        <p>無法載入分享內容</p>
+                        <p style="font-size: 12px; margin-top: 10px;">此功能需要後端支援</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 顯示分享內容
+        function displayShareContent(data) {
+            const shareContent = document.getElementById('shareContent');
+            
+            let purchaseLinks = '';
+            if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
+                purchaseLinks = data.purchaseLinks.online.map(link => 
+                    `<a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                       target="_blank" 
+                       style="display: inline-block; margin: 5px; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
+                        ${link.platform}
+                    </a>`
+                ).join('');
+            }
+            
+            shareContent.innerHTML = `
+                <img src="${data.image}" alt="${data.name}" class="item-image">
+                
+                <h2 class="item-name">${data.name}</h2>
+                
+                <div class="price-section">
+                    <div class="price-label">預估價格</div>
+                    <div class="price-value">${data.price}</div>
+                    <div class="price-note">${data.priceNote}</div>
+                </div>
+                
+                <div class="info-section">
+                    <h3 class="info-title">基本資訊</h3>
+                    <p class="info-content">${data.description}</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3 class="info-title">在哪裡買</h3>
+                    <p class="info-content">${data.availability}</p>
+                </div>
+                
+                ${purchaseLinks ? `
+                <div class="info-section">
+                    <h3 class="info-title">購買管道</h3>
+                    <div style="text-align: center; margin-top: 10px;">
+                        ${purchaseLinks}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <a href="https://lynn800741.github.io/price-scanner-app/" class="download-btn">
+                    立即下載萬物價格掃描器
+                </a>
+                
+                <p class="disclaimer">所有資訊皆由 GPT 產出</p>
+            `;
+        }
+
+        // 取得平台 URL
+        function getPlatformUrl(platform, searchTerm) {
+            const urls = {
+                '蝦皮購物': `https://shopee.tw/search?keyword=${encodeURIComponent(searchTerm)}`,
+                'PChome 24h': `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(searchTerm)}`,
+                'momo購物網': `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(searchTerm)}`,
+                '露天拍賣': `https://find.ruten.com.tw/s/?q=${encodeURIComponent(searchTerm)}`,
+                'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`
+            };
+            return urls[platform] || '#';
+        }
+
+        // 頁面載入時執行
+        window.addEventListener('load', loadShareContent);
+    </script>
+</body>
+</html>
