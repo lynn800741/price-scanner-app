@@ -740,6 +740,62 @@
             background: #f9f9f9;
         }
 
+        /* 引導詞區域 */
+        .quick-prompts {
+            padding: 10px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .prompt-chip {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prompt-chip:hover {
+            background: #FF6B35;
+            color: white;
+            border-color: #FF6B35;
+        }
+
+        /* 重新查看圖片按鈕 */
+        .view-image-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            margin: 10px auto;
+            transition: all 0.3s;
+        }
+
+        .view-image-btn:hover {
+            background: #e8e8e8;
+            color: #333;
+        }
+
+        .view-image-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
         .message {
             margin-bottom: 16px;
             display: flex;
@@ -900,6 +956,18 @@
                 <div class="list-item">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
+                        </svg>
+                        <div class="list-item-title">AI智能服務</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M5 16L3 5l5.5 0L12 16m3.5 0H21l-2-11L14 5"/>
                         </svg>
                         <div class="list-item-content">
@@ -934,19 +1002,19 @@
             <div class="section">
                 <h2 class="section-title">Pro 版功能</h2>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="openExportDialog()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"/>
                         </svg>
-                        <div class="list-item-title">匯出成PDF報告</div>
+                        <div class="list-item-title">匯出成Excel報告</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
                     </svg>
                 </div>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="openBatchAnalysis()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
@@ -967,19 +1035,6 @@
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="autoSaveToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
-                        </svg>
-                        <div class="list-item-title">AI智能服務</div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="aiServiceToggle">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -1049,6 +1104,12 @@
                         </svg>
                     </button>
                 </div>
+                
+                <button class="control-btn" style="position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.9); color: #333;" onclick="document.getElementById('multiFileInput').click()">
+                    <svg viewBox="0 0 24 24" style="fill: #333;">
+                        <path d="M19 11H13V5C13 4.4 12.6 4 12 4S11 4.4 11 5V11H5C4.4 11 4 11.4 4 12S4.4 13 5 13H11V19C11 19.6 11.4 20 12 20S13 19.6 13 19V13H19C19.6 13 20 12.6 20 12S19.6 11 19 11M14 2H6C4.9 2 4 2.9 4 4V8H6V4H14V2M20 16V20H12V22H20C21.1 22 22 21.1 22 20V16H20Z"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -1138,6 +1199,13 @@
                     </svg>
                 </button>
             </div>
+            <div class="quick-prompts" id="quickPrompts">
+                <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
+                <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
+                <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
+                <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
+                <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
+            </div>
             <div class="chat-messages" id="chatMessages">
                 <!-- 對話內容會動態加入這裡 -->
             </div>
@@ -1155,6 +1223,7 @@
         
         <!-- 隱藏的文件輸入 -->
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+        <input type="file" id="multiFileInput" accept="image/*" multiple onchange="handleMultiFileSelect(event)" style="display: none;">
     </div>
 
     <script>
@@ -1298,6 +1367,11 @@
             document.getElementById('fileInput').click();
         }
         
+        // 打開批次分析（從設定頁面）
+        function openBatchAnalysis() {
+            document.getElementById('multiFileInput').click();
+        }
+        
         // 處理選擇的檔案
         async function handleFileSelect(event) {
             const file = event.target.files[0];
@@ -1348,6 +1422,333 @@
             
             // 清除輸入值，允許重複選擇同一檔案
             event.target.value = '';
+        }
+        
+        // 處理多個檔案選擇
+        async function handleMultiFileSelect(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+            
+            // 檢查檔案數量
+            if (files.length > 10) {
+                alert('一次最多只能分析 10 張圖片');
+                return;
+            }
+            
+            // 檢查檔案類型
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            if (imageFiles.length !== files.length) {
+                alert('請只選擇圖片檔案');
+                return;
+            }
+            
+            // 顯示批次分析進度
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = loadingOverlay.querySelector('.loading-text');
+            loadingOverlay.classList.add('active');
+            
+            let successCount = 0;
+            const results = [];
+            
+            // 逐一分析圖片
+            for (let i = 0; i < imageFiles.length; i++) {
+                const file = imageFiles[i];
+                loadingText.textContent = `正在分析第 ${i + 1} / ${imageFiles.length} 張圖片...`;
+                
+                try {
+                    // 讀取圖片
+                    const imageDataUrl = await readFileAsDataURL(file);
+                    
+                    // 調整圖片大小
+                    const resizedImage = await resizeImage(imageDataUrl, 800, 800);
+                    
+                    // 準備 FormData
+                    const blob = await dataURLtoBlob(resizedImage);
+                    const formData = new FormData();
+                    formData.append('image', blob, `image${i}.jpg`);
+                    
+                    // 呼叫 API
+                    const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.data) {
+                            successCount++;
+                            
+                            // 儲存到歷史記錄
+                            capturedImage = resizedImage;
+                            currentAnalysisData = result.data;
+                            saveToHistory(result.data);
+                            
+                            results.push({
+                                image: resizedImage,
+                                data: result.data,
+                                timestamp: new Date().toISOString()
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error(`分析第 ${i + 1} 張圖片失敗:`, error);
+                }
+            }
+            
+            // 隱藏載入動畫
+            loadingOverlay.classList.remove('active');
+            loadingText.textContent = 'AI 正在分析中...';
+            
+            // 顯示結果
+            if (successCount > 0) {
+                alert(`批次分析完成！\n成功：${successCount} 張\n失敗：${imageFiles.length - successCount} 張`);
+                
+                // 切換到列表頁面並重新載入
+                switchPage('listPage');
+                displayHistory();
+            } else {
+                alert('批次分析失敗，請稍後再試');
+            }
+            
+            // 清除輸入值
+            event.target.value = '';
+        }
+        
+        // 讀取檔案為 DataURL
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // 調整圖片大小
+        function resizeImage(dataUrl, maxWidth, maxHeight) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width *= ratio;
+                        height *= ratio;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                };
+                img.src = dataUrl;
+            });
+        }
+        
+        // DataURL 轉 Blob
+        function dataURLtoBlob(dataURL) {
+            const arr = dataURL.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], { type: mime });
+        }
+        
+        // 打開匯出對話框
+        function openExportDialog() {
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            
+            if (history.length === 0) {
+                alert('沒有可匯出的資料');
+                return;
+            }
+            
+            // 建立選擇對話框
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 4000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 20px;
+                padding: 20px;
+                max-width: 400px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+            `;
+            
+            content.innerHTML = `
+                <h2 style="margin-bottom: 20px;">選擇要匯出的照片</h2>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="margin-right: 10px;">
+                        <span>全選</span>
+                    </label>
+                </div>
+                <div id="exportList" style="margin-bottom: 20px;">
+                    ${history.map((item, index) => `
+                        <label style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 10px;">
+                            <input type="checkbox" class="export-item" value="${index}" style="margin-right: 10px;">
+                            <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">${item.name}</div>
+                                <div style="font-size: 12px; color: #666;">${item.price}</div>
+                            </div>
+                        </label>
+                    `).join('')}
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="exportToExcel()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
+                        匯出 Excel
+                    </button>
+                    <button onclick="closeExportDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
+                        取消
+                    </button>
+                </div>
+            `;
+            
+            dialog.appendChild(content);
+            document.body.appendChild(dialog);
+            
+            // 保存對話框參考
+            window.currentExportDialog = dialog;
+        }
+        
+        // 全選/取消全選
+        window.toggleSelectAll = function() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.export-item');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        };
+        
+        // 關閉匯出對話框
+        window.closeExportDialog = function() {
+            if (window.currentExportDialog) {
+                window.currentExportDialog.remove();
+                window.currentExportDialog = null;
+            }
+        };
+        
+        // 匯出到 Excel
+        window.exportToExcel = async function() {
+            const selectedIndexes = Array.from(document.querySelectorAll('.export-item:checked'))
+                .map(cb => parseInt(cb.value));
+            
+            if (selectedIndexes.length === 0) {
+                alert('請至少選擇一個項目');
+                return;
+            }
+            
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const selectedItems = selectedIndexes.map(index => history[index]);
+            
+            try {
+                // 準備資料
+                const exportData = selectedItems.map(item => ({
+                    '物品名稱': item.name,
+                    '價格': item.price,
+                    '價格說明': item.data.priceNote || '',
+                    '描述': item.data.description || '',
+                    '材質': item.data.material || '',
+                    '用途': item.data.usage || '',
+                    '分類': item.data.category || '',
+                    '品牌': item.data.brand || '',
+                    '購買地點': item.data.availability || '',
+                    '掃描日期': formatDateDisplay(item.timestamp)
+                }));
+                
+                // 呼叫後端 API 生成 Excel
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/export/excel';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: exportData })
+                });
+                
+                if (response.ok) {
+                    // 下載檔案
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `price_scanner_${new Date().getTime()}.xlsx`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    
+                    closeExportDialog();
+                    alert('Excel 檔案已下載！');
+                } else {
+                    throw new Error('匯出失敗');
+                }
+                
+            } catch (error) {
+                console.error('匯出錯誤:', error);
+                // 如果 API 還未實現，使用 CSV 替代
+                exportToCSV(selectedItems);
+            }
+        };
+        
+        // 匯出為 CSV（備用方案）
+        function exportToCSV(items) {
+            const headers = ['物品名稱', '價格', '價格說明', '描述', '材質', '用途', '分類', '品牌', '購買地點', '掃描日期'];
+            const rows = items.map(item => [
+                item.name,
+                item.price,
+                item.data.priceNote || '',
+                item.data.description || '',
+                item.data.material || '',
+                item.data.usage || '',
+                item.data.category || '',
+                item.data.brand || '',
+                item.data.availability || '',
+                formatDateDisplay(item.timestamp)
+            ]);
+            
+            // 建立 CSV 內容
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
+            ].join('\n');
+            
+            // 加入 BOM 以支援中文
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // 下載檔案
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `price_scanner_${new Date().getTime()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            closeExportDialog();
+            alert('CSV 檔案已下載！\n\n注意：後端 Excel 功能尚未實現，暫時使用 CSV 格式。');
         }
         
         // 拍照功能
@@ -1669,8 +2070,51 @@
                 const chatHistory = getChatHistory();
                 if (chatHistory.length === 0) {
                     addMessage('assistant', `你好！我是 AI 助手，我可以回答關於「${currentAnalysisData.name}」的任何問題。請問有什麼想了解的嗎？`);
+                    // 第一次對話，記錄已經看過圖片
+                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+                    if (!allChats[currentChatItemId]) {
+                        allChats[currentChatItemId] = [];
+                    }
+                    allChats[currentChatItemId].imageAnalyzed = true;
+                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
+                }
+                
+                // 更新快速提示詞
+                updateQuickPrompts();
+            }
+        }
+        
+        // 更新快速提示詞
+        function updateQuickPrompts() {
+            const quickPrompts = document.getElementById('quickPrompts');
+            const prompts = [
+                '這個值得買嗎？',
+                '有更便宜的替代品嗎？',
+                '如何保養這個物品？',
+                '這個物品的優缺點是什麼？',
+                '使用時要注意什麼？'
+            ];
+            
+            // 根據物品類型動態調整提示詞
+            if (currentAnalysisData.category) {
+                if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
+                    prompts[3] = '營養價值如何？';
+                    prompts[4] = '保存期限多久？';
+                } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
+                    prompts[3] = '規格比較';
+                    prompts[4] = '保固服務如何？';
                 }
             }
+            
+            quickPrompts.innerHTML = prompts.map(prompt => 
+                `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
+            ).join('');
+        }
+        
+        // 發送快速提示
+        function sendQuickPrompt(prompt) {
+            document.getElementById('chatInput').value = prompt;
+            sendMessage();
         }
         
         // 關閉聊天頁面
@@ -1686,11 +2130,23 @@
             return allChats[currentChatItemId] || [];
         }
         
+        // 檢查是否已分析過圖片
+        function hasImageBeenAnalyzed() {
+            if (!currentChatItemId) return false;
+            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+            return allChats[currentChatItemId] && allChats[currentChatItemId].imageAnalyzed;
+        }
+        
         // 保存聊天歷史
         function saveChatHistory(messages) {
             if (!currentChatItemId) return;
             const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
             allChats[currentChatItemId] = messages;
+            // 保留 imageAnalyzed 標記
+            const imageAnalyzed = allChats[currentChatItemId] && allChats[currentChatItemId].imageAnalyzed;
+            if (imageAnalyzed) {
+                allChats[currentChatItemId].imageAnalyzed = true;
+            }
             localStorage.setItem('chatHistory', JSON.stringify(allChats));
         }
         
@@ -1700,8 +2156,24 @@
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.innerHTML = '';
             
+            // 如果有歷史，添加重新查看圖片按鈕
+            if (messages.length > 0) {
+                const viewImageBtn = document.createElement('button');
+                viewImageBtn.className = 'view-image-btn';
+                viewImageBtn.onclick = () => sendMessageWithImage('請重新查看這張圖片並告訴我你看到了什麼。');
+                viewImageBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                    </svg>
+                    重新查看圖片
+                `;
+                chatMessages.appendChild(viewImageBtn);
+            }
+            
             messages.forEach(msg => {
-                addMessageToUI(msg.role, msg.content);
+                if (msg.role && msg.content) {  // 確保訊息格式正確
+                    addMessageToUI(msg.role, msg.content);
+                }
             });
             
             // 滾動到底部
@@ -1733,18 +2205,43 @@
             addMessageToUI(role, content);
         }
         
-        // 發送訊息
-        async function sendMessage() {
-            const chatInput = document.getElementById('chatInput');
-            const chatSendBtn = document.getElementById('chatSendBtn');
-            const message = chatInput.value.trim();
+        // 發送帶圖片的訊息
+        async function sendMessageWithImage(message) {
+            if (!message) {
+                message = document.getElementById('chatInput').value.trim();
+            }
             
             if (!message) return;
             
+            // 清空輸入框
+            if (!message || message === document.getElementById('chatInput').value.trim()) {
+                document.getElementById('chatInput').value = '';
+                document.getElementById('chatInput').style.height = 'auto';
+            }
+            
+            // 發送帶圖片的請求
+            await sendMessageInternal(message, true);
+        }
+        
+        // 發送訊息
+        async function sendMessage() {
+            const message = document.getElementById('chatInput').value.trim();
+            if (!message) return;
+            
+            document.getElementById('chatInput').value = '';
+            document.getElementById('chatInput').style.height = 'auto';
+            
+            // 檢查是否是第一次對話
+            const isFirstMessage = !hasImageBeenAnalyzed();
+            await sendMessageInternal(message, isFirstMessage);
+        }
+        
+        // 內部發送訊息函數
+        async function sendMessageInternal(message, includeImage = false) {
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            
             // 添加用戶訊息
             addMessage('user', message);
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
             
             // 禁用發送按鈕
             chatSendBtn.disabled = true;
@@ -1770,20 +2267,33 @@
                 // 準備請求數據
                 const formData = new FormData();
                 
-                // 將 base64 圖片轉換為 Blob
-                const base64Data = capturedImage.split(',')[1];
-                const byteCharacters = atob(base64Data);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                // 只在需要時包含圖片
+                if (includeImage) {
+                    // 將 base64 圖片轉換為 Blob
+                    const base64Data = capturedImage.split(',')[1];
+                    const byteCharacters = atob(base64Data);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    
+                    formData.append('image', blob, 'item.jpg');
+                    
+                    // 標記已分析過圖片
+                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+                    if (!allChats[currentChatItemId]) {
+                        allChats[currentChatItemId] = [];
+                    }
+                    allChats[currentChatItemId].imageAnalyzed = true;
+                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
                 }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: 'image/jpeg' });
                 
-                formData.append('image', blob, 'item.jpg');
                 formData.append('message', message);
                 formData.append('itemInfo', JSON.stringify(currentAnalysisData));
                 formData.append('chatHistory', JSON.stringify(getChatHistory()));
+                formData.append('includeImage', includeImage.toString());
                 
                 // 呼叫 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
