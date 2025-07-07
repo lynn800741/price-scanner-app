@@ -671,6 +671,219 @@
         #fileInput {
             display: none;
         }
+
+        /* 聊天頁面樣式 */
+        .chat-page {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background: #fff;
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .chat-page.active {
+            display: flex;
+        }
+
+        .chat-header {
+            position: relative;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chat-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-close-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .chat-close-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #666;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: #e8e8e8;
+            color: #333;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .message.user .message-avatar {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: #666;
+            color: white;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            border-color: #FF6B35;
+        }
+
+        .chat-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #FF6B35;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-send-btn:hover {
+            background: #ff5722;
+        }
+
+        .chat-send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .chat-send-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .chat-loading {
+            display: flex;
+            gap: 4px;
+            padding: 12px;
+        }
+
+        .chat-loading span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #999;
+            animation: chatLoading 1.4s ease-in-out infinite;
+        }
+
+        .chat-loading span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chat-loading span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes chatLoading {
+            0%, 60%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            30% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .disclaimer-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -915,6 +1128,31 @@
             <div class="loading-text">AI 正在分析中...</div>
         </div>
         
+        <!-- 聊天頁面 -->
+        <div class="chat-page" id="chatPage">
+            <div class="chat-header">
+                <h1 class="chat-title">AI 助手</h1>
+                <button class="chat-close-btn" onclick="closeChat()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- 對話內容會動態加入這裡 -->
+            </div>
+            <div class="chat-input-area">
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." rows="1"></textarea>
+                    <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <!-- 隱藏的文件輸入 -->
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
     </div>
@@ -925,6 +1163,7 @@
         let capturedImage = null;
         let currentAnalysisData = null;
         let flashMode = 'off';
+        let currentChatItemId = null;
         
         // DOM 元素
         const pages = {
@@ -934,6 +1173,7 @@
         };
         
         const bottomNav = document.getElementById('bottomNav');
+        const chatPage = document.getElementById('chatPage');
         
         // 初始化應用
         window.addEventListener('load', () => {
@@ -1220,6 +1460,9 @@
             history = history.slice(0, 50);
             
             localStorage.setItem('scanHistory', JSON.stringify(history));
+            
+            // 設定當前聊天項目 ID
+            currentChatItemId = historyItem.id;
         }
         
         // 搜尋歷史記錄
@@ -1301,6 +1544,7 @@
             if (item) {
                 capturedImage = item.image;
                 currentAnalysisData = item.data;
+                currentChatItemId = item.id;  // 設定當前聊天項目 ID
                 displayResult(item.data);
                 
                 const resultPanel = document.getElementById('resultPanel');
@@ -1367,8 +1611,8 @@
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button onclick="exportToPDF()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        匯出 PDF
+                    <button onclick="openChat()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        詢問 AI
                     </button>
                     <button onclick="shareResult()" style="flex: 1; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
                         分享
@@ -1387,16 +1631,11 @@
                     <p style="color: #666; line-height: 1.6;">${data.availability}</p>
                 </div>
                 
-                ${data.origin ? `
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">歷史起源</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.origin}</p>
-                </div>
-                ` : ''}
-                
                 <button onclick="closeResult()" style="width: 100%; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
                     關閉
                 </button>
+                
+                <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
             `;
         }
         
@@ -1412,95 +1651,257 @@
             return urls[platform] || '#';
         }
         
-        // 匯出 PDF
-        async function exportToPDF() {
-            if (!currentAnalysisData) {
-                alert('沒有可匯出的資料');
-                return;
-            }
+        // 打開聊天頁面
+        function openChat() {
+            // 設定當前聊天項目 ID
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const currentItem = history.find(item => 
+                item.image === capturedImage && 
+                item.data.name === currentAnalysisData.name
+            );
             
-            try {
-                // 載入 jsPDF
-                if (!window.jspdf) {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-                    document.head.appendChild(script);
-                    
-                    await new Promise(resolve => {
-                        script.onload = resolve;
-                    });
+            if (currentItem) {
+                currentChatItemId = currentItem.id;
+                loadChatHistory();
+                chatPage.classList.add('active');
+                
+                // 如果沒有歷史對話，顯示歡迎訊息
+                const chatHistory = getChatHistory();
+                if (chatHistory.length === 0) {
+                    addMessage('assistant', `你好！我是 AI 助手，我可以回答關於「${currentAnalysisData.name}」的任何問題。請問有什麼想了解的嗎？`);
                 }
-                
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // 設定字體（支援中文需要額外處理）
-                doc.setFont('helvetica');
-                
-                // 標題
-                doc.setFontSize(20);
-                doc.text('Price Scanner Report', 20, 20);
-                
-                // 物品名稱
-                doc.setFontSize(16);
-                doc.text(currentAnalysisData.name, 20, 40);
-                
-                // 價格
-                doc.setFontSize(14);
-                doc.text(`Price: ${currentAnalysisData.price}`, 20, 55);
-                doc.text(`Note: ${currentAnalysisData.priceNote}`, 20, 65);
-                
-                // 描述
-                doc.setFontSize(12);
-                const description = doc.splitTextToSize(currentAnalysisData.description, 170);
-                doc.text(description, 20, 80);
-                
-                // 其他資訊
-                let yPosition = 80 + (description.length * 5) + 10;
-                
-                if (currentAnalysisData.availability) {
-                    doc.text(`Where to buy: ${currentAnalysisData.availability}`, 20, yPosition);
-                    yPosition += 10;
-                }
-                
-                if (currentAnalysisData.material) {
-                    doc.text(`Material: ${currentAnalysisData.material}`, 20, yPosition);
-                    yPosition += 10;
-                }
-                
-                // 日期
-                doc.setFontSize(10);
-                doc.text(`Generated: ${new Date().toLocaleString('zh-TW')}`, 20, 280);
-                
-                // 儲存 PDF
-                doc.save(`${currentAnalysisData.name}_price_report.pdf`);
-                
-                alert('PDF 已匯出！\n\n注意：中文內容可能無法正確顯示，建議使用截圖功能。');
-            } catch (error) {
-                console.error('PDF 匯出失敗:', error);
-                alert('PDF 匯出失敗，請稍後再試');
             }
         }
         
+        // 關閉聊天頁面
+        function closeChat() {
+            chatPage.classList.remove('active');
+            currentChatItemId = null;
+        }
+        
+        // 獲取聊天歷史
+        function getChatHistory() {
+            if (!currentChatItemId) return [];
+            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+            return allChats[currentChatItemId] || [];
+        }
+        
+        // 保存聊天歷史
+        function saveChatHistory(messages) {
+            if (!currentChatItemId) return;
+            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+            allChats[currentChatItemId] = messages;
+            localStorage.setItem('chatHistory', JSON.stringify(allChats));
+        }
+        
+        // 載入聊天歷史
+        function loadChatHistory() {
+            const messages = getChatHistory();
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            
+            messages.forEach(msg => {
+                addMessageToUI(msg.role, msg.content);
+            });
+            
+            // 滾動到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 添加訊息到 UI
+        function addMessageToUI(role, content) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const avatarText = role === 'user' ? '你' : 'AI';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatarText}</div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 添加訊息並保存
+        function addMessage(role, content) {
+            const messages = getChatHistory();
+            messages.push({ role, content, timestamp: new Date().toISOString() });
+            saveChatHistory(messages);
+            addMessageToUI(role, content);
+        }
+        
+        // 發送訊息
+        async function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            // 添加用戶訊息
+            addMessage('user', message);
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            
+            // 禁用發送按鈕
+            chatSendBtn.disabled = true;
+            
+            // 顯示載入動畫
+            const chatMessages = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant';
+            loadingDiv.innerHTML = `
+                <div class="message-avatar">AI</div>
+                <div class="message-content">
+                    <div class="chat-loading">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            try {
+                // 準備請求數據
+                const formData = new FormData();
+                
+                // 將 base64 圖片轉換為 Blob
+                const base64Data = capturedImage.split(',')[1];
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                
+                formData.append('image', blob, 'item.jpg');
+                formData.append('message', message);
+                formData.append('itemInfo', JSON.stringify(currentAnalysisData));
+                formData.append('chatHistory', JSON.stringify(getChatHistory()));
+                
+                // 呼叫 API
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API 請求失敗');
+                }
+                
+                const result = await response.json();
+                
+                // 移除載入動畫
+                loadingDiv.remove();
+                
+                if (result.success) {
+                    // 添加 AI 回覆
+                    addMessage('assistant', result.data.reply);
+                } else {
+                    throw new Error(result.error || '回覆失敗');
+                }
+                
+            } catch (error) {
+                console.error('聊天錯誤:', error);
+                loadingDiv.remove();
+                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
+            } finally {
+                // 重新啟用發送按鈕
+                chatSendBtn.disabled = false;
+            }
+        }
+        
+        // 監聽輸入框 Enter 鍵
+        document.getElementById('chatInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // 自動調整輸入框高度
+        document.getElementById('chatInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+        
         // 分享結果
-        function shareResult() {
+        async function shareResult() {
             if (!currentAnalysisData) {
                 alert('沒有可分享的資料');
                 return;
             }
             
-            const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: '萬物價格掃描器',
-                    text: shareText
-                }).catch(err => console.log('分享取消'));
-            } else {
-                // 複製到剪貼板
-                navigator.clipboard.writeText(shareText).then(() => {
-                    alert('分享文字已複製到剪貼板！');
+            try {
+                // 準備分享數據
+                const shareData = {
+                    name: currentAnalysisData.name,
+                    price: currentAnalysisData.price,
+                    priceNote: currentAnalysisData.priceNote,
+                    description: currentAnalysisData.description,
+                    availability: currentAnalysisData.availability,
+                    purchaseLinks: currentAnalysisData.purchaseLinks,
+                    image: capturedImage
+                };
+                
+                // 呼叫後端 API 生成分享連結
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/share';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(shareData)
                 });
+                
+                if (!response.ok) {
+                    throw new Error('分享失敗');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
+                    const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: '萬物價格掃描器',
+                            text: shareText,
+                            url: shareUrl
+                        }).catch(err => console.log('分享取消'));
+                    } else {
+                        // 複製到剪貼板
+                        navigator.clipboard.writeText(shareText).then(() => {
+                            alert('分享連結已複製到剪貼板！');
+                        });
+                    }
+                } else {
+                    throw new Error(result.error || '分享失敗');
+                }
+                
+            } catch (error) {
+                console.error('分享錯誤:', error);
+                // 如果 API 還未實現，使用本地分享
+                const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: '萬物價格掃描器',
+                        text: shareText
+                    }).catch(err => console.log('分享取消'));
+                } else {
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        alert('分享文字已複製到剪貼板！\n\n注意：分享連結功能需要後端支援。');
+                    });
+                }
             }
         }
         
