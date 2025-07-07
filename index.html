@@ -287,33 +287,29 @@
             fill: #fff;
         }
 
-        /* 掃描框區域 - 修復動畫 */
+        /* 掃描框 */
         .scan-area {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            pointer-events: none;
         }
 
         .scan-text {
             color: #fff;
             font-size: 16px;
             margin-bottom: 20px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* 掃描框 - 添加平滑動畫 */
         .scan-frame {
             width: 280px;
             height: 200px;
             border: 2px solid #fff;
             border-radius: 10px;
             position: relative;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.5);
-            margin: 0 auto;
+            /* 添加平滑動畫 */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .scan-frame.vertical {
@@ -321,65 +317,39 @@
             height: 280px;
         }
 
-        /* 掃描框四角裝飾 */
-        .scan-frame::before,
-        .scan-frame::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #FF6B35;
-        }
-
-        .scan-frame::before {
-            top: -3px;
-            left: -3px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .scan-frame::after {
-            bottom: -3px;
-            right: -3px;
-            border-left: none;
-            border-top: none;
-        }
-
-        /* 橫豎切換按鈕 - 重新設計位置 */
+        /* 橫豹切換 - 動態調整位置 */
         .orientation-selector {
             position: absolute;
-            bottom: 200px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 25px;
             padding: 4px;
             pointer-events: all;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* 動態位置調整 */
+            top: calc(50% + 140px); /* 橫向時的位置 */
+            transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 當掃描框為縱向時，按鈕位置下移 */
+        .scan-frame.vertical ~ .orientation-selector {
+            top: calc(50% + 180px); /* 縱向時位置下移 */
         }
 
         .orientation-btn {
-            padding: 8px 20px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
+            padding: 10px 30px;
+            color: #fff;
+            font-size: 16px;
             border: none;
             background: transparent;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            transition: all 0.3s;
         }
 
         .orientation-btn.active {
             background: #FF6B35;
-            color: #fff;
-            transform: scale(1.05);
-        }
-
-        .orientation-btn:hover {
-            color: #fff;
         }
 
         /* 底部控制 */
@@ -405,13 +375,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
         }
 
         .control-btn svg {
@@ -425,18 +388,9 @@
             height: 70px;
             border-radius: 50%;
             background: #fff;
-            border: 4px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.5);
             position: relative;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .capture-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .capture-btn:active {
-            transform: scale(0.95);
         }
 
         .capture-btn::after {
@@ -669,22 +623,6 @@
         #fileInput {
             display: none;
         }
-
-        /* 掃描動畫效果 */
-        .scan-line {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #FF6B35, transparent);
-            top: 0;
-            animation: scanLine 2s linear infinite;
-        }
-
-        @keyframes scanLine {
-            0% { top: 0; opacity: 1; }
-            50% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
     </style>
 </head>
 <body>
@@ -829,9 +767,7 @@
 
                 <div class="scan-area">
                     <p class="scan-text">將物品對準掃描框並點擊拍照</p>
-                    <div class="scan-frame" id="scanFrame">
-                        <div class="scan-line"></div>
-                    </div>
+                    <div class="scan-frame" id="scanFrame"></div>
                 </div>
 
                 <div class="orientation-selector">
@@ -1035,27 +971,20 @@
             }
         }
         
-        // 設定掃描框方向 - 修復動畫
+        // 設定掃描框方向
         function setOrientation(orientation) {
             currentOrientation = orientation;
             const scanFrame = document.getElementById('scanFrame');
             const buttons = document.querySelectorAll('.orientation-btn');
             
-            // 移除所有按鈕的活動狀態
             buttons.forEach(btn => btn.classList.remove('active'));
             
-            // 添加平滑的動畫效果
             if (orientation === 'vertical') {
                 scanFrame.classList.add('vertical');
                 buttons[1].classList.add('active');
             } else {
                 scanFrame.classList.remove('vertical');
                 buttons[0].classList.add('active');
-            }
-            
-            // 添加觸覺反饋（如果支援）
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
             }
         }
         
@@ -1077,14 +1006,9 @@
                     advanced: [{ torch: flashMode === 'on' }]
                 });
                 
-                // 更新圖標狀態
+                // 更新圖標狀態（可選）
                 const flashBtn = document.querySelector('.control-btn:last-child svg');
                 flashBtn.style.fill = flashMode === 'on' ? '#FFD700' : '#fff';
-                
-                // 觸覺反饋
-                if (navigator.vibrate) {
-                    navigator.vibrate(flashMode === 'on' ? [50, 50, 50] : 20);
-                }
             } catch (error) {
                 console.error('閃光燈控制失敗:', error);
                 alert('無法控制閃光燈');
@@ -1148,23 +1072,11 @@
             event.target.value = '';
         }
         
-        // 拍照功能 - 增強反饋
+        // 拍照功能
         async function capturePhoto() {
             const cameraFeed = document.getElementById('cameraFeed');
             const photoCanvas = document.getElementById('photoCanvas');
             const context = photoCanvas.getContext('2d');
-            
-            // 拍照視覺效果
-            const overlay = document.querySelector('.camera-overlay');
-            overlay.style.background = 'rgba(255, 255, 255, 0.8)';
-            setTimeout(() => {
-                overlay.style.background = 'transparent';
-            }, 100);
-            
-            // 觸覺反饋
-            if (navigator.vibrate) {
-                navigator.vibrate(30);
-            }
             
             // 設定畫布尺寸
             const maxWidth = 800;
@@ -1470,6 +1382,7 @@
                 // 儲存 PDF
                 doc.save(`${currentAnalysisData.name}_price_report.pdf`);
                 
+                alert('PDF 已匯出！\n\n注意：中文內容可能無法正確顯示，建議使用截圖功能。');
             } catch (error) {
                 console.error('PDF 匯出失敗:', error);
                 alert('PDF 匯出失敗，請稍後再試');
