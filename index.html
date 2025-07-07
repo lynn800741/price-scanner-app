@@ -81,6 +81,10 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
+        .bottom-nav.hidden {
+            display: none;
+        }
+
         .nav-item {
             flex: 1;
             display: flex;
@@ -304,52 +308,52 @@
 
         .scan-frame {
             width: 280px;
-            height: 200px;
-            border: 2px solid #fff;
-            border-radius: 10px;
-            position: relative;
-            /* 添加平滑動畫 */
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .scan-frame.vertical {
-            width: 200px;
             height: 280px;
+            position: relative;
         }
 
-        /* 橫豹切換 - 動態調整位置 */
-        .orientation-selector {
+        /* 四角邊框樣式 */
+        .scan-frame::before,
+        .scan-frame::after,
+        .scan-corner-tl,
+        .scan-corner-tr {
+            content: '';
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 4px;
-            pointer-events: all;
-            /* 動態位置調整 */
-            top: calc(50% + 140px); /* 橫向時的位置 */
-            transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #fff;
         }
 
-        /* 當掃描框為縱向時，按鈕位置下移 */
-        .scan-frame.vertical ~ .orientation-selector {
-            top: calc(50% + 180px); /* 縱向時位置下移 */
+        .scan-frame::before {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+            border-top-left-radius: 8px;
         }
 
-        .orientation-btn {
-            padding: 10px 30px;
-            color: #fff;
-            font-size: 16px;
-            border: none;
-            background: transparent;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
+        .scan-frame::after {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+            border-top-right-radius: 8px;
         }
 
-        .orientation-btn.active {
-            background: #FF6B35;
+        .scan-corner-tl {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+        }
+
+        .scan-corner-tr {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+            border-bottom-right-radius: 8px;
         }
 
         /* 底部控制 */
@@ -628,7 +632,7 @@
 <body>
     <div class="app-container">
         <!-- 設定頁面 -->
-        <div class="page settings-page active" id="settingsPage">
+        <div class="page settings-page" id="settingsPage">
             <div class="nav-header">
                 <h1 class="app-title">設定</h1>
             </div>
@@ -766,13 +770,11 @@
                 </div>
 
                 <div class="scan-area">
-                    <p class="scan-text">將物品對準掃描框並點擊拍照</p>
-                    <div class="scan-frame" id="scanFrame"></div>
-                </div>
-
-                <div class="orientation-selector">
-                    <button class="orientation-btn active" onclick="setOrientation('horizontal')">橫向</button>
-                    <button class="orientation-btn" onclick="setOrientation('vertical')">縱向</button>
+                    <p class="scan-text">確保物品清晰地位於鏡頭焦點中</p>
+                    <div class="scan-frame" id="scanFrame">
+                        <span class="scan-corner-tl"></span>
+                        <span class="scan-corner-tr"></span>
+                    </div>
                 </div>
 
                 <div class="camera-controls">
@@ -794,7 +796,7 @@
         </div>
 
         <!-- 照片列表頁面 -->
-        <div class="page list-page" id="listPage">
+        <div class="page list-page active" id="listPage">
             <div class="nav-header">
                 <h1 class="app-title">照片列表</h1>
             </div>
@@ -824,8 +826,8 @@
         </div>
 
         <!-- 底部導航 -->
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="switchPage('listPage')">
+        <div class="bottom-nav" id="bottomNav">
+            <div class="nav-item active" onclick="switchPage('listPage')">
                 <svg viewBox="0 0 24 24">
                     <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/>
                 </svg>
@@ -840,7 +842,7 @@
                 </div>
             </div>
             
-            <div class="nav-item active" onclick="switchPage('settingsPage')">
+            <div class="nav-item" onclick="switchPage('settingsPage')">
                 <svg viewBox="0 0 24 24">
                     <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
@@ -869,7 +871,6 @@
     <script>
         // 全域變數
         let stream = null;
-        let currentOrientation = 'horizontal';
         let capturedImage = null;
         let currentAnalysisData = null;
         let flashMode = 'off';
@@ -881,16 +882,17 @@
             listPage: document.getElementById('listPage')
         };
         
+        const bottomNav = document.getElementById('bottomNav');
+        
         // 初始化應用
         window.addEventListener('load', () => {
             // 檢查並顯示歷史記錄
             displayHistory();
         });
         
-        // 回到首頁
+        // 回到首頁（照片列表頁）
         function goToHome() {
-            // 使用新的 GitHub Pages URL
-            window.location.href = 'https://lynn800741.github.io/price-scanner-app/';
+            switchPage('listPage');
         }
         
         // 切換頁面
@@ -907,12 +909,14 @@
                 // 更新底部導航
                 updateBottomNav(pageId);
                 
-                // 如果切換到相機頁面，啟動相機
+                // 如果切換到相機頁面，啟動相機並隱藏底部導航
                 if (pageId === 'cameraPage') {
                     initCamera();
+                    bottomNav.classList.add('hidden');
                 } else {
-                    // 關閉相機
+                    // 關閉相機並顯示底部導航
                     stopCamera();
+                    bottomNav.classList.remove('hidden');
                 }
                 
                 // 如果切換到列表頁，更新歷史記錄
@@ -930,10 +934,10 @@
             });
             
             // 根據頁面設定對應的導航項目
-            if (activePageId === 'settingsPage') {
-                navItems[2].classList.add('active');
-            } else if (activePageId === 'listPage') {
+            if (activePageId === 'listPage') {
                 navItems[0].classList.add('active');
+            } else if (activePageId === 'settingsPage') {
+                navItems[2].classList.add('active');
             }
         }
         
@@ -968,23 +972,6 @@
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
                 stream = null;
-            }
-        }
-        
-        // 設定掃描框方向
-        function setOrientation(orientation) {
-            currentOrientation = orientation;
-            const scanFrame = document.getElementById('scanFrame');
-            const buttons = document.querySelectorAll('.orientation-btn');
-            
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            if (orientation === 'vertical') {
-                scanFrame.classList.add('vertical');
-                buttons[1].classList.add('active');
-            } else {
-                scanFrame.classList.remove('vertical');
-                buttons[0].classList.add('active');
             }
         }
         
