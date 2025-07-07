@@ -733,6 +733,41 @@
             fill: #666;
         }
 
+        /* 重新查看圖片按鈕區域 */
+        .view-image-section {
+            padding: 10px 20px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+        }
+
+        .view-image-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-image-btn:hover {
+            background: #f5f5f5;
+            color: #333;
+            border-color: #999;
+        }
+
+        .view-image-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -744,7 +779,6 @@
         .quick-prompts {
             padding: 10px 20px;
             background: #fff;
-            border-bottom: 1px solid #eee;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
@@ -767,33 +801,6 @@
             background: #FF6B35;
             color: white;
             border-color: #FF6B35;
-        }
-
-        /* 重新查看圖片按鈕 */
-        .view-image-btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 16px;
-            font-size: 13px;
-            color: #666;
-            cursor: pointer;
-            margin: 10px auto;
-            transition: all 0.3s;
-        }
-
-        .view-image-btn:hover {
-            background: #e8e8e8;
-            color: #333;
-        }
-
-        .view-image-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
         }
 
         .message {
@@ -956,18 +963,6 @@
                 <div class="list-item">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
-                        </svg>
-                        <div class="list-item-title">AI智能服務</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M5 16L3 5l5.5 0L12 16m3.5 0H21l-2-11L14 5"/>
                         </svg>
                         <div class="list-item-content">
@@ -1001,6 +996,18 @@
 
             <div class="section">
                 <h2 class="section-title">Pro 版功能</h2>
+                
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
+                        </svg>
+                        <div class="list-item-title">AI智能服務</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
                 
                 <div class="list-item" onclick="openExportDialog()">
                     <div class="list-item-left">
@@ -1090,7 +1097,7 @@
                 </div>
 
                 <div class="camera-controls">
-                    <button class="control-btn" onclick="selectFromGallery()">
+                    <button class="control-btn" onclick="document.getElementById('multiFileInput').click()">
                         <svg viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                         </svg>
@@ -1105,11 +1112,9 @@
                     </button>
                 </div>
                 
-                <button class="control-btn" style="position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.9); color: #333;" onclick="document.getElementById('multiFileInput').click()">
-                    <svg viewBox="0 0 24 24" style="fill: #333;">
-                        <path d="M19 11H13V5C13 4.4 12.6 4 12 4S11 4.4 11 5V11H5C4.4 11 4 11.4 4 12S4.4 13 5 13H11V19C11 19.6 11.4 20 12 20S13 19.6 13 19V13H19C19.6 13 20 12.6 20 12S19.6 11 19 11M14 2H6C4.9 2 4 2.9 4 4V8H6V4H14V2M20 16V20H12V22H20C21.1 22 22 21.1 22 20V16H20Z"/>
-                    </svg>
-                </button>
+                <p style="position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 12px;">
+                    長按拍照按鈕可選擇單張照片
+                </p>
             </div>
         </div>
 
@@ -1199,17 +1204,25 @@
                     </svg>
                 </button>
             </div>
-            <div class="quick-prompts" id="quickPrompts">
-                <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
-                <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
-                <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
-                <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
-                <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
+            <div class="view-image-section" id="viewImageSection" style="display: none;">
+                <button class="view-image-btn" onclick="sendMessageWithImage('請重新查看這張圖片並告訴我你看到了什麼。')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                    </svg>
+                    重新查看圖片
+                </button>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <!-- 對話內容會動態加入這裡 -->
             </div>
             <div class="chat-input-area">
+                <div class="quick-prompts" id="quickPrompts">
+                    <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
+                </div>
                 <div class="chat-input-container">
                     <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." rows="1"></textarea>
                     <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
@@ -1248,6 +1261,8 @@
         window.addEventListener('load', () => {
             // 檢查並顯示歷史記錄
             displayHistory();
+            // 設定拍照按鈕長按功能
+            setupCaptureButton();
         });
         
         // 回到首頁（照片列表頁）
@@ -1360,11 +1375,6 @@
                 console.error('閃光燈控制失敗:', error);
                 alert('無法控制閃光燈');
             }
-        }
-        
-        // 從相簿選擇圖片
-        function selectFromGallery() {
-            document.getElementById('fileInput').click();
         }
         
         // 打開批次分析（從設定頁面）
@@ -1781,6 +1791,38 @@
             analyzeImage();
         }
         
+        // 長按拍照按鈕時選擇單張照片
+        function setupCaptureButton() {
+            const captureBtn = document.querySelector('.capture-btn');
+            let pressTimer;
+            
+            // 長按開始
+            captureBtn.addEventListener('mousedown', function() {
+                pressTimer = setTimeout(function() {
+                    document.getElementById('fileInput').click();
+                }, 800); // 800ms 後觸發
+            });
+            
+            captureBtn.addEventListener('touchstart', function() {
+                pressTimer = setTimeout(function() {
+                    document.getElementById('fileInput').click();
+                }, 800);
+            });
+            
+            // 取消長按
+            captureBtn.addEventListener('mouseup', function() {
+                clearTimeout(pressTimer);
+            });
+            
+            captureBtn.addEventListener('touchend', function() {
+                clearTimeout(pressTimer);
+            });
+            
+            captureBtn.addEventListener('mouseleave', function() {
+                clearTimeout(pressTimer);
+            });
+        }
+        
         // 分析圖片
         async function analyzeImage() {
             const loadingOverlay = document.getElementById('loadingOverlay');
@@ -2069,6 +2111,9 @@
                 // 如果沒有歷史對話，顯示歡迎訊息
                 const chatHistory = getChatHistory();
                 if (chatHistory.length === 0) {
+                    // 第一次對話，隱藏重新查看圖片按鈕
+                    document.getElementById('viewImageSection').style.display = 'none';
+                    
                     addMessage('assistant', `你好！我是 AI 助手，我可以回答關於「${currentAnalysisData.name}」的任何問題。請問有什麼想了解的嗎？`);
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
@@ -2154,20 +2199,14 @@
         function loadChatHistory() {
             const messages = getChatHistory();
             const chatMessages = document.getElementById('chatMessages');
+            const viewImageSection = document.getElementById('viewImageSection');
             chatMessages.innerHTML = '';
             
-            // 如果有歷史，添加重新查看圖片按鈕
+            // 如果有歷史，顯示重新查看圖片按鈕
             if (messages.length > 0) {
-                const viewImageBtn = document.createElement('button');
-                viewImageBtn.className = 'view-image-btn';
-                viewImageBtn.onclick = () => sendMessageWithImage('請重新查看這張圖片並告訴我你看到了什麼。');
-                viewImageBtn.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                    </svg>
-                    重新查看圖片
-                `;
-                chatMessages.appendChild(viewImageBtn);
+                viewImageSection.style.display = 'flex';
+            } else {
+                viewImageSection.style.display = 'none';
             }
             
             messages.forEach(msg => {
