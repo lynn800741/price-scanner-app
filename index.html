@@ -1346,11 +1346,54 @@
             }
         }
 
-        .disclaimer-text {
-            font-size: 12px;
-            color: #999;
-            text-align: center;
-            margin-top: 10px;
+        /* 橘貓動畫樣式 */
+        .typing-cat {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin-left: 4px;
+            vertical-align: middle;
+            position: relative;
+            animation: catRun 0.5s steps(4) infinite;
+        }
+
+        .typing-cat.sitting {
+            animation: catSit 2s ease-in-out infinite;
+        }
+
+        @keyframes catRun {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(-5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-3px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes catSit {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-2px) rotate(-3deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-2px) rotate(3deg); }
+        }
+
+        .typing-container {
+            position: relative;
+            display: inline;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 20px;
+            background: #FF6B35;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
     </style>
 </head>
@@ -3071,7 +3114,7 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content);
+                    addMessageToUI(msg.role, msg.content, false); // 歷史訊息不使用打字效果
                 }
             });
             
@@ -3079,60 +3122,112 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 簡單的 Markdown 解析函數
-        function parseMarkdown(text) {
-            // 處理標題
-            text = text.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
-            text = text.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
-            text = text.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+        // 創建橘貓 SVG
+        function createCatSVG(isSitting = false) {
+            const catSVG = `
+                <svg viewBox="0 0 30 30" style="width: 100%; height: 100%;">
+                    <!-- 身體 -->
+                    <ellipse cx="15" cy="20" rx="8" ry="6" fill="#FF8C42" stroke="#E07A3A" stroke-width="0.5"/>
+                    <!-- 頭 -->
+                    <circle cx="15" cy="12" r="6" fill="#FF8C42" stroke="#E07A3A" stroke-width="0.5"/>
+                    <!-- 耳朵 -->
+                    <path d="M9 9 L9 12 L11 11 Z" fill="#FF8C42" stroke="#E07A3A" stroke-width="0.5"/>
+                    <path d="M21 9 L21 12 L19 11 Z" fill="#FF8C42" stroke="#E07A3A" stroke-width="0.5"/>
+                    <!-- 眼睛 -->
+                    <circle cx="12" cy="11" r="1" fill="#333"/>
+                    <circle cx="18" cy="11" r="1" fill="#333"/>
+                    <!-- 鼻子 -->
+                    <path d="M14 13 L15 14 L16 13" fill="none" stroke="#333" stroke-width="0.5" stroke-linecap="round"/>
+                    <!-- 尾巴 -->
+                    ${isSitting ? 
+                        '<path d="M20 20 Q25 18 22 25" fill="none" stroke="#FF8C42" stroke-width="3" stroke-linecap="round"/>' :
+                        '<path d="M20 20 Q28 15 25 22" fill="none" stroke="#FF8C42" stroke-width="3" stroke-linecap="round"/>'
+                    }
+                    <!-- 腳 -->
+                    <rect x="10" y="23" width="3" height="3" rx="1" fill="#FF8C42"/>
+                    <rect x="17" y="23" width="3" height="3" rx="1" fill="#FF8C42"/>
+                    ${isSitting ? 
+                        '<!-- 舔毛動作 --><path d="M15 15 Q13 16 12 18" fill="none" stroke="#F06292" stroke-width="1" stroke-linecap="round"/>' :
+                        ''
+                    }
+                </svg>
+            `;
+            return catSVG;
+        }
+
+        // 打字機效果與橘貓動畫
+        async function typewriterEffectWithCat(text, element, isMarkdown = true) {
+            // 先解析 Markdown（如果需要）
+            const parsedText = isMarkdown ? parseMarkdown(text) : text;
             
-            // 處理粗體
-            text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // 創建臨時容器來處理 HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = parsedText;
             
-            // 處理斜體
-            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            // 清空原始元素
+            element.innerHTML = '';
             
-            // 處理行內代碼
-            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            // 創建打字容器
+            const typingContainer = document.createElement('div');
+            typingContainer.className = 'typing-container';
+            element.appendChild(typingContainer);
             
-            // 處理分隔線
-            text = text.replace(/^---+$/gm, '<hr>');
+            // 創建橘貓
+            const catSpan = document.createElement('span');
+            catSpan.className = 'typing-cat';
+            catSpan.innerHTML = createCatSVG(false);
             
-            // 處理無序列表
-            text = text.replace(/^• (.*?)$/gm, '<li>$1</li>');
-            text = text.replace(/^- (.*?)$/gm, '<li>$1</li>');
-            text = text.replace(/^(\s*)<li>/gm, '$1<ul><li>');
-            text = text.replace(/<\/li>\n(?!<li>)/g, '</li></ul>\n');
+            // 創建游標
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
             
-            // 處理有序列表
-            text = text.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
-            
-            // 處理段落
-            text = text.split('\n\n').map(para => {
-                if (!para.match(/^<[^>]+>/)) {
-                    return `<p>${para}</p>`;
+            // 遞歸處理節點
+            async function processNode(node, container) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent;
+                    for (let i = 0; i < text.length; i++) {
+                        container.insertBefore(document.createTextNode(text[i]), cursor);
+                        container.insertBefore(catSpan, cursor);
+                        await new Promise(resolve => setTimeout(resolve, 30));
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    const newElement = document.createElement(node.tagName.toLowerCase());
+                    // 複製屬性
+                    for (let attr of node.attributes) {
+                        newElement.setAttribute(attr.name, attr.value);
+                    }
+                    container.insertBefore(newElement, cursor);
+                    
+                    // 處理子節點
+                    for (let child of node.childNodes) {
+                        await processNode(child, newElement);
+                    }
                 }
-                return para;
-            }).join('\n');
+            }
             
-            // 處理換行
-            text = text.replace(/\n/g, '<br>');
+            // 添加游標
+            typingContainer.appendChild(cursor);
             
-            // 清理多餘的 <br> 標籤
-            text = text.replace(/<br><h/g, '<h');
-            text = text.replace(/<\/h(\d)><br>/g, '</h$1>');
-            text = text.replace(/<br><ul>/g, '<ul>');
-            text = text.replace(/<\/ul><br>/g, '</ul>');
-            text = text.replace(/<br><li>/g, '<li>');
-            text = text.replace(/<br><hr>/g, '<hr>');
-            text = text.replace(/<hr><br>/g, '<hr>');
+            // 處理所有節點
+            for (let node of tempDiv.childNodes) {
+                await processNode(node, typingContainer);
+            }
             
-            return text;
+            // 移除游標
+            cursor.remove();
+            
+            // 讓貓咪坐下舔毛
+            catSpan.className = 'typing-cat sitting';
+            catSpan.innerHTML = createCatSVG(true);
+            
+            // 3秒後移除貓咪
+            setTimeout(() => {
+                catSpan.remove();
+            }, 3000);
         }
         
-        // 添加訊息到 UI
-        function addMessageToUI(role, content) {
+        // 修改添加訊息到 UI 的函數
+        function addMessageToUI(role, content, useTypingEffect = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -3140,13 +3235,23 @@
             if (role === 'user') {
                 // 用戶訊息保持原樣
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+                chatMessages.appendChild(messageDiv);
             } else {
-                // AI 訊息進行 Markdown 解析
-                const parsedContent = parseMarkdown(content);
-                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
+                // AI 訊息
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                messageDiv.appendChild(contentDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                if (useTypingEffect) {
+                    // 使用打字效果
+                    typewriterEffectWithCat(content, contentDiv);
+                } else {
+                    // 直接顯示（用於載入歷史記錄）
+                    contentDiv.innerHTML = parseMarkdown(content);
+                }
             }
             
-            chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
@@ -3155,7 +3260,7 @@
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content);
+            addMessageToUI(role, content, true); // 新訊息使用打字效果
         }
         
         // 發送帶圖片的訊息
