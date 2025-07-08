@@ -2835,7 +2835,24 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    addMessage('assistant', `你好！我是 AI 助手，我可以回答關於「${currentAnalysisData.name}」的任何問題。請問有什麼想了解的嗎？`);
+                    // 根據物品類型生成個性化的歡迎訊息
+                    let welcomeMessage = `你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」，發現了一些有趣的資訊想與你分享！\n\n`;
+                    
+                    // 添加一個有趣的開場
+                    if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
+                        welcomeMessage += `📱 作為一個科技產品，它代表著現代生活的便利性。`;
+                    } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
+                        welcomeMessage += `🍽️ 民以食為天，讓我們來深入了解這個美味的選擇。`;
+                    } else if (currentAnalysisData.brand) {
+                        welcomeMessage += `🏷️ ${currentAnalysisData.brand}這個品牌有著獨特的市場定位。`;
+                    } else {
+                        welcomeMessage += `✨ 每個物品都有它獨特的故事和價值。`;
+                    }
+                    
+                    welcomeMessage += `\n\n我可以為你提供：\n• 深入的產品分析和比較\n• 使用技巧和保養建議\n• 市場趨勢和價格走向\n• 相關的有趣知識和歷史\n\n有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
+                    
+                    addMessage('assistant', welcomeMessage);
+                    
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
                     if (!allChats[currentChatItemId]) {
@@ -2853,26 +2870,57 @@
         // 更新快速提示詞
         function updateQuickPrompts() {
             const quickPrompts = document.getElementById('quickPrompts');
-            const prompts = [
-                '這個值得買嗎？',
-                '有更便宜的替代品嗎？',
-                '如何保養這個物品？',
-                '這個物品的優缺點是什麼？',
-                '使用時要注意什麼？'
+            let prompts = [
+                '深度分析這個產品的優缺點',
+                '和其他同類產品比較如何？',
+                '有什麼隱藏的使用技巧嗎？',
+                '這個價格在市場上算合理嗎？',
+                '長期使用需要注意什麼？'
             ];
             
             // 根據物品類型動態調整提示詞
             if (currentAnalysisData.category) {
                 if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
-                    prompts[3] = '營養價值如何？';
-                    prompts[4] = '保存期限多久？';
+                    prompts = [
+                        '詳細分析營養價值和健康影響',
+                        '有什麼特別的料理方式嗎？',
+                        '如何判斷品質好壞？',
+                        '保存方法和期限建議',
+                        '搭配什麼食材最合適？'
+                    ];
                 } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
-                    prompts[3] = '規格比較';
-                    prompts[4] = '保固服務如何？';
+                    prompts = [
+                        '詳細規格分析和性能評估',
+                        '這個世代的技術有何突破？',
+                        '未來會不會很快被淘汰？',
+                        '有什麼隱藏功能或彩蛋？',
+                        '如何發揮最大性能？'
+                    ];
+                } else if (currentAnalysisData.category.includes('服飾') || currentAnalysisData.category.includes('衣')) {
+                    prompts = [
+                        '材質特性和穿著體驗如何？',
+                        '適合什麼場合和搭配？',
+                        '如何辨別真偽和品質？',
+                        '保養和清洗的專業建議',
+                        '這個設計的流行趨勢分析'
+                    ];
+                } else if (currentAnalysisData.category.includes('玩具') || currentAnalysisData.category.includes('模型')) {
+                    prompts = [
+                        '收藏價值和未來升值潛力',
+                        '有什麼特別的設計巧思？',
+                        '如何保養維持最佳狀態？',
+                        '這個系列的歷史和文化意義',
+                        '適合什麼年齡層？安全嗎？'
+                    ];
                 }
             }
             
-            quickPrompts.innerHTML = prompts.map(prompt => 
+            // 如果有品牌資訊，加入品牌相關提示
+            if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
+                prompts.splice(2, 0, `${currentAnalysisData.brand}這個品牌的故事和特色`);
+            }
+            
+            quickPrompts.innerHTML = prompts.slice(0, 5).map(prompt => 
                 `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
             ).join('');
         }
