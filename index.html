@@ -629,9 +629,6 @@
         .panel-header {
             position: relative;
             padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .panel-handle {
@@ -639,32 +636,27 @@
             height: 5px;
             background: #ddd;
             border-radius: 3px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 15px;
+            margin: 0 auto;
         }
 
         .panel-home-btn {
-            width: 35px;
-            height: 35px;
-            background: #f5f5f5;
-            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background: none;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .panel-home-btn:hover {
-            background: #e0e0e0;
+            padding: 0;
         }
 
         .panel-home-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             fill: #666;
         }
 
@@ -1325,13 +1317,12 @@
         <!-- 結果面板 -->
         <div class="result-panel" id="resultPanel">
             <div class="panel-header">
+                <div class="panel-handle"></div>
                 <button class="panel-home-btn" onclick="closeResult()">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
                 </button>
-                <div class="panel-handle"></div>
-                <div style="width: 35px;"></div>
             </div>
             <div class="result-content" id="resultContent">
                 <!-- 動態內容 -->
@@ -2349,12 +2340,9 @@
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button onclick="openChat()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                <div style="margin-bottom: 20px;">
+                    <button onclick="openChat()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
                         詢問 AI
-                    </button>
-                    <button onclick="shareResult()" style="flex: 1; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        分享
                     </button>
                 </div>
                 
@@ -2370,9 +2358,14 @@
                     <p style="color: #666; line-height: 1.6;">${data.availability}</p>
                 </div>
                 
-                <button onclick="closeResult()" style="width: 100%; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                    關閉
-                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="shareResult()" style="flex: 1; padding: 15px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        分享
+                    </button>
+                    <button onclick="closeResult()" style="flex: 1; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        關閉
+                    </button>
+                </div>
                 
                 <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
             `;
