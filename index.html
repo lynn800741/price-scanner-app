@@ -608,16 +608,11 @@
             font-size: 18px;
         }
 
-        /* 結果頁面 */
+        /* 結果頁面 - 新增單獨頁面樣式 */
         .result-page {
-            display: none;
-            min-height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 80px;
             background: #f5f5f5;
-            position: relative;
-        }
-
-        .result-page.active {
-            display: block;
         }
 
         .result-header {
@@ -627,18 +622,18 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 500px;
+            padding: 15px 20px;
             background: #fff;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 20px;
             border-bottom: 1px solid #eee;
         }
 
         .result-back-btn {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             background: #f5f5f5;
             border-radius: 50%;
             border: none;
@@ -654,23 +649,14 @@
         }
 
         .result-back-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: #666;
-        }
-
-        .result-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            fill: #333;
         }
 
         .result-menu-btn {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             background: #f5f5f5;
             border-radius: 50%;
             border: none;
@@ -691,19 +677,6 @@
             fill: #666;
         }
 
-        .result-container {
-            padding-top: 60px;
-            padding-bottom: 20px;
-            max-width: 500px;
-            margin: 0 auto;
-            background: #fff;
-            min-height: 100vh;
-        }
-
-        .result-content {
-            padding: 0 20px;
-        }
-
         /* 下拉選單 */
         .result-dropdown {
             position: absolute;
@@ -714,7 +687,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             display: none;
-            z-index: 1001;
+            z-index: 2001;
             min-width: 180px;
         }
 
@@ -821,9 +794,24 @@
         }
 
         .result-content {
-            padding: 0 20px 20px;
-            overflow-y: auto;
-            height: calc(100% - 65px);
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .result-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
         }
 
         .price-section {
@@ -836,9 +824,57 @@
         }
 
         .price-value {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 700;
             margin: 10px 0;
+        }
+
+        .info-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-card-content {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-chat {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-share {
+            background: #2196F3;
+            color: white;
         }
 
         /* Canvas for photo capture */
@@ -1432,6 +1468,50 @@
             </div>
         </div>
 
+        <!-- 結果頁面 - 修改為單獨頁面 -->
+        <div class="page result-page" id="resultPage">
+            <div class="result-header">
+                <button class="result-back-btn" onclick="closeResult()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">分析結果</h1>
+                <button class="result-menu-btn" onclick="toggleResultMenu()">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="5" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="19" r="2"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="result-dropdown" id="resultDropdown">
+                <div class="dropdown-item" onclick="reanalyzeImage()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    更正物品識別
+                </div>
+                <div class="dropdown-item" onclick="editItemName()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                    編輯名稱
+                </div>
+                <div class="dropdown-item delete" onclick="deleteCurrentItem()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                    刪除
+                </div>
+            </div>
+            
+            <div class="result-content" id="resultContent">
+                <!-- 動態內容會插入這裡 -->
+            </div>
+        </div>
+
         <!-- 批量操作工具列 -->
         <div class="batch-toolbar" id="batchToolbar">
             <button class="batch-action-btn batch-share-btn" onclick="batchShare()">
@@ -1471,50 +1551,6 @@
                     <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
                 <span>設定</span>
-            </div>
-        </div>
-
-        <!-- 結果頁面 -->
-        <div class="page result-page" id="resultPage">
-            <div class="result-header">
-                <button class="result-back-btn" onclick="closeResult()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                    </svg>
-                </button>
-                <h1 class="result-title">物品詳情</h1>
-                <button class="result-menu-btn" onclick="toggleResultMenu()">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="5" r="2"/>
-                        <circle cx="12" cy="12" r="2"/>
-                        <circle cx="12" cy="19" r="2"/>
-                    </svg>
-                </button>
-                <div class="result-dropdown" id="resultDropdown">
-                    <div class="dropdown-item" onclick="reanalyzeImage()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        更正物品識別
-                    </div>
-                    <div class="dropdown-item" onclick="editItemName()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                        </svg>
-                        編輯名稱
-                    </div>
-                    <div class="dropdown-item delete" onclick="deleteCurrentItem()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg>
-                        刪除
-                    </div>
-                </div>
-            </div>
-            <div class="result-container">
-                <div class="result-content" id="resultContent">
-                    <!-- 動態內容 -->
-                </div>
             </div>
         </div>
 
@@ -1597,7 +1633,7 @@
             settingsPage: document.getElementById('settingsPage'),
             cameraPage: document.getElementById('cameraPage'),
             listPage: document.getElementById('listPage'),
-            resultPage: document.getElementById('resultPage')
+            resultPage: document.getElementById('resultPage')  // 新增結果頁面
         };
         
         const bottomNav = document.getElementById('bottomNav');
@@ -1630,9 +1666,12 @@
                 // 更新底部導航
                 updateBottomNav(pageId);
                 
-                // 如果切換到相機頁面或結果頁面，隱藏底部導航
-                if (pageId === 'cameraPage' || pageId === 'resultPage') {
+                // 如果切換到相機頁面，啟動相機並隱藏底部導航
+                if (pageId === 'cameraPage') {
                     initCamera();
+                    bottomNav.classList.add('hidden');
+                } else if (pageId === 'resultPage') {
+                    // 結果頁面也隱藏底部導航
                     bottomNav.classList.add('hidden');
                 } else {
                     // 關閉相機並顯示底部導航
@@ -2180,7 +2219,6 @@
         // 分析圖片
         async function analyzeImage() {
             const loadingOverlay = document.getElementById('loadingOverlay');
-            const resultPanel = document.getElementById('resultPanel');
             const resultContent = document.getElementById('resultContent');
             
             // 顯示載入動畫
@@ -2494,7 +2532,7 @@
             }
         }
         
-        // 切換結果頁選單
+        // 切換結果選單
         function toggleResultMenu() {
             const dropdown = document.getElementById('resultDropdown');
             dropdown.classList.toggle('active');
@@ -2505,7 +2543,7 @@
             }, 100);
         }
         
-        // 關閉結果頁選單
+        // 關閉結果選單
         function closeResultMenu(event) {
             const dropdown = document.getElementById('resultDropdown');
             const menuBtn = document.querySelector('.result-menu-btn');
@@ -2661,7 +2699,7 @@
             delete chatHistory[currentHistoryItem.id];
             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
             
-            // 關閉結果面板
+            // 關閉結果頁面，回到列表
             closeResult();
             
             // 更新列表顯示
@@ -2696,36 +2734,29 @@
         function displayResult(data) {
             const resultContent = document.getElementById('resultContent');
             
-            // 生成購買連結 - 只保留蝦皮、PChome、momo
+            // 生成購買連結
             let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
-                const allowedPlatforms = ['蝦皮購物', 'PChome 24h', 'momo購物網'];
-                const filteredLinks = data.purchaseLinks.online.filter(link => 
-                    allowedPlatforms.includes(link.platform)
-                );
-                
-                if (filteredLinks.length > 0) {
-                    purchaseLinks = `
-                        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
-                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                ${filteredLinks.map(link => `
-                                    <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
-                                       target="_blank" 
-                                       style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
-                                        ${link.platform}
-                                    </a>
-                                `).join('')}
-                            </div>
+                purchaseLinks = `
+                    <div class="info-card">
+                        <h3 class="info-card-title">購買管道</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${data.purchaseLinks.online.map(link => `
+                                <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                                   target="_blank" 
+                                   style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
+                                    ${link.platform}
+                                </a>
+                            `).join('')}
                         </div>
-                    `;
-                }
+                    </div>
+                `;
             }
             
             resultContent.innerHTML = `
-                <img src="${capturedImage}" alt="拍攝的物品" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+                <img src="${capturedImage}" alt="拍攝的物品" class="result-image">
                 
-                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">${data.name}</h2>
+                <h2 class="result-name">${data.name}</h2>
                 
                 <div class="price-section">
                     <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
@@ -2733,41 +2764,39 @@
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <button onclick="openChat()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                <div class="action-buttons">
+                    <button class="action-button btn-chat" onclick="openChat()">
                         詢問 AI
+                    </button>
+                    <button class="action-button btn-share" onclick="shareResult()">
+                        分享
                     </button>
                 </div>
                 
                 ${purchaseLinks}
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">基本資訊</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.description}</p>
+                <div class="info-card">
+                    <h3 class="info-card-title">基本資訊</h3>
+                    <p class="info-card-content">${data.description}</p>
                 </div>
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">分類</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.category || '未分類'}</p>
+                ${data.category ? `
+                <div class="info-card">
+                    <h3 class="info-card-title">分類</h3>
+                    <p class="info-card-content">${data.category}</p>
                 </div>
+                ` : ''}
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">品牌</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.brand || '未知品牌'}</p>
+                ${data.brand ? `
+                <div class="info-card">
+                    <h3 class="info-card-title">品牌</h3>
+                    <p class="info-card-content">${data.brand}</p>
                 </div>
+                ` : ''}
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">在哪裡買</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.availability}</p>
-                </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="shareResult()" style="flex: 1; padding: 15px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        分享
-                    </button>
-                    <button onclick="closeResult()" style="flex: 1; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        關閉
-                    </button>
+                <div class="info-card">
+                    <h3 class="info-card-title">在哪裡買</h3>
+                    <p class="info-card-content">${data.availability}</p>
                 </div>
                 
                 <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
@@ -3146,9 +3175,8 @@
             }
         }
         
-        // 關閉結果面板
+        // 關閉結果頁面
         function closeResult() {
-            // 切換回列表頁面
             switchPage('listPage');
         }
         
