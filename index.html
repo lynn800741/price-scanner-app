@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <!-- PWA 支援 -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    
+    <!-- iOS 支援 -->
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <meta name="apple-mobile-web-app-title" content="價格掃描">
+    
     <title>萬物價格掃描器</title>
     <style>
         * {
@@ -418,6 +428,9 @@
         .search-container {
             padding: 10px 20px;
             background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .search-box {
@@ -426,6 +439,7 @@
             background: #f5f5f5;
             border-radius: 10px;
             padding: 10px 15px;
+            flex: 1;
         }
 
         .search-icon {
@@ -441,6 +455,140 @@
             background: none;
             font-size: 16px;
             outline: none;
+        }
+
+        /* 選取和篩選按鈕 */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #666;
+        }
+
+        .action-btn.active {
+            background: #FF6B35;
+        }
+
+        .action-btn.active svg {
+            fill: #fff;
+        }
+
+        /* 批量操作工具欄 */
+        .batch-toolbar {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 460px;
+            height: 60px;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1001;
+        }
+
+        .batch-toolbar.active {
+            bottom: 70px;
+        }
+
+        .batch-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .batch-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .batch-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #666;
+        }
+
+        .batch-btn.delete svg {
+            fill: #ff5252;
+        }
+
+        .batch-count {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 選擇模式下的歷史項目 */
+        .history-item {
+            position: relative;
+        }
+
+        .history-item.selectable {
+            cursor: pointer;
+        }
+
+        .selection-checkbox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #999;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .selection-checkbox.visible {
+            display: flex;
+        }
+
+        .selection-checkbox.checked {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .selection-checkbox.checked::after {
+            content: '✓';
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
         }
 
         .empty-state {
@@ -518,82 +666,290 @@
             font-size: 18px;
         }
 
-        /* 結果面板 */
-        .result-panel {
+        /* 結果頁面（全螢幕） */
+        .result-page {
             position: fixed;
-            bottom: -100%;
-            left: 0;
-            right: 0;
-            height: 90vh;
-            background: #fff;
-            border-radius: 20px 20px 0 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000;
-            overflow: hidden;
-        }
-
-        .result-panel.active {
-            bottom: 0;
-        }
-
-        .panel-header {
-            position: relative;
-            padding: 15px 20px;
-        }
-
-        .panel-handle {
-            width: 60px;
-            height: 5px;
-            background: #ddd;
-            border-radius: 3px;
-            margin: 0 auto;
-        }
-
-        .panel-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            width: 30px;
-            height: 30px;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
             background: #f5f5f5;
-            border-radius: 50%;
-            border: none;
+            z-index: 2000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .result-page.active {
+            display: block;
+        }
+
+        .result-header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 20px;
+            background: #fff;
+            z-index: 2001;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+
+        .home-btn {
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .home-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        .more-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .more-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .more-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        /* 更多選項選單 */
+        .more-menu {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 2002;
+        }
+
+        .more-menu.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-item:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .menu-item:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .menu-item.delete {
+            color: #ff5252;
+        }
+
+        .result-content {
+            padding-top: 70px;
+            padding-bottom: 80px;
+        }
+
+        /* 結果卡片樣式 */
+        .result-card {
+            background: #fff;
+            margin: 10px 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-card.image-card {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-card.name-card {
+            text-align: center;
+        }
+
+        .item-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .result-card.price-card {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .price-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .price-note {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .result-card.action-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .result-card.action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-icon {
+            width: 24px;
+            height: 24px;
+            fill: #4CAF50;
+        }
+
+        .action-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-content {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .purchase-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .purchase-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #FF6B35;
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .purchase-link:hover {
+            background: #ff5722;
+        }
+
+        /* 底部操作按鈕 */
+        .result-footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            z-index: 2001;
+        }
+
+        .footer-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .panel-close-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .panel-close-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: #666;
-        }
-
-        .result-content {
-            padding: 0 20px 20px;
-            overflow-y: auto;
-            height: calc(100% - 65px);
-        }
-
-        .price-section {
-            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+        .footer-btn.share {
+            background: #2196F3;
             color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
         }
 
-        .price-value {
-            font-size: 48px;
-            font-weight: 700;
-            margin: 10px 0;
+        .footer-btn.share:hover {
+            background: #1976D2;
+        }
+
+        .footer-btn.close {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .footer-btn.close:hover {
+            background: #ff5722;
         }
 
         /* Canvas for photo capture */
@@ -668,7 +1024,7 @@
         }
 
         /* 文件輸入隱藏 */
-        #fileInput {
+        #fileInput, #multiFileInput {
             display: none;
         }
 
@@ -947,6 +1303,167 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* 改良的匯出對話框 */
+        .export-dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .export-dialog-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .export-close-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .export-close-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .export-close-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #666;
+        }
+
+        .select-all-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .select-all-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .select-all-label input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .export-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .export-btn-primary {
+            flex: 1;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .export-btn-primary:hover {
+            background: #45a049;
+        }
+
+        /* 編輯名稱對話框 */
+        .edit-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-dialog-content {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .edit-dialog-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .edit-input:focus {
+            border-color: #FF6B35;
+        }
+
+        .edit-dialog-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .edit-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .edit-btn.save {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .edit-btn.save:hover {
+            background: #45a049;
+        }
+
+        .edit-btn.cancel {
+            background: #666;
+            color: white;
+        }
+
+        .edit-btn.cancel:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body>
@@ -1131,6 +1648,18 @@
                     </svg>
                     <input type="text" class="search-input" placeholder="搜尋" id="searchInput" oninput="searchHistory()">
                 </div>
+                <div class="action-buttons">
+                    <button class="action-btn" id="selectBtn" onclick="toggleSelectionMode()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" onclick="openFilterOptions()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
             <div class="empty-state" id="emptyState">
@@ -1145,6 +1674,21 @@
             
             <div class="history-section" id="historySection" style="display: none;">
                 <!-- 歷史記錄會動態加入這裡 -->
+            </div>
+            
+            <!-- 批量操作工具欄 -->
+            <div class="batch-toolbar" id="batchToolbar">
+                <button class="batch-btn" onclick="batchShare()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                    </svg>
+                </button>
+                <div class="batch-count" id="batchCount">已選取 0 個</div>
+                <button class="batch-btn delete" onclick="batchDelete()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12z"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -1173,18 +1717,31 @@
             </div>
         </div>
 
-        <!-- 結果面板 -->
-        <div class="result-panel" id="resultPanel">
-            <div class="panel-header">
-                <div class="panel-handle"></div>
-                <button class="panel-close-btn" onclick="closeResult()">
+        <!-- 結果頁面（全螢幕） -->
+        <div class="result-page" id="resultPage">
+            <div class="result-header">
+                <button class="home-btn" onclick="closeResult()">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
                 </button>
+                <button class="more-btn" onclick="toggleMoreMenu()">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/>
+                    </svg>
+                </button>
+                <div class="more-menu" id="moreMenu">
+                    <div class="menu-item" onclick="reanalyzeItem()">更正物品識別</div>
+                    <div class="menu-item" onclick="editItemName()">編輯名稱</div>
+                    <div class="menu-item delete" onclick="deleteCurrentItem()">刪除</div>
+                </div>
             </div>
             <div class="result-content" id="resultContent">
                 <!-- 動態內容 -->
+            </div>
+            <div class="result-footer">
+                <button class="footer-btn share" onclick="shareResult()">分享</button>
+                <button class="footer-btn close" onclick="closeResult()">關閉</button>
             </div>
         </div>
 
@@ -1246,6 +1803,9 @@
         let currentAnalysisData = null;
         let flashMode = 'off';
         let currentChatItemId = null;
+        let isSelectionMode = false;
+        let selectedItems = new Set();
+        let currentViewingItemId = null;
         
         // DOM 元素
         const pages = {
@@ -1256,14 +1816,29 @@
         
         const bottomNav = document.getElementById('bottomNav');
         const chatPage = document.getElementById('chatPage');
+        const resultPage = document.getElementById('resultPage');
         
         // 初始化應用
         window.addEventListener('load', () => {
+            // 註冊 Service Worker
+            registerServiceWorker();
             // 檢查並顯示歷史記錄
             displayHistory();
             // 設定拍照按鈕長按功能
             setupCaptureButton();
         });
+        
+        // 註冊 Service Worker（離線功能）
+        async function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    await navigator.serviceWorker.register('/sw.js');
+                    console.log('Service Worker 註冊成功');
+                } catch (error) {
+                    console.log('Service Worker 註冊失敗:', error);
+                }
+            }
+        }
         
         // 回到首頁（照片列表頁）
         function goToHome() {
@@ -1375,6 +1950,122 @@
                 console.error('閃光燈控制失敗:', error);
                 alert('無法控制閃光燈');
             }
+        }
+        
+        // 切換選擇模式
+        function toggleSelectionMode() {
+            isSelectionMode = !isSelectionMode;
+            const selectBtn = document.getElementById('selectBtn');
+            const batchToolbar = document.getElementById('batchToolbar');
+            
+            if (isSelectionMode) {
+                selectBtn.classList.add('active');
+                selectedItems.clear();
+                updateBatchCount();
+                
+                // 顯示所有選擇框
+                document.querySelectorAll('.selection-checkbox').forEach(checkbox => {
+                    checkbox.classList.add('visible');
+                });
+                
+                // 隱藏底部導航，顯示批量工具欄
+                bottomNav.style.transform = 'translateX(-50%) translateY(100%)';
+                setTimeout(() => {
+                    batchToolbar.classList.add('active');
+                }, 300);
+            } else {
+                selectBtn.classList.remove('active');
+                batchToolbar.classList.remove('active');
+                
+                // 隱藏所有選擇框
+                document.querySelectorAll('.selection-checkbox').forEach(checkbox => {
+                    checkbox.classList.remove('visible', 'checked');
+                });
+                
+                // 顯示底部導航
+                setTimeout(() => {
+                    bottomNav.style.transform = 'translateX(-50%) translateY(0)';
+                }, 300);
+            }
+        }
+        
+        // 切換項目選擇
+        function toggleItemSelection(itemId) {
+            if (!isSelectionMode) return;
+            
+            const checkbox = document.querySelector(`[data-item-id="${itemId}"] .selection-checkbox`);
+            
+            if (selectedItems.has(itemId)) {
+                selectedItems.delete(itemId);
+                checkbox.classList.remove('checked');
+            } else {
+                selectedItems.add(itemId);
+                checkbox.classList.add('checked');
+            }
+            
+            updateBatchCount();
+        }
+        
+        // 更新批量操作計數
+        function updateBatchCount() {
+            const batchCount = document.getElementById('batchCount');
+            batchCount.textContent = `已選取 ${selectedItems.size} 個`;
+        }
+        
+        // 批量分享
+        async function batchShare() {
+            if (selectedItems.size === 0) {
+                alert('請選擇要分享的項目');
+                return;
+            }
+            
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const itemsToShare = history.filter(item => selectedItems.has(item.id));
+            
+            // 建立分享文字
+            let shareText = `我用萬物價格掃描器發現了 ${itemsToShare.length} 個物品：\n\n`;
+            itemsToShare.forEach(item => {
+                shareText += `${item.name} - ${item.price}\n`;
+            });
+            shareText += '\n立即試用：https://lynn800741.github.io/price-scanner-app/';
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: '萬物價格掃描器',
+                        text: shareText
+                    });
+                } catch (err) {
+                    console.log('分享取消');
+                }
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('分享文字已複製到剪貼板！');
+                });
+            }
+        }
+        
+        // 批量刪除
+        function batchDelete() {
+            if (selectedItems.size === 0) {
+                alert('請選擇要刪除的項目');
+                return;
+            }
+            
+            if (confirm(`確定要刪除選中的 ${selectedItems.size} 個項目嗎？`)) {
+                let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+                history = history.filter(item => !selectedItems.has(item.id));
+                localStorage.setItem('scanHistory', JSON.stringify(history));
+                
+                // 重置選擇模式
+                toggleSelectionMode();
+                displayHistory();
+            }
+        }
+        
+        // 打開篩選選項
+        function openFilterOptions() {
+            alert('篩選功能開發中...');
         }
         
         // 打開批次分析（從設定頁面）
@@ -1611,16 +2302,24 @@
             `;
             
             content.innerHTML = `
-                <h2 style="margin-bottom: 20px;">選擇要匯出的照片</h2>
-                <div style="margin-bottom: 20px;">
-                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
-                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="margin-right: 10px;">
-                        <span>全選</span>
+                <div class="export-dialog-header">
+                    <h2 class="export-dialog-title">選擇要匯出的照片</h2>
+                    <button class="export-close-btn" onclick="closeExportDialog()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="select-all-row">
+                    <label class="select-all-label">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        全選
                     </label>
+                    <button onclick="exportToExcel()" class="export-btn-primary">匯出 Excel</button>
                 </div>
                 <div id="exportList" style="margin-bottom: 20px;">
                     ${history.map((item, index) => `
-                        <label style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 10px;">
+                        <label style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 10px; cursor: pointer;">
                             <input type="checkbox" class="export-item" value="${index}" style="margin-right: 10px;">
                             <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
                             <div style="flex: 1;">
@@ -1629,14 +2328,6 @@
                             </div>
                         </label>
                     `).join('')}
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="exportToExcel()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                        匯出 Excel
-                    </button>
-                    <button onclick="closeExportDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                        取消
-                    </button>
                 </div>
             `;
             
@@ -1826,7 +2517,6 @@
         // 分析圖片
         async function analyzeImage() {
             const loadingOverlay = document.getElementById('loadingOverlay');
-            const resultPanel = document.getElementById('resultPanel');
             const resultContent = document.getElementById('resultContent');
             
             // 顯示載入動畫
@@ -1864,15 +2554,16 @@
                     // 保存當前分析數據
                     currentAnalysisData = result.data;
                     
+                    // 儲存到歷史記錄
+                    const historyItem = saveToHistory(result.data);
+                    currentViewingItemId = historyItem.id;
+                    
                     // 顯示結果
                     displayResult(result.data);
                     
-                    // 儲存到歷史記錄
-                    saveToHistory(result.data);
-                    
                     // 切換到列表頁面並顯示結果
                     switchPage('listPage');
-                    resultPanel.classList.add('active');
+                    resultPage.classList.add('active');
                 } else {
                     throw new Error(result.error || '分析失敗');
                 }
@@ -1906,6 +2597,8 @@
             
             // 設定當前聊天項目 ID
             currentChatItemId = historyItem.id;
+            
+            return historyItem;
         }
         
         // 搜尋歷史記錄
@@ -1955,7 +2648,8 @@
                     
                     groupedByMonth[month].forEach(item => {
                         html += `
-                            <div class="history-item" onclick="showHistoryItem(${item.id})">
+                            <div class="history-item ${isSelectionMode ? 'selectable' : ''}" data-item-id="${item.id}" onclick="${isSelectionMode ? `toggleItemSelection(${item.id})` : `showHistoryItem(${item.id})`}">
+                                <div class="selection-checkbox ${isSelectionMode ? 'visible' : ''} ${selectedItems.has(item.id) ? 'checked' : ''}"></div>
                                 <img src="${item.image}" alt="${item.name}" class="history-img">
                                 <div class="history-info">
                                     <div class="history-name">${item.name}</div>
@@ -1987,11 +2681,11 @@
             if (item) {
                 capturedImage = item.image;
                 currentAnalysisData = item.data;
-                currentChatItemId = item.id;  // 設定當前聊天項目 ID
+                currentChatItemId = item.id;
+                currentViewingItemId = item.id;
                 displayResult(item.data);
                 
-                const resultPanel = document.getElementById('resultPanel');
-                resultPanel.classList.add('active');
+                resultPage.classList.add('active');
             }
         }
         
@@ -2024,61 +2718,68 @@
             const resultContent = document.getElementById('resultContent');
             
             // 生成購買連結
-            let purchaseLinks = '';
+            let purchaseLinksHTML = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
-                purchaseLinks = `
-                    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            ${data.purchaseLinks.online.map(link => `
-                                <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
-                                   target="_blank" 
-                                   style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
-                                    ${link.platform}
-                                </a>
-                            `).join('')}
-                        </div>
+                purchaseLinksHTML = `
+                    <div class="purchase-links">
+                        ${data.purchaseLinks.online.map(link => `
+                            <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                               target="_blank" 
+                               class="purchase-link">
+                                ${link.platform}
+                            </a>
+                        `).join('')}
                     </div>
                 `;
             }
             
             resultContent.innerHTML = `
-                <img src="${capturedImage}" alt="拍攝的物品" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+                <!-- 照片卡片 -->
+                <div class="result-card image-card">
+                    <img src="${capturedImage}" alt="拍攝的物品" class="result-image">
+                </div>
                 
-                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">${data.name}</h2>
+                <!-- 名稱卡片 -->
+                <div class="result-card name-card">
+                    <h2 class="item-name">${data.name}</h2>
+                </div>
                 
-                <div class="price-section">
-                    <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
+                <!-- 價格卡片 -->
+                <div class="result-card price-card">
+                    <div class="price-label">預估價格</div>
                     <div class="price-value">${data.price}</div>
-                    <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
+                    <div class="price-note">${data.priceNote}</div>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button onclick="openChat()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        詢問 AI
-                    </button>
-                    <button onclick="shareResult()" style="flex: 1; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        分享
-                    </button>
+                <!-- 詢問 AI 卡片 -->
+                <div class="result-card action-card" onclick="openChat()">
+                    <svg class="action-icon" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    <span class="action-text">詢問 AI</span>
                 </div>
                 
-                ${purchaseLinks}
+                <!-- 購買管道卡片 -->
+                ${purchaseLinksHTML ? `
+                <div class="result-card">
+                    <h3 class="info-title">購買管道</h3>
+                    ${purchaseLinksHTML}
+                </div>
+                ` : ''}
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">基本資訊</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.description}</p>
+                <!-- 基本資訊卡片 -->
+                <div class="result-card">
+                    <h3 class="info-title">基本資訊</h3>
+                    <p class="info-content">${data.description}</p>
                 </div>
                 
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">在哪裡買</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.availability}</p>
+                <!-- 在哪裡買卡片 -->
+                <div class="result-card">
+                    <h3 class="info-title">在哪裡買</h3>
+                    <p class="info-content">${data.availability}</p>
                 </div>
                 
-                <button onclick="closeResult()" style="width: 100%; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                    關閉
-                </button>
-                
-                <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
+                <p class="disclaimer-text" style="margin: 20px;">所有資訊皆由 GPT 產出</p>
             `;
         }
         
@@ -2092,6 +2793,145 @@
                 'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`
             };
             return urls[platform] || '#';
+        }
+        
+        // 切換更多選單
+        function toggleMoreMenu() {
+            const moreMenu = document.getElementById('moreMenu');
+            moreMenu.classList.toggle('active');
+            
+            // 點擊其他地方關閉選單
+            if (moreMenu.classList.contains('active')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeMoreMenuOutside);
+                }, 100);
+            }
+        }
+        
+        // 點擊外部關閉更多選單
+        function closeMoreMenuOutside(event) {
+            const moreMenu = document.getElementById('moreMenu');
+            const moreBtn = document.querySelector('.more-btn');
+            
+            if (!moreMenu.contains(event.target) && !moreBtn.contains(event.target)) {
+                moreMenu.classList.remove('active');
+                document.removeEventListener('click', closeMoreMenuOutside);
+            }
+        }
+        
+        // 更正物品識別
+        async function reanalyzeItem() {
+            const moreMenu = document.getElementById('moreMenu');
+            moreMenu.classList.remove('active');
+            
+            if (!capturedImage) {
+                alert('無法重新分析');
+                return;
+            }
+            
+            // 關閉結果頁面並重新分析
+            resultPage.classList.remove('active');
+            
+            // 延遲一下再分析，讓動畫更流暢
+            setTimeout(() => {
+                analyzeImage();
+            }, 300);
+        }
+        
+        // 編輯名稱
+        function editItemName() {
+            const moreMenu = document.getElementById('moreMenu');
+            moreMenu.classList.remove('active');
+            
+            if (!currentViewingItemId) {
+                alert('無法編輯');
+                return;
+            }
+            
+            // 建立編輯對話框
+            const dialog = document.createElement('div');
+            dialog.className = 'edit-dialog';
+            dialog.innerHTML = `
+                <div class="edit-dialog-content">
+                    <h3 class="edit-dialog-title">編輯名稱</h3>
+                    <input type="text" class="edit-input" id="editNameInput" value="${currentAnalysisData.name}">
+                    <div class="edit-dialog-buttons">
+                        <button class="edit-btn save" onclick="saveEditedName()">儲存</button>
+                        <button class="edit-btn cancel" onclick="closeEditDialog()">取消</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // 聚焦輸入框
+            setTimeout(() => {
+                document.getElementById('editNameInput').focus();
+                document.getElementById('editNameInput').select();
+            }, 100);
+            
+            // 保存對話框參考
+            window.currentEditDialog = dialog;
+        }
+        
+        // 儲存編輯的名稱
+        window.saveEditedName = function() {
+            const newName = document.getElementById('editNameInput').value.trim();
+            
+            if (!newName) {
+                alert('名稱不能為空');
+                return;
+            }
+            
+            // 更新歷史記錄
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const index = history.findIndex(item => item.id === currentViewingItemId);
+            
+            if (index !== -1) {
+                history[index].name = newName;
+                history[index].data.name = newName;
+                localStorage.setItem('scanHistory', JSON.stringify(history));
+                
+                // 更新當前資料
+                currentAnalysisData.name = newName;
+                
+                // 重新顯示結果
+                displayResult(currentAnalysisData);
+                
+                // 關閉對話框
+                closeEditDialog();
+            }
+        };
+        
+        // 關閉編輯對話框
+        window.closeEditDialog = function() {
+            if (window.currentEditDialog) {
+                window.currentEditDialog.remove();
+                window.currentEditDialog = null;
+            }
+        };
+        
+        // 刪除當前項目
+        function deleteCurrentItem() {
+            const moreMenu = document.getElementById('moreMenu');
+            moreMenu.classList.remove('active');
+            
+            if (!currentViewingItemId) {
+                alert('無法刪除');
+                return;
+            }
+            
+            if (confirm('確定要刪除這個項目嗎？')) {
+                let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+                history = history.filter(item => item.id !== currentViewingItemId);
+                localStorage.setItem('scanHistory', JSON.stringify(history));
+                
+                // 關閉結果頁面
+                closeResult();
+                
+                // 更新列表
+                displayHistory();
+            }
         }
         
         // 打開聊天頁面
@@ -2454,10 +3294,14 @@
             }
         }
         
-        // 關閉結果面板
+        // 關閉結果頁面
         function closeResult() {
-            const resultPanel = document.getElementById('resultPanel');
-            resultPanel.classList.remove('active');
+            resultPage.classList.remove('active');
+            currentViewingItemId = null;
+            
+            // 關閉更多選單
+            const moreMenu = document.getElementById('moreMenu');
+            moreMenu.classList.remove('active');
         }
         
         // 清理資源
