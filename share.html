@@ -212,8 +212,9 @@
             
             let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
-                purchaseLinks = data.purchaseLinks.online.map(link => 
-                    `<a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                const platforms = data.purchaseLinks.online.slice(0, 3); // 只顯示前3個
+                purchaseLinks = platforms.map(link => 
+                    `<a href="${getPlatformUrl(link, link.searchTerm)}" 
                        target="_blank" 
                        style="display: inline-block; margin: 5px; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
                         ${link.platform}
@@ -261,14 +262,42 @@
 
         // 取得平台 URL
         function getPlatformUrl(platform, searchTerm) {
-            const urls = {
-                '蝦皮購物': `https://shopee.tw/search?keyword=${encodeURIComponent(searchTerm)}`,
-                'PChome 24h': `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(searchTerm)}`,
-                'momo購物網': `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(searchTerm)}`,
-                '露天拍賣': `https://find.ruten.com.tw/s/?q=${encodeURIComponent(searchTerm)}`,
-                'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`
+            // 如果是舊格式
+            if (typeof platform === 'string') {
+                const urls = {
+                    '蝦皮購物': `https://shopee.tw/search?keyword=${encodeURIComponent(searchTerm)}`,
+                    'PChome 24h': `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(searchTerm)}`,
+                    'momo購物網': `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(searchTerm)}`,
+                    '露天拍賣': `https://find.ruten.com.tw/s/?q=${encodeURIComponent(searchTerm)}`,
+                    'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`
+                };
+                return urls[platform] || '#';
+            }
+            
+            // 新格式
+            const platformSearchUrls = {
+                // 台灣
+                '蝦皮購物': 'https://shopee.tw/search?keyword=',
+                'PChome 24h': 'https://24h.pchome.com.tw/search/?q=',
+                'momo購物網': 'https://www.momoshop.com.tw/search/searchShop.jsp?keyword=',
+                // 美國
+                'Amazon': 'https://www.amazon.com/s?k=',
+                'eBay': 'https://www.ebay.com/sch/i.html?_nkw=',
+                'Walmart': 'https://www.walmart.com/search?q=',
+                // 日本
+                'Amazon Japan': 'https://www.amazon.co.jp/s?k=',
+                '楽天市場': 'https://search.rakuten.co.jp/search/mall/',
+                'Yahoo!ショッピング': 'https://shopping.yahoo.co.jp/search?p=',
+                // 歐洲
+                'Otto': 'https://www.otto.de/suche/',
+                // 東南亞
+                'Shopee': 'https://shopee.sg/search?keyword=',
+                'Lazada': 'https://www.lazada.sg/catalog/?q=',
+                'Tokopedia': 'https://www.tokopedia.com/search?q='
             };
-            return urls[platform] || '#';
+            
+            const baseUrl = platformSearchUrls[platform.platform] || platformSearchUrls['蝦皮購物'];
+            return `${baseUrl}${encodeURIComponent(searchTerm)}`;
         }
 
         // 頁面載入時執行
