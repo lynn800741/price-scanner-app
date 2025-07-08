@@ -3119,7 +3119,7 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content);
+                    addMessageToUI(msg.role, msg.content, false); // 歷史訊息不使用打字效果
                 }
             });
             
@@ -3127,8 +3127,8 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 添加訊息到 UI
-        function addMessageToUI(role, content) {
+        // 添加訊息到 UI - 加入橘貓打字效果
+        function addMessageToUI(role, content, useTypingEffect = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -3136,14 +3136,87 @@
             if (role === 'user') {
                 // 用戶訊息保持原樣
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             } else {
-                // AI 訊息進行 Markdown 解析
-                const parsedContent = parseMarkdown(content);
-                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
+                // AI 訊息
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                messageDiv.appendChild(contentDiv);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                if (useTypingEffect) {
+                    // 使用橘貓打字效果
+                    typeWithCat(content, contentDiv);
+                } else {
+                    // 直接顯示（用於載入歷史記錄）
+                    contentDiv.innerHTML = parseMarkdown(content);
+                }
             }
+        }
+        
+        // 橘貓打字效果
+        function typeWithCat(text, element) {
+            // 先顯示橘貓和打字指示器
+            element.innerHTML = `
+                <span class="typing-cat-container">
+                    <span class="typing-cat">🐈</span>
+                    <span class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            `;
             
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // 1秒後開始顯示文字
+            setTimeout(() => {
+                // 解析 Markdown
+                const parsedContent = parseMarkdown(text);
+                
+                // 創建一個臨時容器來存放解析後的內容
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = parsedContent;
+                
+                // 清空元素
+                element.innerHTML = '';
+                
+                // 逐步顯示內容
+                let currentHTML = '';
+                const fullHTML = tempDiv.innerHTML;
+                let index = 0;
+                
+                const typeInterval = setInterval(() => {
+                    if (index < fullHTML.length) {
+                        // 簡單的逐字顯示（包含HTML標籤）
+                        currentHTML = fullHTML.substring(0, index + 1);
+                        element.innerHTML = currentHTML + 
+                            `<span class="typing-cat-container">
+                                <span class="typing-cat">🐈</span>
+                            </span>`;
+                        index += 3; // 每次顯示3個字符，加快速度
+                        
+                        // 保持滾動到底部
+                        const chatMessages = document.getElementById('chatMessages');
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        // 完成打字
+                        clearInterval(typeInterval);
+                        
+                        // 顯示完整內容，貓咪坐下
+                        element.innerHTML = fullHTML + 
+                            `<span class="typing-cat-container" style="margin-left: 10px;">
+                                <span class="typing-cat" style="animation: none;">🐱</span>
+                            </span>`;
+                        
+                        // 3秒後移除貓咪
+                        setTimeout(() => {
+                            element.innerHTML = fullHTML;
+                        }, 3000);
+                    }
+                }, 30);
+            }, 1000);
         }
         
         // 添加訊息並保存
@@ -3151,7 +3224,7 @@
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content);
+            addMessageToUI(role, content, true); // 新訊息使用打字效果
         }
         
         // 發送帶圖片的訊息
