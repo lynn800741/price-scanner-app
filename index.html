@@ -645,19 +645,166 @@
             left: 20px;
             width: 30px;
             height: 30px;
-            background: none;
+            background: #f5f5f5;
+            border-radius: 50%;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            padding: 0;
+            transition: all 0.3s;
+        }
+
+        .panel-home-btn:hover {
+            background: #e0e0e0;
         }
 
         .panel-home-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
             fill: #666;
+        }
+
+        .panel-menu-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .panel-menu-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .panel-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #666;
+        }
+
+        /* 下拉選單 */
+        .panel-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: none;
+            z-index: 2001;
+            min-width: 180px;
+        }
+
+        .panel-dropdown.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+
+        .dropdown-item svg {
+            width: 18px;
+            height: 18px;
+            fill: #666;
+        }
+
+        .dropdown-item.delete {
+            color: #f44336;
+        }
+
+        .dropdown-item.delete svg {
+            fill: #f44336;
+        }
+
+        /* 編輯名稱對話框 */
+        .edit-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .edit-dialog.active {
+            display: flex;
+        }
+
+        .edit-dialog-content {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .edit-dialog-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .edit-dialog-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-dialog-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .edit-dialog-btn.save {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .edit-dialog-btn.cancel {
+            background: #f5f5f5;
+            color: #666;
         }
 
         .result-content {
@@ -1323,9 +1470,48 @@
                         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
                 </button>
+                <button class="panel-menu-btn" onclick="togglePanelMenu()">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="5" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="19" r="2"/>
+                    </svg>
+                </button>
+                <div class="panel-dropdown" id="panelDropdown">
+                    <div class="dropdown-item" onclick="reanalyzeImage()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                        </svg>
+                        更正物品識別
+                    </div>
+                    <div class="dropdown-item" onclick="editItemName()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                        編輯名稱
+                    </div>
+                    <div class="dropdown-item delete" onclick="deleteCurrentItem()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                        刪除
+                    </div>
+                </div>
             </div>
             <div class="result-content" id="resultContent">
                 <!-- 動態內容 -->
+            </div>
+        </div>
+
+        <!-- 編輯名稱對話框 -->
+        <div class="edit-dialog" id="editDialog">
+            <div class="edit-dialog-content">
+                <h3 class="edit-dialog-title">編輯名稱</h3>
+                <input type="text" class="edit-input" id="editNameInput" placeholder="輸入新名稱">
+                <div class="edit-dialog-buttons">
+                    <button class="edit-dialog-btn save" onclick="saveEditedName()">儲存</button>
+                    <button class="edit-dialog-btn cancel" onclick="closeEditDialog()">取消</button>
+                </div>
             </div>
         </div>
 
@@ -1389,6 +1575,7 @@
         let currentChatItemId = null;
         let isSelectMode = false;
         let selectedItems = new Set();
+        let currentHistoryItem = null;
         
         // DOM 元素
         const pages = {
@@ -2049,6 +2236,7 @@
             
             // 設定當前聊天項目 ID
             currentChatItemId = historyItem.id;
+            currentHistoryItem = historyItem;  // 保存當前歷史項目
         }
         
         // 搜尋歷史記錄
@@ -2275,11 +2463,186 @@
                 capturedImage = item.image;
                 currentAnalysisData = item.data;
                 currentChatItemId = item.id;  // 設定當前聊天項目 ID
+                currentHistoryItem = item;     // 保存當前歷史項目
                 displayResult(item.data);
                 
                 const resultPanel = document.getElementById('resultPanel');
                 resultPanel.classList.add('active');
             }
+        }
+        
+        // 切換面板選單
+        function togglePanelMenu() {
+            const dropdown = document.getElementById('panelDropdown');
+            dropdown.classList.toggle('active');
+            
+            // 點擊其他地方關閉選單
+            setTimeout(() => {
+                document.addEventListener('click', closePanelMenu);
+            }, 100);
+        }
+        
+        // 關閉面板選單
+        function closePanelMenu(event) {
+            const dropdown = document.getElementById('panelDropdown');
+            const menuBtn = document.querySelector('.panel-menu-btn');
+            
+            if (!dropdown.contains(event.target) && !menuBtn.contains(event.target)) {
+                dropdown.classList.remove('active');
+                document.removeEventListener('click', closePanelMenu);
+            }
+        }
+        
+        // 重新分析圖片
+        async function reanalyzeImage() {
+            // 關閉選單
+            document.getElementById('panelDropdown').classList.remove('active');
+            
+            // 確認重新分析
+            if (!confirm('確定要重新識別這個物品嗎？')) {
+                return;
+            }
+            
+            // 顯示載入動畫
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+            
+            try {
+                // 將 base64 圖片轉換為 blob
+                const base64Data = capturedImage.split(',')[1];
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                
+                // 準備 FormData
+                const formData = new FormData();
+                formData.append('image', blob, 'capture.jpg');
+                
+                // 呼叫後端 API
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API 請求失敗');
+                }
+                
+                const result = await response.json();
+                
+                // 隱藏載入動畫
+                loadingOverlay.classList.remove('active');
+                
+                if (result.success && result.data) {
+                    // 更新當前分析數據
+                    currentAnalysisData = result.data;
+                    
+                    // 更新歷史記錄
+                    let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+                    const index = history.findIndex(h => h.id === currentHistoryItem.id);
+                    if (index !== -1) {
+                        history[index].data = result.data;
+                        history[index].name = result.data.name;
+                        history[index].price = result.data.price;
+                        localStorage.setItem('scanHistory', JSON.stringify(history));
+                    }
+                    
+                    // 重新顯示結果
+                    displayResult(result.data);
+                    
+                    alert('物品識別已更新！');
+                } else {
+                    throw new Error(result.error || '分析失敗');
+                }
+                
+            } catch (error) {
+                console.error('重新分析錯誤:', error);
+                loadingOverlay.classList.remove('active');
+                alert('重新分析失敗：' + error.message);
+            }
+        }
+        
+        // 編輯物品名稱
+        function editItemName() {
+            // 關閉選單
+            document.getElementById('panelDropdown').classList.remove('active');
+            
+            // 顯示編輯對話框
+            const editDialog = document.getElementById('editDialog');
+            const editInput = document.getElementById('editNameInput');
+            editInput.value = currentAnalysisData.name;
+            editDialog.classList.add('active');
+            
+            // 聚焦輸入框
+            setTimeout(() => editInput.focus(), 100);
+        }
+        
+        // 關閉編輯對話框
+        function closeEditDialog() {
+            document.getElementById('editDialog').classList.remove('active');
+        }
+        
+        // 儲存編輯的名稱
+        function saveEditedName() {
+            const newName = document.getElementById('editNameInput').value.trim();
+            
+            if (!newName) {
+                alert('請輸入新名稱');
+                return;
+            }
+            
+            // 更新當前數據
+            currentAnalysisData.name = newName;
+            
+            // 更新歷史記錄
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const index = history.findIndex(h => h.id === currentHistoryItem.id);
+            if (index !== -1) {
+                history[index].name = newName;
+                history[index].data.name = newName;
+                localStorage.setItem('scanHistory', JSON.stringify(history));
+            }
+            
+            // 重新顯示結果
+            displayResult(currentAnalysisData);
+            
+            // 關閉對話框
+            closeEditDialog();
+            
+            // 更新列表顯示
+            displayHistory();
+        }
+        
+        // 刪除當前項目
+        function deleteCurrentItem() {
+            // 關閉選單
+            document.getElementById('panelDropdown').classList.remove('active');
+            
+            if (!confirm('確定要刪除這個項目嗎？')) {
+                return;
+            }
+            
+            // 從歷史記錄中刪除
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            history = history.filter(item => item.id !== currentHistoryItem.id);
+            localStorage.setItem('scanHistory', JSON.stringify(history));
+            
+            // 刪除相關聊天記錄
+            const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+            delete chatHistory[currentHistoryItem.id];
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+            
+            // 關閉結果面板
+            closeResult();
+            
+            // 更新列表顯示
+            displayHistory();
         }
         
         // 格式化日期顯示
