@@ -608,41 +608,35 @@
             font-size: 18px;
         }
 
-        /* 結果面板 */
-        .result-panel {
-            position: fixed;
-            bottom: -100%;
-            left: 0;
-            right: 0;
-            height: 90vh;
-            background: #fff;
-            border-radius: 20px 20px 0 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000;
-            overflow: hidden;
-        }
-
-        .result-panel.active {
-            bottom: 0;
-        }
-
-        .panel-header {
+        /* 結果頁面 */
+        .result-page {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
             position: relative;
+        }
+
+        .result-page.active {
+            display: block;
+        }
+
+        .result-header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 15px 20px;
+            border-bottom: 1px solid #eee;
         }
 
-        .panel-handle {
-            width: 60px;
-            height: 5px;
-            background: #ddd;
-            border-radius: 3px;
-            margin: 0 auto;
-        }
-
-        .panel-home-btn {
-            position: absolute;
-            top: 15px;
-            left: 20px;
+        .result-back-btn {
             width: 30px;
             height: 30px;
             background: #f5f5f5;
@@ -655,20 +649,26 @@
             transition: all 0.3s;
         }
 
-        .panel-home-btn:hover {
+        .result-back-btn:hover {
             background: #e0e0e0;
         }
 
-        .panel-home-btn svg {
+        .result-back-btn svg {
             width: 16px;
             height: 16px;
             fill: #666;
         }
 
-        .panel-menu-btn {
+        .result-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
             position: absolute;
-            top: 15px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .result-menu-btn {
             width: 30px;
             height: 30px;
             background: #f5f5f5;
@@ -681,18 +681,31 @@
             transition: all 0.3s;
         }
 
-        .panel-menu-btn:hover {
+        .result-menu-btn:hover {
             background: #e0e0e0;
         }
 
-        .panel-menu-btn svg {
+        .result-menu-btn svg {
             width: 20px;
             height: 20px;
             fill: #666;
         }
 
+        .result-container {
+            padding-top: 60px;
+            padding-bottom: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+        }
+
+        .result-content {
+            padding: 0 20px;
+        }
+
         /* 下拉選單 */
-        .panel-dropdown {
+        .result-dropdown {
             position: absolute;
             top: 50px;
             right: 20px;
@@ -701,11 +714,11 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             display: none;
-            z-index: 2001;
+            z-index: 1001;
             min-width: 180px;
         }
 
-        .panel-dropdown.active {
+        .result-dropdown.active {
             display: block;
         }
 
@@ -823,7 +836,7 @@
         }
 
         .price-value {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 700;
             margin: 10px 0;
         }
@@ -1461,23 +1474,23 @@
             </div>
         </div>
 
-        <!-- 結果面板 -->
-        <div class="result-panel" id="resultPanel">
-            <div class="panel-header">
-                <div class="panel-handle"></div>
-                <button class="panel-home-btn" onclick="closeResult()">
+        <!-- 結果頁面 -->
+        <div class="page result-page" id="resultPage">
+            <div class="result-header">
+                <button class="result-back-btn" onclick="closeResult()">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
                 </button>
-                <button class="panel-menu-btn" onclick="togglePanelMenu()">
+                <h1 class="result-title">物品詳情</h1>
+                <button class="result-menu-btn" onclick="toggleResultMenu()">
                     <svg viewBox="0 0 24 24">
                         <circle cx="12" cy="5" r="2"/>
                         <circle cx="12" cy="12" r="2"/>
                         <circle cx="12" cy="19" r="2"/>
                     </svg>
                 </button>
-                <div class="panel-dropdown" id="panelDropdown">
+                <div class="result-dropdown" id="resultDropdown">
                     <div class="dropdown-item" onclick="reanalyzeImage()">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
@@ -1498,8 +1511,10 @@
                     </div>
                 </div>
             </div>
-            <div class="result-content" id="resultContent">
-                <!-- 動態內容 -->
+            <div class="result-container">
+                <div class="result-content" id="resultContent">
+                    <!-- 動態內容 -->
+                </div>
             </div>
         </div>
 
@@ -1581,7 +1596,8 @@
         const pages = {
             settingsPage: document.getElementById('settingsPage'),
             cameraPage: document.getElementById('cameraPage'),
-            listPage: document.getElementById('listPage')
+            listPage: document.getElementById('listPage'),
+            resultPage: document.getElementById('resultPage')
         };
         
         const bottomNav = document.getElementById('bottomNav');
@@ -1614,8 +1630,8 @@
                 // 更新底部導航
                 updateBottomNav(pageId);
                 
-                // 如果切換到相機頁面，啟動相機並隱藏底部導航
-                if (pageId === 'cameraPage') {
+                // 如果切換到相機頁面或結果頁面，隱藏底部導航
+                if (pageId === 'cameraPage' || pageId === 'resultPage') {
                     initCamera();
                     bottomNav.classList.add('hidden');
                 } else {
@@ -2208,9 +2224,8 @@
                     // 儲存到歷史記錄
                     saveToHistory(result.data);
                     
-                    // 切換到列表頁面並顯示結果
-                    switchPage('listPage');
-                    resultPanel.classList.add('active');
+                    // 切換到結果頁面
+                    switchPage('resultPage');
                 } else {
                     throw new Error(result.error || '分析失敗');
                 }
@@ -2474,37 +2489,37 @@
                 currentHistoryItem = item;     // 保存當前歷史項目
                 displayResult(item.data);
                 
-                const resultPanel = document.getElementById('resultPanel');
-                resultPanel.classList.add('active');
+                // 切換到結果頁面
+                switchPage('resultPage');
             }
         }
         
-        // 切換面板選單
-        function togglePanelMenu() {
-            const dropdown = document.getElementById('panelDropdown');
+        // 切換結果頁選單
+        function toggleResultMenu() {
+            const dropdown = document.getElementById('resultDropdown');
             dropdown.classList.toggle('active');
             
             // 點擊其他地方關閉選單
             setTimeout(() => {
-                document.addEventListener('click', closePanelMenu);
+                document.addEventListener('click', closeResultMenu);
             }, 100);
         }
         
-        // 關閉面板選單
-        function closePanelMenu(event) {
-            const dropdown = document.getElementById('panelDropdown');
-            const menuBtn = document.querySelector('.panel-menu-btn');
+        // 關閉結果頁選單
+        function closeResultMenu(event) {
+            const dropdown = document.getElementById('resultDropdown');
+            const menuBtn = document.querySelector('.result-menu-btn');
             
             if (!dropdown.contains(event.target) && !menuBtn.contains(event.target)) {
                 dropdown.classList.remove('active');
-                document.removeEventListener('click', closePanelMenu);
+                document.removeEventListener('click', closeResultMenu);
             }
         }
         
         // 重新分析圖片
         async function reanalyzeImage() {
             // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
+            document.getElementById('resultDropdown').classList.remove('active');
             
             // 確認重新分析
             if (!confirm('確定要重新識別這個物品嗎？')) {
@@ -2579,7 +2594,7 @@
         // 編輯物品名稱
         function editItemName() {
             // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
+            document.getElementById('resultDropdown').classList.remove('active');
             
             // 顯示編輯對話框
             const editDialog = document.getElementById('editDialog');
@@ -2630,7 +2645,7 @@
         // 刪除當前項目
         function deleteCurrentItem() {
             // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
+            document.getElementById('resultDropdown').classList.remove('active');
             
             if (!confirm('確定要刪除這個項目嗎？')) {
                 return;
@@ -2681,23 +2696,30 @@
         function displayResult(data) {
             const resultContent = document.getElementById('resultContent');
             
-            // 生成購買連結
+            // 生成購買連結 - 只保留蝦皮、PChome、momo
             let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
-                purchaseLinks = `
-                    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            ${data.purchaseLinks.online.map(link => `
-                                <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
-                                   target="_blank" 
-                                   style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
-                                    ${link.platform}
-                                </a>
-                            `).join('')}
+                const allowedPlatforms = ['蝦皮購物', 'PChome 24h', 'momo購物網'];
+                const filteredLinks = data.purchaseLinks.online.filter(link => 
+                    allowedPlatforms.includes(link.platform)
+                );
+                
+                if (filteredLinks.length > 0) {
+                    purchaseLinks = `
+                        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                ${filteredLinks.map(link => `
+                                    <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                                       target="_blank" 
+                                       style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
+                                        ${link.platform}
+                                    </a>
+                                `).join('')}
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
             
             resultContent.innerHTML = `
@@ -2722,6 +2744,16 @@
                 <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                     <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">基本資訊</h3>
                     <p style="color: #666; line-height: 1.6;">${data.description}</p>
+                </div>
+                
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">分類</h3>
+                    <p style="color: #666; line-height: 1.6;">${data.category || '未分類'}</p>
+                </div>
+                
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">品牌</h3>
+                    <p style="color: #666; line-height: 1.6;">${data.brand || '未知品牌'}</p>
                 </div>
                 
                 <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
@@ -3116,8 +3148,8 @@
         
         // 關閉結果面板
         function closeResult() {
-            const resultPanel = document.getElementById('resultPanel');
-            resultPanel.classList.remove('active');
+            // 切換回列表頁面
+            switchPage('listPage');
         }
         
         // 清理資源
