@@ -1346,54 +1346,11 @@
             }
         }
 
-        /* 橘貓動畫樣式 */
-        .typing-cat {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            margin-left: 4px;
-            vertical-align: middle;
-            position: relative;
-            animation: catRun 0.5s steps(4) infinite;
-        }
-
-        .typing-cat.sitting {
-            animation: catSit 2s ease-in-out infinite;
-        }
-
-        @keyframes catRun {
-            0% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-3px) rotate(-5deg); }
-            50% { transform: translateY(0px) rotate(0deg); }
-            75% { transform: translateY(-3px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        @keyframes catSit {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-2px) rotate(-3deg); }
-            50% { transform: translateY(0px) rotate(0deg); }
-            75% { transform: translateY(-2px) rotate(3deg); }
-        }
-
-        .typing-container {
-            position: relative;
-            display: inline;
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 20px;
-            background: #FF6B35;
-            margin-left: 2px;
-            animation: blink 1s infinite;
-            vertical-align: text-bottom;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+        .disclaimer-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -2946,18 +2903,15 @@
         
         // 打開聊天頁面
         function openChat() {
-            // 確保有當前分析數據
-            if (!currentAnalysisData) {
-                alert('請先掃描或選擇一個物品');
-                return;
-            }
-            
             // 設定當前聊天項目 ID
-            if (!currentChatItemId && currentHistoryItem) {
-                currentChatItemId = currentHistoryItem.id;
-            }
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const currentItem = history.find(item => 
+                item.image === capturedImage && 
+                item.data.name === currentAnalysisData.name
+            );
             
-            if (currentChatItemId) {
+            if (currentItem) {
+                currentChatItemId = currentItem.id;
                 loadChatHistory();
                 chatPage.classList.add('active');
                 
@@ -3001,8 +2955,6 @@
                 
                 // 更新快速提示詞
                 updateQuickPrompts();
-            } else {
-                alert('無法開啟聊天，請重新選擇物品');
             }
         }
         
@@ -3119,7 +3071,7 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content, false); // 歷史訊息不使用打字效果
+                    addMessageToUI(msg.role, msg.content);
                 }
             });
             
@@ -3127,8 +3079,60 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 添加訊息到 UI - 加入橘貓打字效果
-        function addMessageToUI(role, content, useTypingEffect = false) {
+        // 簡單的 Markdown 解析函數
+        function parseMarkdown(text) {
+            // 處理標題
+            text = text.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+            text = text.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+            text = text.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+            
+            // 處理粗體
+            text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // 處理斜體
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // 處理行內代碼
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // 處理分隔線
+            text = text.replace(/^---+$/gm, '<hr>');
+            
+            // 處理無序列表
+            text = text.replace(/^• (.*?)$/gm, '<li>$1</li>');
+            text = text.replace(/^- (.*?)$/gm, '<li>$1</li>');
+            text = text.replace(/^(\s*)<li>/gm, '$1<ul><li>');
+            text = text.replace(/<\/li>\n(?!<li>)/g, '</li></ul>\n');
+            
+            // 處理有序列表
+            text = text.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
+            
+            // 處理段落
+            text = text.split('\n\n').map(para => {
+                if (!para.match(/^<[^>]+>/)) {
+                    return `<p>${para}</p>`;
+                }
+                return para;
+            }).join('\n');
+            
+            // 處理換行
+            text = text.replace(/\n/g, '<br>');
+            
+            // 清理多餘的 <br> 標籤
+            text = text.replace(/<br><h/g, '<h');
+            text = text.replace(/<\/h(\d)><br>/g, '</h$1>');
+            text = text.replace(/<br><ul>/g, '<ul>');
+            text = text.replace(/<\/ul><br>/g, '</ul>');
+            text = text.replace(/<br><li>/g, '<li>');
+            text = text.replace(/<br><hr>/g, '<hr>');
+            text = text.replace(/<hr><br>/g, '<hr>');
+            
+            return text;
+        }
+        
+        // 添加訊息到 UI
+        function addMessageToUI(role, content) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -3136,87 +3140,14 @@
             if (role === 'user') {
                 // 用戶訊息保持原樣
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
             } else {
-                // AI 訊息
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'message-content';
-                messageDiv.appendChild(contentDiv);
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                if (useTypingEffect) {
-                    // 使用橘貓打字效果
-                    typeWithCat(content, contentDiv);
-                } else {
-                    // 直接顯示（用於載入歷史記錄）
-                    contentDiv.innerHTML = parseMarkdown(content);
-                }
+                // AI 訊息進行 Markdown 解析
+                const parsedContent = parseMarkdown(content);
+                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
             }
-        }
-        
-        // 橘貓打字效果
-        function typeWithCat(text, element) {
-            // 先顯示橘貓和打字指示器
-            element.innerHTML = `
-                <span class="typing-cat-container">
-                    <span class="typing-cat">🐈</span>
-                    <span class="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </span>
-            `;
             
-            // 1秒後開始顯示文字
-            setTimeout(() => {
-                // 解析 Markdown
-                const parsedContent = parseMarkdown(text);
-                
-                // 創建一個臨時容器來存放解析後的內容
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = parsedContent;
-                
-                // 清空元素
-                element.innerHTML = '';
-                
-                // 逐步顯示內容
-                let currentHTML = '';
-                const fullHTML = tempDiv.innerHTML;
-                let index = 0;
-                
-                const typeInterval = setInterval(() => {
-                    if (index < fullHTML.length) {
-                        // 簡單的逐字顯示（包含HTML標籤）
-                        currentHTML = fullHTML.substring(0, index + 1);
-                        element.innerHTML = currentHTML + 
-                            `<span class="typing-cat-container">
-                                <span class="typing-cat">🐈</span>
-                            </span>`;
-                        index += 3; // 每次顯示3個字符，加快速度
-                        
-                        // 保持滾動到底部
-                        const chatMessages = document.getElementById('chatMessages');
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    } else {
-                        // 完成打字
-                        clearInterval(typeInterval);
-                        
-                        // 顯示完整內容，貓咪坐下
-                        element.innerHTML = fullHTML + 
-                            `<span class="typing-cat-container" style="margin-left: 10px;">
-                                <span class="typing-cat" style="animation: none;">🐱</span>
-                            </span>`;
-                        
-                        // 3秒後移除貓咪
-                        setTimeout(() => {
-                            element.innerHTML = fullHTML;
-                        }, 3000);
-                    }
-                }, 30);
-            }, 1000);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
         // 添加訊息並保存
@@ -3224,7 +3155,7 @@
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content, true); // 新訊息使用打字效果
+            addMessageToUI(role, content);
         }
         
         // 發送帶圖片的訊息
