@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    
-    <!-- PWA 支援 -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#FF6B35">
-    
-    <!-- iOS 支援 -->
-    <link rel="apple-touch-icon" href="/icon-192.png">
-    <meta name="apple-mobile-web-app-title" content="價格掃描">
-    
     <title>萬物價格掃描器</title>
     <style>
         * {
@@ -685,37 +675,40 @@
             display: block;
         }
 
-        .result-header {
+        /* 固定按鈕容器 */
+        .result-fixed-buttons {
             position: fixed;
-            top: 0;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
             max-width: 500px;
-            padding: 15px 20px;
-            background: #fff;
-            z-index: 2001;
+            padding: 0 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #eee;
+            z-index: 2002;
+            pointer-events: none;
         }
 
         .home-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border: none;
             cursor: pointer;
             border-radius: 50%;
-            transition: background 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            pointer-events: all;
+            transition: all 0.3s;
         }
 
         .home-btn:hover {
-            background: #f5f5f5;
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.05);
         }
 
         .home-btn svg {
@@ -725,20 +718,24 @@
         }
 
         .more-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border: none;
             cursor: pointer;
             border-radius: 50%;
-            transition: background 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            pointer-events: all;
+            transition: all 0.3s;
         }
 
         .more-btn:hover {
-            background: #f5f5f5;
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.05);
         }
 
         .more-btn svg {
@@ -749,14 +746,15 @@
 
         /* 更多選項選單 */
         .more-menu {
-            position: absolute;
-            top: 50px;
+            position: fixed;
+            top: 80px;
             right: 20px;
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
-            z-index: 2002;
+            z-index: 2003;
+            overflow: hidden;
         }
 
         .more-menu.active {
@@ -789,8 +787,8 @@
         }
 
         .result-content {
-            padding-top: 70px;
-            padding-bottom: 80px;
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
 
         /* 結果卡片樣式 */
@@ -908,22 +906,13 @@
         }
 
         /* 底部操作按鈕 */
-        .result-footer {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            padding: 15px 20px;
-            background: #fff;
-            border-top: 1px solid #eee;
+        .result-actions {
             display: flex;
             gap: 10px;
-            z-index: 2001;
+            margin: 20px;
         }
 
-        .footer-btn {
+        .action-btn-bottom {
             flex: 1;
             padding: 12px;
             border: none;
@@ -934,21 +923,21 @@
             transition: all 0.3s;
         }
 
-        .footer-btn.share {
+        .action-btn-bottom.share {
             background: #2196F3;
             color: white;
         }
 
-        .footer-btn.share:hover {
+        .action-btn-bottom.share:hover {
             background: #1976D2;
         }
 
-        .footer-btn.close {
+        .action-btn-bottom.close {
             background: #FF6B35;
             color: white;
         }
 
-        .footer-btn.close:hover {
+        .action-btn-bottom.close:hover {
             background: #ff5722;
         }
 
@@ -1021,6 +1010,32 @@
             font-size: 12px;
             color: #999;
             margin-top: 5px;
+        }
+
+        /* 顯示模式樣式 */
+        .history-grid.list-view {
+            display: block;
+        }
+
+        .history-grid.list-view .history-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-grid.list-view .history-img {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .history-grid.list-view .history-info {
+            flex: 1;
+            padding: 15px;
         }
 
         /* 文件輸入隱藏 */
@@ -1345,10 +1360,40 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .select-all-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             padding: 10px;
             background: #f5f5f5;
             border-radius: 10px;
+        }
+
+        .export-share-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #4CAF50;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .export-share-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .export-share-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
         }
 
         .select-all-label {
@@ -1366,26 +1411,7 @@
         }
 
         .export-btn-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .export-btn-primary {
-            flex: 1;
-            padding: 12px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .export-btn-primary:hover {
-            background: #45a049;
+            display: none;
         }
 
         /* 編輯名稱對話框 */
@@ -1654,9 +1680,9 @@
                             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                         </svg>
                     </button>
-                    <button class="action-btn" onclick="openFilterOptions()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
+                    <button class="action-btn" id="layoutBtn" onclick="toggleLayout()">
+                        <svg viewBox="0 0 24 24" id="layoutIcon">
+                            <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
                         </svg>
                     </button>
                 </div>
@@ -1719,7 +1745,7 @@
 
         <!-- 結果頁面（全螢幕） -->
         <div class="result-page" id="resultPage">
-            <div class="result-header">
+            <div class="result-fixed-buttons">
                 <button class="home-btn" onclick="closeResult()">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -1730,18 +1756,14 @@
                         <circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/>
                     </svg>
                 </button>
-                <div class="more-menu" id="moreMenu">
-                    <div class="menu-item" onclick="reanalyzeItem()">更正物品識別</div>
-                    <div class="menu-item" onclick="editItemName()">編輯名稱</div>
-                    <div class="menu-item delete" onclick="deleteCurrentItem()">刪除</div>
-                </div>
+            </div>
+            <div class="more-menu" id="moreMenu">
+                <div class="menu-item" onclick="reanalyzeItem()">更正物品識別</div>
+                <div class="menu-item" onclick="editItemName()">編輯名稱</div>
+                <div class="menu-item delete" onclick="deleteCurrentItem()">刪除</div>
             </div>
             <div class="result-content" id="resultContent">
                 <!-- 動態內容 -->
-            </div>
-            <div class="result-footer">
-                <button class="footer-btn share" onclick="shareResult()">分享</button>
-                <button class="footer-btn close" onclick="closeResult()">關閉</button>
             </div>
         </div>
 
@@ -1806,6 +1828,7 @@
         let isSelectionMode = false;
         let selectedItems = new Set();
         let currentViewingItemId = null;
+        let isListView = false;  // 新增：列表顯示模式
         
         // DOM 元素
         const pages = {
@@ -2063,9 +2086,18 @@
             }
         }
         
-        // 打開篩選選項
-        function openFilterOptions() {
-            alert('篩選功能開發中...');
+        // 切換顯示佈局
+        function toggleLayout() {
+            isListView = !isListView;
+            const layoutIcon = document.getElementById('layoutIcon');
+            
+            if (isListView) {
+                layoutIcon.innerHTML = '<path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>';
+            } else {
+                layoutIcon.innerHTML = '<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>';
+            }
+            
+            displayHistory();
         }
         
         // 打開批次分析（從設定頁面）
@@ -2311,11 +2343,17 @@
                     </button>
                 </div>
                 <div class="select-all-row">
-                    <label class="select-all-label">
-                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
-                        全選
-                    </label>
-                    <button onclick="exportToExcel()" class="export-btn-primary">匯出 Excel</button>
+                    <div class="select-all-wrapper">
+                        <label class="select-all-label">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                            全選
+                        </label>
+                    </div>
+                    <button onclick="exportToExcel()" class="export-share-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                        </svg>
+                    </button>
                 </div>
                 <div id="exportList" style="margin-bottom: 20px;">
                     ${history.map((item, index) => `
@@ -2644,17 +2682,19 @@
                 let html = '';
                 Object.keys(groupedByMonth).forEach(month => {
                     html += `<div class="month-label">${month}</div>`;
-                    html += '<div class="history-grid">';
+                    html += `<div class="history-grid ${isListView ? 'list-view' : ''}">`;
                     
                     groupedByMonth[month].forEach(item => {
                         html += `
-                            <div class="history-item ${isSelectionMode ? 'selectable' : ''}" data-item-id="${item.id}" onclick="${isSelectionMode ? `toggleItemSelection(${item.id})` : `showHistoryItem(${item.id})`}">
-                                <div class="selection-checkbox ${isSelectionMode ? 'visible' : ''} ${selectedItems.has(item.id) ? 'checked' : ''}"></div>
-                                <img src="${item.image}" alt="${item.name}" class="history-img">
-                                <div class="history-info">
-                                    <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${item.price}</div>
-                                    <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
+                            <div class="history-item ${isSelectionMode ? 'selectable' : ''}" data-item-id="${item.id}">
+                                <div class="selection-checkbox ${isSelectionMode ? 'visible' : ''} ${selectedItems.has(item.id) ? 'checked' : ''}" onclick="event.stopPropagation(); toggleItemSelection(${item.id})"></div>
+                                <div onclick="${isSelectionMode ? 'event.stopPropagation()' : `showHistoryItem(${item.id})`}">
+                                    <img src="${item.image}" alt="${item.name}" class="history-img">
+                                    <div class="history-info">
+                                        <div class="history-name">${item.name}</div>
+                                        <div class="history-price">${item.price}</div>
+                                        <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -2779,7 +2819,13 @@
                     <p class="info-content">${data.availability}</p>
                 </div>
                 
-                <p class="disclaimer-text" style="margin: 20px;">所有資訊皆由 GPT 產出</p>
+                <!-- 分享和關閉按鈕 -->
+                <div class="result-actions">
+                    <button class="action-btn-bottom share" onclick="shareResult()">分享</button>
+                    <button class="action-btn-bottom close" onclick="closeResult()">關閉</button>
+                </div>
+                
+                <p class="disclaimer-text" style="margin: 20px; text-align: center;">所有資訊皆由 GPT 產出</p>
             `;
         }
         
