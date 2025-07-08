@@ -2946,15 +2946,18 @@
         
         // 打開聊天頁面
         function openChat() {
-            // 設定當前聊天項目 ID
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const currentItem = history.find(item => 
-                item.image === capturedImage && 
-                item.data.name === currentAnalysisData.name
-            );
+            // 確保有當前分析數據
+            if (!currentAnalysisData) {
+                alert('請先掃描或選擇一個物品');
+                return;
+            }
             
-            if (currentItem) {
-                currentChatItemId = currentItem.id;
+            // 設定當前聊天項目 ID
+            if (!currentChatItemId && currentHistoryItem) {
+                currentChatItemId = currentHistoryItem.id;
+            }
+            
+            if (currentChatItemId) {
                 loadChatHistory();
                 chatPage.classList.add('active');
                 
@@ -2998,6 +3001,8 @@
                 
                 // 更新快速提示詞
                 updateQuickPrompts();
+            } else {
+                alert('無法開啟聊天，請重新選擇物品');
             }
         }
         
