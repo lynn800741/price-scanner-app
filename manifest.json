@@ -1,0 +1,36 @@
+{
+  "name": "萬物價格掃描器",
+  "short_name": "價格掃描",
+  "description": "AI 智能價格分析工具，掃描任何物品即可獲得價格資訊",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6B35",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "scope": "/",
+  "features": [
+    "camera",
+    "storage"
+  ],
+  "permissions": [
+    "camera",
+    "storage"
+  ]
+}
