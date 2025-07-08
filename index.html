@@ -671,8 +671,8 @@
             display: block;
         }
 
-        /* 固定按鈕 - 參考原始關閉按鈕樣式 */
-        .home-btn {
+        /* 固定按鈕 - 確保固定在視窗上 */
+        .result-page .home-btn {
             position: fixed;
             top: 15px;
             left: 50%;
@@ -691,23 +691,23 @@
         }
 
         @media (max-width: 500px) {
-            .home-btn {
+            .result-page .home-btn {
                 left: 20px;
                 transform: none;
             }
         }
 
-        .home-btn:hover {
+        .result-page .home-btn:hover {
             background: #e0e0e0;
         }
 
-        .home-btn svg {
+        .result-page .home-btn svg {
             width: 16px;
             height: 16px;
             fill: #666;
         }
 
-        .more-btn {
+        .result-page .more-btn {
             position: fixed;
             top: 15px;
             left: 50%;
@@ -726,25 +726,25 @@
         }
 
         @media (max-width: 500px) {
-            .more-btn {
+            .result-page .more-btn {
                 left: auto;
                 right: 20px;
                 transform: none;
             }
         }
 
-        .more-btn:hover {
+        .result-page .more-btn:hover {
             background: #e0e0e0;
         }
 
-        .more-btn svg {
+        .result-page .more-btn svg {
             width: 16px;
             height: 16px;
             fill: #666;
         }
 
         /* 更多選項選單 */
-        .more-menu {
+        .result-page .more-menu {
             position: fixed;
             top: 50px;
             left: 50%;
@@ -758,7 +758,7 @@
         }
 
         @media (max-width: 500px) {
-            .more-menu {
+            .result-page .more-menu {
                 left: auto;
                 right: 20px;
                 transform: none;
@@ -978,10 +978,11 @@
         .history-item {
             background: #f5f5f5;
             border-radius: 10px;
-            overflow: hidden;
+            overflow: visible;
             cursor: pointer;
             transition: all 0.3s;
             position: relative;
+            padding: 5px;
         }
 
         .history-item:hover {
@@ -993,10 +994,11 @@
             width: 100%;
             height: 120px;
             object-fit: cover;
+            border-radius: 8px;
         }
 
         .history-info {
-            padding: 10px;
+            padding: 5px;
         }
 
         .history-name {
@@ -2020,8 +2022,13 @@
         }
         
         // 切換項目選擇
-        function toggleItemSelection(itemId) {
+        function toggleItemSelection(itemId, event) {
             if (!isSelectionMode) return;
+            
+            // 如果有 event，阻止事件冒泡
+            if (event) {
+                event.stopPropagation();
+            }
             
             const checkbox = document.querySelector(`[data-item-id="${itemId}"] .selection-checkbox`);
             
@@ -2692,17 +2699,33 @@
                     html += `<div class="history-grid ${isListView ? 'list-view' : ''}">`;
                     
                     groupedByMonth[month].forEach(item => {
-                        html += `
-                            <div class="history-item ${isSelectionMode ? 'selectable' : ''}" data-item-id="${item.id}" onclick="${isSelectionMode ? `toggleItemSelection(${item.id})` : `showHistoryItem(${item.id})`}">
-                                <div class="selection-checkbox ${isSelectionMode ? 'visible' : ''} ${selectedItems.has(item.id) ? 'checked' : ''}"></div>
-                                <img src="${item.image}" alt="${item.name}" class="history-img">
-                                <div class="history-info">
-                                    <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${item.price}</div>
-                                    <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
+                        if (isSelectionMode) {
+                            // 選取模式：點擊整個項目都能選取
+                            html += `
+                                <div class="history-item selectable" data-item-id="${item.id}" onclick="toggleItemSelection(${item.id}, event)">
+                                    <div class="selection-checkbox visible ${selectedItems.has(item.id) ? 'checked' : ''}"></div>
+                                    <img src="${item.image}" alt="${item.name}" class="history-img">
+                                    <div class="history-info">
+                                        <div class="history-name">${item.name}</div>
+                                        <div class="history-price">${item.price}</div>
+                                        <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
+                        } else {
+                            // 正常模式：點擊進入詳情
+                            html += `
+                                <div class="history-item" data-item-id="${item.id}" onclick="showHistoryItem(${item.id})">
+                                    <div class="selection-checkbox"></div>
+                                    <img src="${item.image}" alt="${item.name}" class="history-img">
+                                    <div class="history-info">
+                                        <div class="history-name">${item.name}</div>
+                                        <div class="history-price">${item.price}</div>
+                                        <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
                     });
                     
                     html += '</div>';
