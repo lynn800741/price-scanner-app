@@ -419,8 +419,8 @@
             padding: 10px 20px;
             background: #fff;
             display: flex;
-            align-items: center;
             gap: 10px;
+            align-items: center;
         }
 
         .search-box {
@@ -448,87 +448,24 @@
         }
 
         .select-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
+            padding: 8px 16px;
             background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
             cursor: pointer;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         .select-btn:hover {
             background: #e0e0e0;
         }
 
-        .select-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #666;
-        }
-
-        /* 批量操作欄 */
-        .batch-actions {
-            position: fixed;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: #fff;
-            border-top: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
-            transition: bottom 0.3s ease;
-            z-index: 1001;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .batch-actions.active {
-            bottom: 0;
-        }
-
-        .batch-action-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .batch-share-btn {
-            background: #2196F3;
-        }
-
-        .batch-share-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #fff;
-        }
-
-        .batch-delete-btn {
-            background: #f44336;
-        }
-
-        .batch-delete-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #fff;
-        }
-
-        .batch-count {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
+        .select-btn.active {
+            background: #FF6B35;
+            color: white;
         }
 
         .empty-state {
@@ -566,6 +503,71 @@
         .empty-subtitle {
             font-size: 14px;
             color: #999;
+        }
+
+        /* 批量操作工具列 */
+        .batch-toolbar {
+            position: fixed;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1001;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .batch-toolbar.active {
+            bottom: 0;
+        }
+
+        .batch-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .batch-share-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        .batch-share-btn:hover {
+            background: #1976D2;
+        }
+
+        .batch-delete-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .batch-delete-btn:hover {
+            background: #d32f2f;
+        }
+
+        .batch-count {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 選取模式下隱藏底部導航 */
+        .select-mode .bottom-nav {
+            display: none;
         }
 
         /* 載入動畫 */
@@ -612,8 +614,9 @@
             bottom: -100%;
             left: 0;
             right: 0;
-            height: 100vh;
-            background: #f5f5f5;
+            height: 90vh;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2000;
             overflow: hidden;
@@ -623,59 +626,27 @@
             bottom: 0;
         }
 
-        .result-header {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: #fff;
+        .panel-header {
+            position: relative;
             padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            z-index: 2001;
         }
 
-        .result-home-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
+        .panel-handle {
+            width: 60px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 0 auto;
         }
 
-        .result-home-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .result-home-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #666;
-        }
-
-        .result-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
+        .panel-close-btn {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .result-menu-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            top: 15px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
             background: #f5f5f5;
+            border-radius: 50%;
             border: none;
             display: flex;
             align-items: center;
@@ -684,232 +655,35 @@
             transition: all 0.3s;
         }
 
-        .result-menu-btn:hover {
+        .panel-close-btn:hover {
             background: #e0e0e0;
         }
 
-        .result-menu-btn svg {
-            width: 24px;
-            height: 24px;
+        .panel-close-btn svg {
+            width: 16px;
+            height: 16px;
             fill: #666;
         }
 
-        /* 結果內容 */
         .result-content {
-            padding-top: 70px;
-            padding-bottom: 80px;
+            padding: 0 20px 20px;
             overflow-y: auto;
-            height: 100%;
+            height: calc(100% - 65px);
         }
 
-        .result-card {
-            background: #fff;
-            margin: 10px 20px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .result-image-card {
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .result-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .result-name-card h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin: 0;
-        }
-
-        .result-price-card {
+        .price-section {
             background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
             color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
             text-align: center;
-        }
-
-        .price-label {
-            font-size: 14px;
-            opacity: 0.9;
         }
 
         .price-value {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 700;
             margin: 10px 0;
-        }
-
-        .price-note {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .result-ai-card {
-            background: #4CAF50;
-            color: white;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .result-ai-card:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
-        }
-
-        .ai-icon {
-            width: 40px;
-            height: 40px;
-            fill: white;
-            margin-bottom: 10px;
-        }
-
-        .ai-text {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .info-card-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .info-card-content {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .purchase-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .purchase-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 16px;
-            background: #FF6B35;
-            color: white;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .purchase-link:hover {
-            background: #ff5722;
-            transform: translateY(-1px);
-        }
-
-        /* 底部按鈕 */
-        .result-bottom-actions {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: #fff;
-            padding: 15px 20px;
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid #eee;
-            z-index: 2001;
-        }
-
-        .result-share-btn {
-            flex: 1;
-            padding: 15px;
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .result-share-btn:hover {
-            background: #1976D2;
-        }
-
-        .result-close-btn {
-            flex: 1;
-            padding: 15px;
-            background: #FF6B35;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .result-close-btn:hover {
-            background: #ff5722;
-        }
-
-        /* 彈出選單 */
-        .result-menu {
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            display: none;
-            z-index: 2002;
-        }
-
-        .result-menu.active {
-            display: block;
-        }
-
-        .menu-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .menu-item:hover {
-            background: #f5f5f5;
-        }
-
-        .menu-item svg {
-            width: 20px;
-            height: 20px;
-            fill: #666;
-        }
-
-        .menu-item.delete {
-            color: #f44336;
-        }
-
-        .menu-item.delete svg {
-            fill: #f44336;
         }
 
         /* Canvas for photo capture */
@@ -947,41 +721,42 @@
             position: relative;
         }
 
-        .history-item.selected {
-            outline: 3px solid #FF6B35;
-            outline-offset: -3px;
-        }
-
         .history-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .history-checkbox {
+        .history-item.selected {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 3px #FF6B35;
+        }
+
+        .history-item-checkbox {
             position: absolute;
             top: 10px;
             right: 10px;
             width: 24px;
             height: 24px;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid #999;
             border-radius: 50%;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 1;
+            cursor: pointer;
+            z-index: 2;
         }
 
-        .select-mode .history-checkbox {
+        .select-mode .history-item-checkbox {
             display: flex;
         }
 
-        .history-checkbox.checked {
+        .history-item-checkbox.checked {
             background: #FF6B35;
             border-color: #FF6B35;
         }
 
-        .history-checkbox.checked::after {
+        .history-item-checkbox.checked::after {
             content: '✓';
             color: white;
             font-size: 16px;
@@ -1300,193 +1075,6 @@
             text-align: center;
             margin-top: 10px;
         }
-
-        /* 更新匯出對話框樣式 */
-        .export-dialog {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 4000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .export-content {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .export-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .export-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .export-close {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .export-close:hover {
-            background: #e0e0e0;
-        }
-
-        .export-close svg {
-            width: 16px;
-            height: 16px;
-            fill: #666;
-        }
-
-        .export-select-all {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-
-        .export-select-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .export-btn-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #4CAF50;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .export-btn-icon:hover {
-            background: #45a049;
-        }
-
-        .export-btn-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        .export-list {
-            margin-bottom: 20px;
-        }
-
-        .export-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-
-        /* 編輯名稱對話框 */
-        .edit-dialog {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 4000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .edit-content {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .edit-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .edit-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 20px;
-        }
-
-        .edit-input:focus {
-            border-color: #FF6B35;
-        }
-
-        .edit-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .edit-cancel {
-            flex: 1;
-            padding: 12px;
-            background: #666;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .edit-save {
-            flex: 1;
-            padding: 12px;
-            background: #FF6B35;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -1671,11 +1259,7 @@
                     </svg>
                     <input type="text" class="search-input" placeholder="搜尋" id="searchInput" oninput="searchHistory()">
                 </div>
-                <button class="select-btn" onclick="toggleSelectMode()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
-                </button>
+                <button class="select-btn" id="selectBtn" onclick="toggleSelectMode()">選取</button>
             </div>
             
             <div class="empty-state" id="emptyState">
@@ -1691,21 +1275,23 @@
             <div class="history-section" id="historySection" style="display: none;">
                 <!-- 歷史記錄會動態加入這裡 -->
             </div>
-            
-            <!-- 批量操作欄 -->
-            <div class="batch-actions" id="batchActions">
-                <button class="batch-action-btn batch-share-btn" onclick="batchShare()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                    </svg>
-                </button>
-                <span class="batch-count">已選取 <span id="selectedCount">0</span> 個</span>
-                <button class="batch-action-btn batch-delete-btn" onclick="batchDelete()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                    </svg>
-                </button>
-            </div>
+        </div>
+
+        <!-- 批量操作工具列 -->
+        <div class="batch-toolbar" id="batchToolbar">
+            <button class="batch-action-btn batch-share-btn" onclick="batchShare()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                </svg>
+                分享
+            </button>
+            <span class="batch-count">已選取 <span id="selectedCount">0</span> 個</span>
+            <button class="batch-action-btn batch-delete-btn" onclick="batchDelete()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+                刪除
+            </button>
         </div>
 
         <!-- 底部導航 -->
@@ -1735,45 +1321,16 @@
 
         <!-- 結果面板 -->
         <div class="result-panel" id="resultPanel">
-            <div class="result-header">
-                <button class="result-home-btn" onclick="closeResult()">
+            <div class="panel-header">
+                <div class="panel-handle"></div>
+                <button class="panel-close-btn" onclick="closeResult()">
                     <svg viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                     </svg>
                 </button>
-                <h2 class="result-title">分析結果</h2>
-                <button class="result-menu-btn" onclick="toggleResultMenu()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                </button>
-                <div class="result-menu" id="resultMenu">
-                    <div class="menu-item" onclick="reanalyzeItem()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
-                        更正物品識別
-                    </div>
-                    <div class="menu-item" onclick="editItemName()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                        </svg>
-                        編輯名稱
-                    </div>
-                    <div class="menu-item delete" onclick="deleteItem()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg>
-                        刪除
-                    </div>
-                </div>
             </div>
             <div class="result-content" id="resultContent">
                 <!-- 動態內容 -->
-            </div>
-            <div class="result-bottom-actions">
-                <button class="result-share-btn" onclick="shareResult()">分享</button>
-                <button class="result-close-btn" onclick="closeResult()">關閉</button>
             </div>
         </div>
 
@@ -1837,7 +1394,6 @@
         let currentChatItemId = null;
         let isSelectMode = false;
         let selectedItems = new Set();
-        let currentResultItemId = null;
         
         // DOM 元素
         const pages = {
@@ -1969,223 +1525,6 @@
             }
         }
         
-        // 切換選擇模式
-        function toggleSelectMode() {
-            isSelectMode = !isSelectMode;
-            selectedItems.clear();
-            
-            const historySection = document.getElementById('historySection');
-            const batchActions = document.getElementById('batchActions');
-            const bottomNav = document.getElementById('bottomNav');
-            
-            if (isSelectMode) {
-                historySection.classList.add('select-mode');
-                batchActions.classList.add('active');
-                bottomNav.style.display = 'none';
-            } else {
-                historySection.classList.remove('select-mode');
-                batchActions.classList.remove('active');
-                bottomNav.style.display = '';
-                
-                // 清除所有選擇狀態
-                document.querySelectorAll('.history-checkbox').forEach(checkbox => {
-                    checkbox.classList.remove('checked');
-                });
-                document.querySelectorAll('.history-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
-            }
-            
-            updateSelectedCount();
-        }
-        
-        // 切換項目選擇
-        function toggleItemSelection(id, event) {
-            if (!isSelectMode) return;
-            
-            event.stopPropagation();
-            
-            const item = document.querySelector(`[data-item-id="${id}"]`);
-            const checkbox = item.querySelector('.history-checkbox');
-            
-            if (selectedItems.has(id)) {
-                selectedItems.delete(id);
-                item.classList.remove('selected');
-                checkbox.classList.remove('checked');
-            } else {
-                selectedItems.add(id);
-                item.classList.add('selected');
-                checkbox.classList.add('checked');
-            }
-            
-            updateSelectedCount();
-        }
-        
-        // 更新選擇計數
-        function updateSelectedCount() {
-            document.getElementById('selectedCount').textContent = selectedItems.size;
-        }
-        
-        // 批量分享
-        async function batchShare() {
-            if (selectedItems.size === 0) {
-                alert('請選擇要分享的照片');
-                return;
-            }
-            
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const selectedData = Array.from(selectedItems).map(id => 
-                history.find(item => item.id == id)
-            ).filter(item => item);
-            
-            // 產生分享文字
-            let shareText = '我使用萬物價格掃描器掃描了以下物品：\n\n';
-            selectedData.forEach(item => {
-                shareText += `📦 ${item.name}\n💰 ${item.price}\n\n`;
-            });
-            shareText += '立即試用：https://lynn800741.github.io/price-scanner-app/';
-            
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: '萬物價格掃描器 - 批量分享',
-                        text: shareText
-                    });
-                } catch (err) {
-                    console.log('分享取消');
-                }
-            } else {
-                navigator.clipboard.writeText(shareText).then(() => {
-                    alert('分享內容已複製到剪貼板！');
-                });
-            }
-            
-            toggleSelectMode();
-        }
-        
-        // 批量刪除
-        function batchDelete() {
-            if (selectedItems.size === 0) {
-                alert('請選擇要刪除的照片');
-                return;
-            }
-            
-            if (confirm(`確定要刪除選中的 ${selectedItems.size} 個項目嗎？`)) {
-                let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-                history = history.filter(item => !selectedItems.has(item.id));
-                localStorage.setItem('scanHistory', JSON.stringify(history));
-                
-                toggleSelectMode();
-                displayHistory();
-            }
-        }
-        
-        // 切換結果選單
-        function toggleResultMenu() {
-            const menu = document.getElementById('resultMenu');
-            menu.classList.toggle('active');
-        }
-        
-        // 重新分析物品
-        async function reanalyzeItem() {
-            toggleResultMenu();
-            
-            if (!capturedImage) {
-                alert('無法重新分析：圖片不存在');
-                return;
-            }
-            
-            // 關閉結果面板
-            closeResult();
-            
-            // 重新分析
-            analyzeImage();
-        }
-        
-        // 編輯物品名稱
-        function editItemName() {
-            toggleResultMenu();
-            
-            const dialog = document.createElement('div');
-            dialog.className = 'edit-dialog';
-            dialog.innerHTML = `
-                <div class="edit-content">
-                    <h2 class="edit-title">編輯名稱</h2>
-                    <input type="text" class="edit-input" id="editNameInput" value="${currentAnalysisData.name}">
-                    <div class="edit-actions">
-                        <button class="edit-cancel" onclick="closeEditDialog()">取消</button>
-                        <button class="edit-save" onclick="saveEditedName()">儲存</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(dialog);
-            
-            // 聚焦輸入框
-            setTimeout(() => {
-                document.getElementById('editNameInput').focus();
-                document.getElementById('editNameInput').select();
-            }, 100);
-            
-            window.currentEditDialog = dialog;
-        }
-        
-        // 關閉編輯對話框
-        window.closeEditDialog = function() {
-            if (window.currentEditDialog) {
-                window.currentEditDialog.remove();
-                window.currentEditDialog = null;
-            }
-        };
-        
-        // 儲存編輯的名稱
-        window.saveEditedName = function() {
-            const newName = document.getElementById('editNameInput').value.trim();
-            
-            if (!newName) {
-                alert('名稱不能為空');
-                return;
-            }
-            
-            // 更新當前數據
-            currentAnalysisData.name = newName;
-            
-            // 更新歷史記錄
-            if (currentResultItemId) {
-                let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-                const index = history.findIndex(item => item.id === currentResultItemId);
-                if (index !== -1) {
-                    history[index].name = newName;
-                    history[index].data.name = newName;
-                    localStorage.setItem('scanHistory', JSON.stringify(history));
-                }
-            }
-            
-            // 重新顯示結果
-            displayResult(currentAnalysisData);
-            
-            // 關閉對話框
-            closeEditDialog();
-        };
-        
-        // 刪除項目
-        function deleteItem() {
-            toggleResultMenu();
-            
-            if (!currentResultItemId) {
-                alert('無法刪除：項目不存在');
-                return;
-            }
-            
-            if (confirm('確定要刪除這個項目嗎？')) {
-                let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-                history = history.filter(item => item.id !== currentResultItemId);
-                localStorage.setItem('scanHistory', JSON.stringify(history));
-                
-                closeResult();
-                displayHistory();
-            }
-        }
-        
         // 打開批次分析（從設定頁面）
         function openBatchAnalysis() {
             document.getElementById('multiFileInput').click();
@@ -2284,159 +1623,7 @@
                     // 準備 FormData
                     const blob = await dataURLtoBlob(resizedImage);
                     const formData = new FormData();
-                    formData.append('image', blob, 'item.jpg');
-                    
-                    // 標記已分析過圖片
-                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-                    if (!allChats[currentChatItemId]) {
-                        allChats[currentChatItemId] = [];
-                    }
-                    allChats[currentChatItemId].imageAnalyzed = true;
-                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
-                }
-                
-                formData.append('message', message);
-                formData.append('itemInfo', JSON.stringify(currentAnalysisData));
-                formData.append('chatHistory', JSON.stringify(getChatHistory()));
-                formData.append('includeImage', includeImage.toString());
-                
-                // 呼叫 API
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API 請求失敗');
-                }
-                
-                const result = await response.json();
-                
-                // 移除載入動畫
-                loadingDiv.remove();
-                
-                if (result.success) {
-                    // 添加 AI 回覆
-                    addMessage('assistant', result.data.reply);
-                } else {
-                    throw new Error(result.error || '回覆失敗');
-                }
-                
-            } catch (error) {
-                console.error('聊天錯誤:', error);
-                loadingDiv.remove();
-                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
-            } finally {
-                // 重新啟用發送按鈕
-                chatSendBtn.disabled = false;
-            }
-        }
-        
-        // 監聽輸入框 Enter 鍵
-        document.getElementById('chatInput').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
-        
-        // 自動調整輸入框高度
-        document.getElementById('chatInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-        
-        // 分享結果
-        async function shareResult() {
-            if (!currentAnalysisData) {
-                alert('沒有可分享的資料');
-                return;
-            }
-            
-            try {
-                // 準備分享數據
-                const shareData = {
-                    name: currentAnalysisData.name,
-                    price: currentAnalysisData.price,
-                    priceNote: currentAnalysisData.priceNote,
-                    description: currentAnalysisData.description,
-                    availability: currentAnalysisData.availability,
-                    purchaseLinks: currentAnalysisData.purchaseLinks,
-                    image: capturedImage
-                };
-                
-                // 呼叫後端 API 生成分享連結
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/share';
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(shareData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('分享失敗');
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
-                    const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
-                    
-                    if (navigator.share) {
-                        navigator.share({
-                            title: '萬物價格掃描器',
-                            text: shareText,
-                            url: shareUrl
-                        }).catch(err => console.log('分享取消'));
-                    } else {
-                        // 複製到剪貼板
-                        navigator.clipboard.writeText(shareText).then(() => {
-                            alert('分享連結已複製到剪貼板！');
-                        });
-                    }
-                } else {
-                    throw new Error(result.error || '分享失敗');
-                }
-                
-            } catch (error) {
-                console.error('分享錯誤:', error);
-                // 如果 API 還未實現，使用本地分享
-                const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
-                
-                if (navigator.share) {
-                    navigator.share({
-                        title: '萬物價格掃描器',
-                        text: shareText
-                    }).catch(err => console.log('分享取消'));
-                } else {
-                    navigator.clipboard.writeText(shareText).then(() => {
-                        alert('分享文字已複製到剪貼板！\n\n注意：分享連結功能需要後端支援。');
-                    });
-                }
-            }
-        }
-        
-        // 關閉結果面板
-        function closeResult() {
-            const resultPanel = document.getElementById('resultPanel');
-            resultPanel.classList.remove('active');
-            
-            // 關閉結果選單
-            const resultMenu = document.getElementById('resultMenu');
-            resultMenu.classList.remove('active');
-        }
-        
-        // 清理資源
-        window.addEventListener('beforeunload', () => {
-            stopCamera();
-        });
-    </script>
-</body>
-</html>', blob, `image${i}.jpg`);
+                    formData.append('image', blob, `image${i}.jpg`);
                     
                     // 呼叫 API
                     const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -2547,35 +1734,42 @@
             
             // 建立選擇對話框
             const dialog = document.createElement('div');
-            dialog.className = 'export-dialog';
+            dialog.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 4000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
             
             const content = document.createElement('div');
-            content.className = 'export-content';
+            content.style.cssText = `
+                background: white;
+                border-radius: 20px;
+                padding: 20px;
+                max-width: 400px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+            `;
             
             content.innerHTML = `
-                <div class="export-header">
-                    <h2 class="export-title">選擇要匯出的照片</h2>
-                    <button class="export-close" onclick="closeExportDialog()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="export-select-all">
-                    <label class="export-select-label">
-                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                <h2 style="margin-bottom: 20px;">選擇要匯出的照片</h2>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="margin-right: 10px;">
                         <span>全選</span>
                     </label>
-                    <button class="export-btn-icon" onclick="exportToExcel()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
-                        </svg>
-                    </button>
                 </div>
-                <div class="export-list">
+                <div id="exportList" style="margin-bottom: 20px;">
                     ${history.map((item, index) => `
-                        <label class="export-item">
-                            <input type="checkbox" class="export-item-checkbox" value="${index}" style="margin-right: 10px;">
+                        <label style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 10px;">
+                            <input type="checkbox" class="export-item" value="${index}" style="margin-right: 10px;">
                             <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
                             <div style="flex: 1;">
                                 <div style="font-weight: 600;">${item.name}</div>
@@ -2583,6 +1777,14 @@
                             </div>
                         </label>
                     `).join('')}
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="exportToExcel()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
+                        匯出 Excel
+                    </button>
+                    <button onclick="closeExportDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
+                        取消
+                    </button>
                 </div>
             `;
             
@@ -2596,7 +1798,7 @@
         // 全選/取消全選
         window.toggleSelectAll = function() {
             const selectAll = document.getElementById('selectAll');
-            const checkboxes = document.querySelectorAll('.export-item-checkbox');
+            const checkboxes = document.querySelectorAll('.export-item');
             checkboxes.forEach(cb => cb.checked = selectAll.checked);
         };
         
@@ -2610,7 +1812,7 @@
         
         // 匯出到 Excel
         window.exportToExcel = async function() {
-            const selectedIndexes = Array.from(document.querySelectorAll('.export-item-checkbox:checked'))
+            const selectedIndexes = Array.from(document.querySelectorAll('.export-item:checked'))
                 .map(cb => parseInt(cb.value));
             
             if (selectedIndexes.length === 0) {
@@ -2850,8 +2052,7 @@
             
             localStorage.setItem('scanHistory', JSON.stringify(history));
             
-            // 設定當前結果項目 ID
-            currentResultItemId = historyItem.id;
+            // 設定當前聊天項目 ID
             currentChatItemId = historyItem.id;
         }
         
@@ -2902,8 +2103,11 @@
                     
                     groupedByMonth[month].forEach(item => {
                         html += `
-                            <div class="history-item" data-item-id="${item.id}" onclick="${isSelectMode ? `toggleItemSelection(${item.id}, event)` : `showHistoryItem(${item.id})`}">
-                                <div class="history-checkbox" onclick="toggleItemSelection(${item.id}, event)"></div>
+                            <div class="history-item ${selectedItems.has(item.id) ? 'selected' : ''}" 
+                                 onclick="handleHistoryItemClick(event, ${item.id})"
+                                 data-id="${item.id}">
+                                <div class="history-item-checkbox ${selectedItems.has(item.id) ? 'checked' : ''}" 
+                                     onclick="toggleItemSelection(event, ${item.id})"></div>
                                 <img src="${item.image}" alt="${item.name}" class="history-img">
                                 <div class="history-info">
                                     <div class="history-name">${item.name}</div>
@@ -2918,11 +2122,6 @@
                 });
                 
                 historySection.innerHTML = html;
-                
-                // 恢復選擇模式狀態
-                if (isSelectMode) {
-                    historySection.classList.add('select-mode');
-                }
             }
         }
         
@@ -2930,6 +2129,148 @@
         function displayHistory() {
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             displayHistoryItems(history);
+        }
+        
+        // 切換選取模式
+        function toggleSelectMode() {
+            isSelectMode = !isSelectMode;
+            const selectBtn = document.getElementById('selectBtn');
+            const batchToolbar = document.getElementById('batchToolbar');
+            const listPage = document.getElementById('listPage');
+            
+            if (isSelectMode) {
+                selectBtn.textContent = '取消';
+                selectBtn.classList.add('active');
+                listPage.classList.add('select-mode');
+                selectedItems.clear();
+                updateSelectedCount();
+            } else {
+                selectBtn.textContent = '選取';
+                selectBtn.classList.remove('active');
+                listPage.classList.remove('select-mode');
+                batchToolbar.classList.remove('active');
+                selectedItems.clear();
+                // 移除所有選中狀態
+                document.querySelectorAll('.history-item').forEach(item => {
+                    item.classList.remove('selected');
+                    item.querySelector('.history-item-checkbox').classList.remove('checked');
+                });
+            }
+        }
+        
+        // 處理歷史項目點擊
+        function handleHistoryItemClick(event, id) {
+            if (isSelectMode) {
+                event.preventDefault();
+                toggleItemSelection(event, id);
+            } else {
+                showHistoryItem(id);
+            }
+        }
+        
+        // 切換項目選擇狀態
+        function toggleItemSelection(event, id) {
+            event.stopPropagation();
+            
+            const historyItem = document.querySelector(`.history-item[data-id="${id}"]`);
+            const checkbox = historyItem.querySelector('.history-item-checkbox');
+            
+            if (selectedItems.has(id)) {
+                selectedItems.delete(id);
+                historyItem.classList.remove('selected');
+                checkbox.classList.remove('checked');
+            } else {
+                selectedItems.add(id);
+                historyItem.classList.add('selected');
+                checkbox.classList.add('checked');
+            }
+            
+            updateSelectedCount();
+        }
+        
+        // 更新選中數量
+        function updateSelectedCount() {
+            const count = selectedItems.size;
+            document.getElementById('selectedCount').textContent = count;
+            
+            const batchToolbar = document.getElementById('batchToolbar');
+            if (count > 0) {
+                batchToolbar.classList.add('active');
+            } else {
+                batchToolbar.classList.remove('active');
+            }
+        }
+        
+        // 批量分享
+        async function batchShare() {
+            if (selectedItems.size === 0) {
+                alert('請選擇要分享的項目');
+                return;
+            }
+            
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const selectedData = Array.from(selectedItems).map(id => 
+                history.find(item => item.id === id)
+            ).filter(Boolean);
+            
+            try {
+                // 建立分享文字
+                let shareText = '我用萬物價格掃描器掃描了以下物品：\n\n';
+                selectedData.forEach(item => {
+                    shareText += `• ${item.name} - ${item.price}\n`;
+                });
+                shareText += '\n立即試用：https://lynn800741.github.io/price-scanner-app/';
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        title: '萬物價格掃描器',
+                        text: shareText
+                    });
+                } else {
+                    await navigator.clipboard.writeText(shareText);
+                    alert('分享內容已複製到剪貼板！');
+                }
+                
+                // 退出選取模式
+                toggleSelectMode();
+                
+            } catch (error) {
+                console.error('分享失敗:', error);
+                if (error.name !== 'AbortError') {
+                    alert('分享失敗，請稍後再試');
+                }
+            }
+        }
+        
+        // 批量刪除
+        function batchDelete() {
+            if (selectedItems.size === 0) {
+                alert('請選擇要刪除的項目');
+                return;
+            }
+            
+            const confirmMsg = `確定要刪除 ${selectedItems.size} 個項目嗎？`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+            
+            // 從歷史記錄中刪除選中的項目
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            history = history.filter(item => !selectedItems.has(item.id));
+            localStorage.setItem('scanHistory', JSON.stringify(history));
+            
+            // 同時刪除相關的聊天記錄
+            const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+            selectedItems.forEach(id => {
+                delete chatHistory[id];
+            });
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+            
+            // 退出選取模式並重新顯示
+            toggleSelectMode();
+            displayHistory();
+            
+            alert(`已刪除 ${selectedItems.size} 個項目`);
         }
         
         // 顯示歷史記錄項目
@@ -2940,8 +2281,7 @@
             if (item) {
                 capturedImage = item.image;
                 currentAnalysisData = item.data;
-                currentResultItemId = item.id;
-                currentChatItemId = item.id;
+                currentChatItemId = item.id;  // 設定當前聊天項目 ID
                 displayResult(item.data);
                 
                 const resultPanel = document.getElementById('resultPanel');
@@ -2978,64 +2318,59 @@
             const resultContent = document.getElementById('resultContent');
             
             // 生成購買連結
-            let purchaseLinksHTML = '';
+            let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
-                purchaseLinksHTML = data.purchaseLinks.online.map(link => `
-                    <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
-                       target="_blank" 
-                       class="purchase-link">
-                        ${link.platform}
-                    </a>
-                `).join('');
+                purchaseLinks = `
+                    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${data.purchaseLinks.online.map(link => `
+                                <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
+                                   target="_blank" 
+                                   style="display: inline-flex; align-items: center; padding: 8px 16px; background: #FF6B35; color: white; border-radius: 20px; text-decoration: none; font-size: 14px;">
+                                    ${link.platform}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             }
             
             resultContent.innerHTML = `
-                <!-- 照片卡片 -->
-                <div class="result-card result-image-card">
-                    <img src="${capturedImage}" alt="${data.name}" class="result-image">
-                </div>
+                <img src="${capturedImage}" alt="拍攝的物品" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
                 
-                <!-- 名稱卡片 -->
-                <div class="result-card result-name-card">
-                    <h2>${data.name}</h2>
-                </div>
+                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">${data.name}</h2>
                 
-                <!-- 價格卡片 -->
-                <div class="result-card result-price-card">
-                    <div class="price-label">預估價格</div>
+                <div class="price-section">
+                    <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
                     <div class="price-value">${data.price}</div>
-                    <div class="price-note">${data.priceNote}</div>
+                    <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
-                <!-- AI 諮詢卡片 -->
-                <div class="result-card result-ai-card" onclick="openChat()">
-                    <svg class="ai-icon" viewBox="0 0 24 24">
-                        <path d="M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9"/>
-                    </svg>
-                    <div class="ai-text">詢問 AI 助手</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button onclick="openChat()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        詢問 AI
+                    </button>
+                    <button onclick="shareResult()" style="flex: 1; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        分享
+                    </button>
                 </div>
                 
-                ${purchaseLinksHTML ? `
-                <!-- 購買管道卡片 -->
-                <div class="result-card">
-                    <h3 class="info-card-title">購買管道</h3>
-                    <div class="purchase-links">
-                        ${purchaseLinksHTML}
-                    </div>
-                </div>
-                ` : ''}
+                ${purchaseLinks}
                 
-                <!-- 基本資訊卡片 -->
-                <div class="result-card">
-                    <h3 class="info-card-title">基本資訊</h3>
-                    <p class="info-card-content">${data.description}</p>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">基本資訊</h3>
+                    <p style="color: #666; line-height: 1.6;">${data.description}</p>
                 </div>
                 
-                <!-- 在哪裡買卡片 -->
-                <div class="result-card">
-                    <h3 class="info-card-title">在哪裡買</h3>
-                    <p class="info-card-content">${data.availability}</p>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">在哪裡買</h3>
+                    <p style="color: #666; line-height: 1.6;">${data.availability}</p>
                 </div>
+                
+                <button onclick="closeResult()" style="width: 100%; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                    關閉
+                </button>
                 
                 <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
             `;
@@ -3277,4 +2612,152 @@
                     const byteArray = new Uint8Array(byteNumbers);
                     const blob = new Blob([byteArray], { type: 'image/jpeg' });
                     
-                    formData.append('image
+                    formData.append('image', blob, 'item.jpg');
+                    
+                    // 標記已分析過圖片
+                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
+                    if (!allChats[currentChatItemId]) {
+                        allChats[currentChatItemId] = [];
+                    }
+                    allChats[currentChatItemId].imageAnalyzed = true;
+                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
+                }
+                
+                formData.append('message', message);
+                formData.append('itemInfo', JSON.stringify(currentAnalysisData));
+                formData.append('chatHistory', JSON.stringify(getChatHistory()));
+                formData.append('includeImage', includeImage.toString());
+                
+                // 呼叫 API
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API 請求失敗');
+                }
+                
+                const result = await response.json();
+                
+                // 移除載入動畫
+                loadingDiv.remove();
+                
+                if (result.success) {
+                    // 添加 AI 回覆
+                    addMessage('assistant', result.data.reply);
+                } else {
+                    throw new Error(result.error || '回覆失敗');
+                }
+                
+            } catch (error) {
+                console.error('聊天錯誤:', error);
+                loadingDiv.remove();
+                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
+            } finally {
+                // 重新啟用發送按鈕
+                chatSendBtn.disabled = false;
+            }
+        }
+        
+        // 監聽輸入框 Enter 鍵
+        document.getElementById('chatInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // 自動調整輸入框高度
+        document.getElementById('chatInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+        
+        // 分享結果
+        async function shareResult() {
+            if (!currentAnalysisData) {
+                alert('沒有可分享的資料');
+                return;
+            }
+            
+            try {
+                // 準備分享數據
+                const shareData = {
+                    name: currentAnalysisData.name,
+                    price: currentAnalysisData.price,
+                    priceNote: currentAnalysisData.priceNote,
+                    description: currentAnalysisData.description,
+                    availability: currentAnalysisData.availability,
+                    purchaseLinks: currentAnalysisData.purchaseLinks,
+                    image: capturedImage
+                };
+                
+                // 呼叫後端 API 生成分享連結
+                const API_URL = 'https://price-scanner-backend.vercel.app/api/share';
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(shareData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('分享失敗');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
+                    const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: '萬物價格掃描器',
+                            text: shareText,
+                            url: shareUrl
+                        }).catch(err => console.log('分享取消'));
+                    } else {
+                        // 複製到剪貼板
+                        navigator.clipboard.writeText(shareText).then(() => {
+                            alert('分享連結已複製到剪貼板！');
+                        });
+                    }
+                } else {
+                    throw new Error(result.error || '分享失敗');
+                }
+                
+            } catch (error) {
+                console.error('分享錯誤:', error);
+                // 如果 API 還未實現，使用本地分享
+                const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: '萬物價格掃描器',
+                        text: shareText
+                    }).catch(err => console.log('分享取消'));
+                } else {
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        alert('分享文字已複製到剪貼板！\n\n注意：分享連結功能需要後端支援。');
+                    });
+                }
+            }
+        }
+        
+        // 關閉結果面板
+        function closeResult() {
+            const resultPanel = document.getElementById('resultPanel');
+            resultPanel.classList.remove('active');
+        }
+        
+        // 清理資源
+        window.addEventListener('beforeunload', () => {
+            stopCamera();
+        });
+    </script>
+</body>
+</html>
