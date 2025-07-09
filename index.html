@@ -1258,6 +1258,26 @@
             font-weight: 600;
         }
 
+        /* 打字機游標效果 */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #666;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* AI 訊息打字中的樣式 */
+        .message.assistant.typing .message-content {
+            min-height: 30px;
+        }
+
         .chat-input-area {
             padding: 15px;
             background: #fff;
@@ -2850,7 +2870,7 @@
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
-                <div class="action-buttons" style="margin-bottom: 20px;">
+                <div class="action-buttons">
                     <button class="action-button btn-chat" onclick="openChat()">
                         詢問 AI
                     </button>
@@ -2942,7 +2962,8 @@
                     welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
                     welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
                     
-                    addMessage('assistant', welcomeMessage);
+                    // 使用打字機效果顯示歡迎訊息
+                    addMessage('assistant', welcomeMessage, true);
                     
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
@@ -3071,7 +3092,7 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content);
+                    addMessageToUI(msg.role, msg.content, false);  // 載入歷史時不使用打字機效果
                 }
             });
             
@@ -3131,31 +3152,149 @@
             return text;
         }
         
-        // 添加訊息到 UI
-        function addMessageToUI(role, content) {
+        // 添加訊息到 UI（修改版本，支援打字機效果）
+        function addMessageToUI(role, content, useTypewriter = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
             
             if (role === 'user') {
-                // 用戶訊息保持原樣
+                // 用戶訊息保持原樣，立即顯示
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+                chatMessages.appendChild(messageDiv);
             } else {
-                // AI 訊息進行 Markdown 解析
-                const parsedContent = parseMarkdown(content);
-                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
+                // AI 訊息
+                if (useTypewriter) {
+                    // 使用打字機效果
+                    messageDiv.classList.add('typing');
+                    messageDiv.innerHTML = `<div class="message-content"><span class="typing-cursor"></span></div>`;
+                    chatMessages.appendChild(messageDiv);
+                    
+                    // 開始打字機動畫
+                    typewriterEffect(messageDiv, content);
+                } else {
+                    // 不使用打字機效果（例如載入歷史記錄時）
+                    const parsedContent = parseMarkdown(content);
+                    messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
+                    chatMessages.appendChild(messageDiv);
+                }
             }
             
-            chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 添加訊息並保存
-        function addMessage(role, content) {
+        // 打字機效果函數
+        function typewriterEffect(messageDiv, content) {
+            const messageContent = messageDiv.querySelector('.message-content');
+            const cursor = messageContent.querySelector('.typing-cursor');
+            
+            // 先解析 Markdown，但保存原始結構
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = parseMarkdown(content);
+            
+            // 將解析後的內容轉換為節點列表
+            const nodes = [];
+            function extractNodes(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    // 文字節點，拆分成單個字符
+                    const text = node.textContent;
+                    for (let i = 0; i < text.length; i++) {
+                        nodes.push({ type: 'text', content: text[i] });
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // 元素節點
+                    nodes.push({ type: 'tagStart', tag: node.tagName.toLowerCase(), node: node });
+                    
+                    // 遞迴處理子節點
+                    for (let child of node.childNodes) {
+                        extractNodes(child);
+                    }
+                    
+                    nodes.push({ type: 'tagEnd', tag: node.tagName.toLowerCase() });
+                }
+            }
+            
+            // 提取所有節點
+            for (let child of tempDiv.childNodes) {
+                extractNodes(child);
+            }
+            
+            // 開始打字動畫
+            let currentIndex = 0;
+            let currentElement = null;
+            let elementStack = [];
+            
+            // 移除游標
+            cursor.remove();
+            
+            // 清空內容
+            messageContent.innerHTML = '';
+            
+            // 添加游標
+            const newCursor = document.createElement('span');
+            newCursor.className = 'typing-cursor';
+            messageContent.appendChild(newCursor);
+            
+            const typeInterval = setInterval(() => {
+                if (currentIndex >= nodes.length) {
+                    // 打字完成，移除游標和 typing 類別
+                    newCursor.remove();
+                    messageDiv.classList.remove('typing');
+                    clearInterval(typeInterval);
+                    return;
+                }
+                
+                const node = nodes[currentIndex];
+                
+                if (node.type === 'text') {
+                    // 添加文字
+                    if (currentElement) {
+                        currentElement.textContent += node.content;
+                    } else {
+                        const textNode = document.createTextNode(node.content);
+                        messageContent.insertBefore(textNode, newCursor);
+                    }
+                } else if (node.type === 'tagStart') {
+                    // 開始標籤
+                    const newElement = document.createElement(node.tag);
+                    
+                    // 複製屬性
+                    if (node.node.className) newElement.className = node.node.className;
+                    if (node.node.id) newElement.id = node.node.id;
+                    
+                    // 複製其他屬性
+                    for (let attr of node.node.attributes) {
+                        newElement.setAttribute(attr.name, attr.value);
+                    }
+                    
+                    if (currentElement) {
+                        currentElement.appendChild(newElement);
+                    } else {
+                        messageContent.insertBefore(newElement, newCursor);
+                    }
+                    
+                    elementStack.push(currentElement);
+                    currentElement = newElement;
+                } else if (node.type === 'tagEnd') {
+                    // 結束標籤
+                    currentElement = elementStack.pop();
+                }
+                
+                currentIndex++;
+                
+                // 滾動到底部
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+            }, 15); // 每個字符 15ms，可以調整速度
+        }
+        
+        // 添加訊息並保存（修改版本）
+        function addMessage(role, content, useTypewriter = false) {
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content);
+            addMessageToUI(role, content, useTypewriter);
         }
         
         // 發送帶圖片的訊息
@@ -3189,7 +3328,7 @@
             await sendMessageInternal(message, isFirstMessage);
         }
         
-        // 內部發送訊息函數
+        // 內部發送訊息函數（修改版本）
         async function sendMessageInternal(message, includeImage = false) {
             const chatSendBtn = document.getElementById('chatSendBtn');
             
@@ -3264,8 +3403,8 @@
                 loadingDiv.remove();
                 
                 if (result.success) {
-                    // 添加 AI 回覆
-                    addMessage('assistant', result.data.reply);
+                    // 添加 AI 回覆，使用打字機效果
+                    addMessage('assistant', result.data.reply, true);
                 } else {
                     throw new Error(result.error || '回覆失敗');
                 }
@@ -3273,7 +3412,8 @@
             } catch (error) {
                 console.error('聊天錯誤:', error);
                 loadingDiv.remove();
-                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
+                // 錯誤訊息也使用打字機效果
+                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。', true);
             } finally {
                 // 重新啟用發送按鈕
                 chatSendBtn.disabled = false;
