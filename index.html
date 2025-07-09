@@ -2921,6 +2921,24 @@
             return urls[platform] || '#';
         }
         
+        // 判斷是否需要傳送圖片
+        function shouldSendImage(message) {
+            // 如果是第一次對話，一定要傳圖片
+            if (!hasImageBeenAnalyzed()) {
+                return true;
+            }
+            
+            // 關鍵詞檢測 - 只有明確需要看圖片時才傳
+            const imageKeywords = [
+                '看看', '查看', '圖片', '照片', '外觀', '長什麼', '顏色', '包裝', 
+                '樣子', '形狀', '大小', '尺寸', '重新看', '再看一次', '仔細看',
+                '圖中', '照片中', '畫面中', '看到什麼', '是什麼'
+            ];
+            
+            // 檢查訊息是否包含圖片相關關鍵詞
+            return imageKeywords.some(keyword => message.includes(keyword));
+        }
+        
         // 打開聊天頁面
         function openChat() {
             // 設定當前聊天項目 ID
@@ -2941,26 +2959,27 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 根據物品類型生成個性化的歡迎訊息
-                    let welcomeMessage = `## 你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」\n\n發現了一些有趣的資訊想與你分享！\n\n`;
+                    // 根據物品類型生成個性化的歡迎訊息（優化版）
+                    let welcomeMessage = `## 你好！我已經仔細分析了這個「${currentAnalysisData.name}」\n\n`;
                     
-                    // 添加一個有趣的開場
-                    if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
-                        welcomeMessage += `📱 **作為一個科技產品**，它代表著現代生活的便利性。`;
-                    } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
-                        welcomeMessage += `🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。`;
-                    } else if (currentAnalysisData.brand) {
-                        welcomeMessage += `🏷️ **${currentAnalysisData.brand}** 這個品牌有著獨特的市場定位。`;
-                    } else {
-                        welcomeMessage += `✨ **每個物品都有它獨特的故事和價值**。`;
+                    // 加入具體的物品描述
+                    welcomeMessage += `根據我的分析，這是一個${currentAnalysisData.description}。`;
+                    
+                    if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
+                        welcomeMessage += `它是 **${currentAnalysisData.brand}** 品牌的產品。`;
                     }
                     
-                    welcomeMessage += `\n\n### 我可以為你提供：\n\n`;
-                    welcomeMessage += `• **深入的產品分析**——從各個角度剖析優缺點\n`;
-                    welcomeMessage += `• **使用技巧和保養建議**——讓物品發揮最大價值\n`;
-                    welcomeMessage += `• **市場趨勢和價格走向**——掌握最佳購買時機\n`;
-                    welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
-                    welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
+                    welcomeMessage += `\n\n### 關鍵資訊：\n`;
+                    welcomeMessage += `• **價格**：${currentAnalysisData.price}\n`;
+                    welcomeMessage += `• **類別**：${currentAnalysisData.category || '一般商品'}\n`;
+                    welcomeMessage += `• **主要用途**：${currentAnalysisData.usage || '日常使用'}\n`;
+                    
+                    welcomeMessage += `\n### 我可以為你：\n`;
+                    welcomeMessage += `• 深入分析產品特性和價值\n`;
+                    welcomeMessage += `• 比較同類產品的優劣\n`;
+                    welcomeMessage += `• 提供使用和保養建議\n`;
+                    welcomeMessage += `• 解答任何相關疑問\n\n`;
+                    welcomeMessage += `有什麼想了解的嗎？`;
                     
                     // 使用打字機效果顯示歡迎訊息
                     addMessage('assistant', welcomeMessage, true);
