@@ -1764,6 +1764,18 @@
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
                     </svg>
                 </div>
+                
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        <div class="list-item-title">升級訂閱方案</div>
+                    </div>
+                    <div class="list-item-arrow" style="background: #FF6B35; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                        $1,188/年
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2080,12 +2092,12 @@
                 <div class="pricing-section">
                     <div class="pricing-container">
                         <div class="pricing-card popular" id="yearlyPlan" onclick="selectPlan('yearly')">
-                            <div class="discount-badge">省17%</div>
+                            <div class="discount-badge">省34%</div>
                             <div class="pricing-radio"></div>
                             <div class="pricing-title">年繳方案</div>
-                            <div class="pricing-price">$124.17</div>
+                            <div class="pricing-price">$99</div>
                             <div class="pricing-note">每月</div>
-                            <div class="pricing-period">$1,490/年</div>
+                            <div class="pricing-period">$1,188/年</div>
                         </div>
 
                         <div class="pricing-card" id="monthlyPlan" onclick="selectPlan('monthly')">
@@ -2132,7 +2144,7 @@
         // 價格配置
         const PRICING = {
             monthly: 150,
-            yearly: 1490
+            yearly: 1188  // 99 * 12
         };
         
         // 計算折扣百分比
@@ -3601,7 +3613,8 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content);
+                    // 載入歷史訊息時不使用打字動畫
+                    addMessageToUI(msg.role, msg.content, false);
                 }
             });
             
@@ -3661,8 +3674,50 @@
             return text;
         }
         
-        // 添加訊息到 UI
-        function addMessageToUI(role, content) {
+        // 打字動畫效果
+        async function typewriterEffect(element, text, speed = 30) {
+            element.innerHTML = '';
+            const parsedHTML = parseMarkdown(text);
+            
+            // 創建一個臨時元素來解析 HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = parsedHTML;
+            
+            // 遍歷所有節點並逐字顯示
+            async function typeNode(node, targetElement) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    // 文字節點：逐字顯示
+                    const text = node.textContent;
+                    for (let i = 0; i < text.length; i++) {
+                        targetElement.innerHTML += text[i];
+                        await new Promise(resolve => setTimeout(resolve, speed));
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // 元素節點：創建元素並遞歸處理子節點
+                    const newElement = document.createElement(node.tagName.toLowerCase());
+                    
+                    // 複製屬性
+                    Array.from(node.attributes).forEach(attr => {
+                        newElement.setAttribute(attr.name, attr.value);
+                    });
+                    
+                    targetElement.appendChild(newElement);
+                    
+                    // 處理子節點
+                    for (const childNode of node.childNodes) {
+                        await typeNode(childNode, newElement);
+                    }
+                }
+            }
+            
+            // 處理所有子節點
+            for (const childNode of tempDiv.childNodes) {
+                await typeNode(childNode, element);
+            }
+        }
+        
+        // 添加訊息到 UI（修改版，支援打字動畫）
+        async function addMessageToUI(role, content, useTypewriter = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -3671,21 +3726,33 @@
                 // 用戶訊息保持原樣
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
             } else {
-                // AI 訊息進行 Markdown 解析
-                const parsedContent = parseMarkdown(content);
-                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
+                // AI 訊息
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageDiv.appendChild(messageContent);
+                
+                if (useTypewriter) {
+                    // 使用打字動畫
+                    chatMessages.appendChild(messageDiv);
+                    await typewriterEffect(messageContent, content);
+                } else {
+                    // 直接顯示（用於載入歷史訊息）
+                    messageContent.innerHTML = parseMarkdown(content);
+                }
             }
             
-            chatMessages.appendChild(messageDiv);
+            if (!messageDiv.parentNode) {
+                chatMessages.appendChild(messageDiv);
+            }
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 添加訊息並保存
-        function addMessage(role, content) {
+        // 添加訊息並保存（修改版，支援打字動畫）
+        async function addMessage(role, content, useTypewriter = true) {
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content);
+            await addMessageToUI(role, content, useTypewriter);
         }
         
         // 發送帶圖片的訊息
