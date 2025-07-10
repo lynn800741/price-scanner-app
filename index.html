@@ -1744,6 +1744,8 @@
             margin: 30px 0;
             color: #999;
             font-size: 14px;
+            width: 100%;
+            max-width: 350px;
         }
 
         .divider::before,
@@ -1751,11 +1753,13 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: #ddd;
+            background: #e0e0e0;
+            display: block;
         }
 
         .divider span {
             padding: 0 16px;
+            white-space: nowrap;
         }
 
         .social-login {
