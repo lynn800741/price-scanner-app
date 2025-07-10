@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>萬物價格掃描器</title>
+    <title>LENSY - 萬物價格掃描器</title>
     <style>
         * {
             margin: 0;
@@ -1258,26 +1258,6 @@
             font-weight: 600;
         }
 
-        /* 打字機游標效果 */
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background-color: #666;
-            margin-left: 2px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* AI 訊息打字中的樣式 */
-        .message.assistant.typing .message-content {
-            min-height: 30px;
-        }
-
         .chat-input-area {
             padding: 15px;
             background: #fff;
@@ -1372,6 +1352,282 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* 升級PRO頁面樣式 */
+        .pro-upgrade-page {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background: #fff;
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .pro-upgrade-page.active {
+            display: flex;
+        }
+
+        .pro-header {
+            position: relative;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pro-close-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .pro-close-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        .pro-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .pro-hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pro-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .pro-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .pro-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .trial-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            margin-bottom: 40px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #FFF3E0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #FF6B35;
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pricing-section {
+            margin-bottom: 80px;
+        }
+
+        .pricing-card {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.selected {
+            border-color: #FF6B35;
+            background: #FFF3E0;
+            transform: scale(1.02);
+        }
+
+        .pricing-card.popular {
+            position: relative;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #FF6B35;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pricing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .pricing-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .pricing-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #999;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pricing-card.selected .pricing-radio {
+            border-color: #FF6B35;
+        }
+
+        .pricing-card.selected .pricing-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #FF6B35;
+            border-radius: 50%;
+        }
+
+        .pricing-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .pricing-note {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .subscribe-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 460px;
+            padding: 16px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .subscribe-btn:hover {
+            background: #ff5722;
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .terms-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            padding: 0 20px;
+            margin-bottom: 100px;
+            line-height: 1.6;
+        }
+
+        .terms-text a {
+            color: #FF6B35;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -1385,7 +1641,7 @@
             <div class="section">
                 <h2 class="section-title">會員服務</h2>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="openProUpgrade()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M5 16L3 5l5.5 0L12 16m3.5 0H21l-2-11L14 5"/>
@@ -1546,7 +1802,7 @@
         <!-- 照片列表頁面 -->
         <div class="page list-page active" id="listPage">
             <div class="nav-header">
-                <h1 class="app-title">照片列表</h1>
+                <h1 class="app-title">LENSY</h1>
             </div>
             
             <div class="search-container">
@@ -1717,6 +1973,135 @@
                 </div>
             </div>
         </div>
+
+        <!-- 升級PRO頁面 -->
+        <div class="pro-upgrade-page" id="proUpgradePage">
+            <div class="pro-header">
+                <button class="pro-close-btn" onclick="closeProUpgrade()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">升級方案</h1>
+            </div>
+            
+            <div class="pro-content">
+                <div class="pro-hero">
+                    <div class="pro-logo">L</div>
+                    <h2 class="pro-title">LENSY PRO</h2>
+                    <p class="pro-subtitle">解鎖所有強大功能，讓掃描分析更專業</p>
+                    <div class="trial-badge">免費試用 3 天</div>
+                </div>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">AI 智能服務</div>
+                            <div class="feature-desc">更精準的物品識別與價格分析</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">每月 1000 次掃描分析</div>
+                            <div class="feature-desc">滿足你的所有掃描需求</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM5 17l1.41-1.41 1.38 1.38 1.42-1.42-1.38-1.38L9.24 13l-1.41-1.41-1.42 1.41 1.38 1.38L6.42 15.59 5 17zm12-2h-5v-2h5v2zm-5-4h5v2h-5z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">去除煩人的應用程式廣告</div>
+                            <div class="feature-desc">享受純淨無干擾的使用體驗</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">匯出 Excel 報告</div>
+                            <div class="feature-desc">專業的數據整理與分析報告</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">多張照片批次辨識</div>
+                            <div class="feature-desc">一次處理多張照片，節省時間</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <div class="feature-title">自動儲存到相簿</div>
+                            <div class="feature-desc">掃描結果自動備份不遺失</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-section">
+                    <div class="pricing-card popular" id="yearlyPlan" onclick="selectPlan('yearly')">
+                        <div class="popular-badge">最划算</div>
+                        <div class="pricing-header">
+                            <div>
+                                <div class="pricing-title">年繳方案</div>
+                                <div class="pricing-price">$124.17/月</div>
+                                <div class="pricing-note">免費試用期後年費 $1,490/年</div>
+                            </div>
+                            <div class="pricing-radio"></div>
+                        </div>
+                    </div>
+
+                    <div class="pricing-card" id="monthlyPlan" onclick="selectPlan('monthly')">
+                        <div class="pricing-header">
+                            <div>
+                                <div class="pricing-title">月繳方案</div>
+                                <div class="pricing-price">$150/月</div>
+                                <div class="pricing-note">月繳 $150/月</div>
+                            </div>
+                            <div class="pricing-radio"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terms-text">
+                    3 天免費試用後開始計費。可隨時在設定中取消訂閱。<br>
+                    繼續即表示您同意 <a href="#">服務條款</a> 和 <a href="#">隱私權政策</a>
+                </div>
+            </div>
+
+            <button class="subscribe-btn" onclick="startFreeTrial()">
+                開始免費試用
+            </button>
+        </div>
         
         <!-- 隱藏的文件輸入 -->
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
@@ -1733,6 +2118,7 @@
         let isSelectMode = false;
         let selectedItems = new Set();
         let currentHistoryItem = null;
+        let selectedPricingPlan = 'yearly'; // 預設選擇年繳方案
         
         // DOM 元素
         const pages = {
@@ -1744,6 +2130,7 @@
         
         const bottomNav = document.getElementById('bottomNav');
         const chatPage = document.getElementById('chatPage');
+        const proUpgradePage = document.getElementById('proUpgradePage');
         
         // 初始化應用
         window.addEventListener('load', () => {
@@ -1751,7 +2138,50 @@
             displayHistory();
             // 設定拍照按鈕長按功能
             setupCaptureButton();
+            // 預設選擇年繳方案
+            selectPlan('yearly');
         });
+        
+        // 打開升級PRO頁面
+        function openProUpgrade() {
+            proUpgradePage.classList.add('active');
+        }
+        
+        // 關閉升級PRO頁面
+        function closeProUpgrade() {
+            proUpgradePage.classList.remove('active');
+        }
+        
+        // 選擇方案
+        function selectPlan(plan) {
+            selectedPricingPlan = plan;
+            
+            // 移除所有選中狀態
+            document.querySelectorAll('.pricing-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 添加選中狀態
+            if (plan === 'yearly') {
+                document.getElementById('yearlyPlan').classList.add('selected');
+            } else {
+                document.getElementById('monthlyPlan').classList.add('selected');
+            }
+        }
+        
+        // 開始免費試用
+        function startFreeTrial() {
+            const planText = selectedPricingPlan === 'yearly' 
+                ? '年繳方案（$1,490/年）' 
+                : '月繳方案（$150/月）';
+                
+            alert(`即將開始 3 天免費試用\n\n您選擇的是：${planText}\n\n試用期結束後將自動扣款\n\n此功能尚在開發中，敬請期待！`);
+            
+            // 這裡可以加入實際的訂閱邏輯
+            // 例如：調用支付 API、記錄用戶訂閱狀態等
+            
+            closeProUpgrade();
+        }
         
         // 回到首頁（照片列表頁）
         function goToHome() {
@@ -2205,7 +2635,7 @@
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `price_scanner_${new Date().getTime()}.xlsx`;
+                    a.download = `lensy_export_${new Date().getTime()}.xlsx`;
                     a.click();
                     window.URL.revokeObjectURL(url);
                     
@@ -2252,7 +2682,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `price_scanner_${new Date().getTime()}.csv`;
+            a.download = `lensy_export_${new Date().getTime()}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
             
@@ -2565,7 +2995,7 @@
             
             try {
                 // 建立分享文字
-                let shareText = '我用萬物價格掃描器掃描了以下物品：\n\n';
+                let shareText = '我用 LENSY 掃描了以下物品：\n\n';
                 selectedData.forEach(item => {
                     shareText += `• ${item.name} - ${item.price}\n`;
                 });
@@ -2573,7 +3003,7 @@
                 
                 if (navigator.share) {
                     await navigator.share({
-                        title: '萬物價格掃描器',
+                        title: 'LENSY - 萬物價格掃描器',
                         text: shareText
                     });
                 } else {
@@ -2870,7 +3300,7 @@
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
-                <div class="action-buttons">
+                <div class="action-buttons" style="margin-bottom: 20px;">
                     <button class="action-button btn-chat" onclick="openChat()">
                         詢問 AI
                     </button>
@@ -2921,24 +3351,6 @@
             return urls[platform] || '#';
         }
         
-        // 判斷是否需要傳送圖片
-        function shouldSendImage(message) {
-            // 如果是第一次對話，一定要傳圖片
-            if (!hasImageBeenAnalyzed()) {
-                return true;
-            }
-            
-            // 關鍵詞檢測 - 只有明確需要看圖片時才傳
-            const imageKeywords = [
-                '看看', '查看', '圖片', '照片', '外觀', '長什麼', '顏色', '包裝', 
-                '樣子', '形狀', '大小', '尺寸', '重新看', '再看一次', '仔細看',
-                '圖中', '照片中', '畫面中', '看到什麼', '是什麼'
-            ];
-            
-            // 檢查訊息是否包含圖片相關關鍵詞
-            return imageKeywords.some(keyword => message.includes(keyword));
-        }
-        
         // 打開聊天頁面
         function openChat() {
             // 設定當前聊天項目 ID
@@ -2959,30 +3371,28 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 根據物品類型生成個性化的歡迎訊息（優化版）
-                    let welcomeMessage = `## 你好！我已經仔細分析了這個「${currentAnalysisData.name}」\n\n`;
+                    // 根據物品類型生成個性化的歡迎訊息
+                    let welcomeMessage = `## 你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」\n\n發現了一些有趣的資訊想與你分享！\n\n`;
                     
-                    // 加入具體的物品描述
-                    welcomeMessage += `根據我的分析，這是一個${currentAnalysisData.description}。`;
-                    
-                    if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
-                        welcomeMessage += `它是 **${currentAnalysisData.brand}** 品牌的產品。`;
+                    // 添加一個有趣的開場
+                    if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
+                        welcomeMessage += `📱 **作為一個科技產品**，它代表著現代生活的便利性。`;
+                    } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
+                        welcomeMessage += `🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。`;
+                    } else if (currentAnalysisData.brand) {
+                        welcomeMessage += `🏷️ **${currentAnalysisData.brand}** 這個品牌有著獨特的市場定位。`;
+                    } else {
+                        welcomeMessage += `✨ **每個物品都有它獨特的故事和價值**。`;
                     }
                     
-                    welcomeMessage += `\n\n### 關鍵資訊：\n`;
-                    welcomeMessage += `• **價格**：${currentAnalysisData.price}\n`;
-                    welcomeMessage += `• **類別**：${currentAnalysisData.category || '一般商品'}\n`;
-                    welcomeMessage += `• **主要用途**：${currentAnalysisData.usage || '日常使用'}\n`;
+                    welcomeMessage += `\n\n### 我可以為你提供：\n\n`;
+                    welcomeMessage += `• **深入的產品分析**——從各個角度剖析優缺點\n`;
+                    welcomeMessage += `• **使用技巧和保養建議**——讓物品發揮最大價值\n`;
+                    welcomeMessage += `• **市場趨勢和價格走向**——掌握最佳購買時機\n`;
+                    welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
+                    welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
                     
-                    welcomeMessage += `\n### 我可以為你：\n`;
-                    welcomeMessage += `• 深入分析產品特性和價值\n`;
-                    welcomeMessage += `• 比較同類產品的優劣\n`;
-                    welcomeMessage += `• 提供使用和保養建議\n`;
-                    welcomeMessage += `• 解答任何相關疑問\n\n`;
-                    welcomeMessage += `有什麼想了解的嗎？`;
-                    
-                    // 使用打字機效果顯示歡迎訊息
-                    addMessage('assistant', welcomeMessage, true);
+                    addMessage('assistant', welcomeMessage);
                     
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
@@ -3111,7 +3521,7 @@
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content, false);  // 載入歷史時不使用打字機效果
+                    addMessageToUI(msg.role, msg.content);
                 }
             });
             
@@ -3171,149 +3581,31 @@
             return text;
         }
         
-        // 添加訊息到 UI（修改版本，支援打字機效果）
-        function addMessageToUI(role, content, useTypewriter = false) {
+        // 添加訊息到 UI
+        function addMessageToUI(role, content) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
             
             if (role === 'user') {
-                // 用戶訊息保持原樣，立即顯示
+                // 用戶訊息保持原樣
                 messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-                chatMessages.appendChild(messageDiv);
             } else {
-                // AI 訊息
-                if (useTypewriter) {
-                    // 使用打字機效果
-                    messageDiv.classList.add('typing');
-                    messageDiv.innerHTML = `<div class="message-content"><span class="typing-cursor"></span></div>`;
-                    chatMessages.appendChild(messageDiv);
-                    
-                    // 開始打字機動畫
-                    typewriterEffect(messageDiv, content);
-                } else {
-                    // 不使用打字機效果（例如載入歷史記錄時）
-                    const parsedContent = parseMarkdown(content);
-                    messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
-                    chatMessages.appendChild(messageDiv);
-                }
+                // AI 訊息進行 Markdown 解析
+                const parsedContent = parseMarkdown(content);
+                messageDiv.innerHTML = `<div class="message-content">${parsedContent}</div>`;
             }
             
+            chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // 打字機效果函數
-        function typewriterEffect(messageDiv, content) {
-            const messageContent = messageDiv.querySelector('.message-content');
-            const cursor = messageContent.querySelector('.typing-cursor');
-            
-            // 先解析 Markdown，但保存原始結構
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = parseMarkdown(content);
-            
-            // 將解析後的內容轉換為節點列表
-            const nodes = [];
-            function extractNodes(node) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    // 文字節點，拆分成單個字符
-                    const text = node.textContent;
-                    for (let i = 0; i < text.length; i++) {
-                        nodes.push({ type: 'text', content: text[i] });
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    // 元素節點
-                    nodes.push({ type: 'tagStart', tag: node.tagName.toLowerCase(), node: node });
-                    
-                    // 遞迴處理子節點
-                    for (let child of node.childNodes) {
-                        extractNodes(child);
-                    }
-                    
-                    nodes.push({ type: 'tagEnd', tag: node.tagName.toLowerCase() });
-                }
-            }
-            
-            // 提取所有節點
-            for (let child of tempDiv.childNodes) {
-                extractNodes(child);
-            }
-            
-            // 開始打字動畫
-            let currentIndex = 0;
-            let currentElement = null;
-            let elementStack = [];
-            
-            // 移除游標
-            cursor.remove();
-            
-            // 清空內容
-            messageContent.innerHTML = '';
-            
-            // 添加游標
-            const newCursor = document.createElement('span');
-            newCursor.className = 'typing-cursor';
-            messageContent.appendChild(newCursor);
-            
-            const typeInterval = setInterval(() => {
-                if (currentIndex >= nodes.length) {
-                    // 打字完成，移除游標和 typing 類別
-                    newCursor.remove();
-                    messageDiv.classList.remove('typing');
-                    clearInterval(typeInterval);
-                    return;
-                }
-                
-                const node = nodes[currentIndex];
-                
-                if (node.type === 'text') {
-                    // 添加文字
-                    if (currentElement) {
-                        currentElement.textContent += node.content;
-                    } else {
-                        const textNode = document.createTextNode(node.content);
-                        messageContent.insertBefore(textNode, newCursor);
-                    }
-                } else if (node.type === 'tagStart') {
-                    // 開始標籤
-                    const newElement = document.createElement(node.tag);
-                    
-                    // 複製屬性
-                    if (node.node.className) newElement.className = node.node.className;
-                    if (node.node.id) newElement.id = node.node.id;
-                    
-                    // 複製其他屬性
-                    for (let attr of node.node.attributes) {
-                        newElement.setAttribute(attr.name, attr.value);
-                    }
-                    
-                    if (currentElement) {
-                        currentElement.appendChild(newElement);
-                    } else {
-                        messageContent.insertBefore(newElement, newCursor);
-                    }
-                    
-                    elementStack.push(currentElement);
-                    currentElement = newElement;
-                } else if (node.type === 'tagEnd') {
-                    // 結束標籤
-                    currentElement = elementStack.pop();
-                }
-                
-                currentIndex++;
-                
-                // 滾動到底部
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-            }, 15); // 每個字符 15ms，可以調整速度
-        }
-        
-        // 添加訊息並保存（修改版本）
-        function addMessage(role, content, useTypewriter = false) {
+        // 添加訊息並保存
+        function addMessage(role, content) {
             const messages = getChatHistory();
             messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            addMessageToUI(role, content, useTypewriter);
+            addMessageToUI(role, content);
         }
         
         // 發送帶圖片的訊息
@@ -3347,7 +3639,7 @@
             await sendMessageInternal(message, isFirstMessage);
         }
         
-        // 內部發送訊息函數（修改版本）
+        // 內部發送訊息函數
         async function sendMessageInternal(message, includeImage = false) {
             const chatSendBtn = document.getElementById('chatSendBtn');
             
@@ -3422,8 +3714,8 @@
                 loadingDiv.remove();
                 
                 if (result.success) {
-                    // 添加 AI 回覆，使用打字機效果
-                    addMessage('assistant', result.data.reply, true);
+                    // 添加 AI 回覆
+                    addMessage('assistant', result.data.reply);
                 } else {
                     throw new Error(result.error || '回覆失敗');
                 }
@@ -3431,8 +3723,7 @@
             } catch (error) {
                 console.error('聊天錯誤:', error);
                 loadingDiv.remove();
-                // 錯誤訊息也使用打字機效果
-                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。', true);
+                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
             } finally {
                 // 重新啟用發送按鈕
                 chatSendBtn.disabled = false;
@@ -3490,11 +3781,11 @@
                 
                 if (result.success) {
                     const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
-                    const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
+                    const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
                     
                     if (navigator.share) {
                         navigator.share({
-                            title: '萬物價格掃描器',
+                            title: 'LENSY - 萬物價格掃描器',
                             text: shareText,
                             url: shareUrl
                         }).catch(err => console.log('分享取消'));
@@ -3511,11 +3802,11 @@
             } catch (error) {
                 console.error('分享錯誤:', error);
                 // 如果 API 還未實現，使用本地分享
-                const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
+                const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
                 
                 if (navigator.share) {
                     navigator.share({
-                        title: '萬物價格掃描器',
+                        title: 'LENSY - 萬物價格掃描器',
                         text: shareText
                     }).catch(err => console.log('分享取消'));
                 } else {
