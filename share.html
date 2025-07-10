@@ -1402,6 +1402,26 @@
     </div>
 
     <script>
+        // 價格格式化函數 - 統一所有價格顯示
+        function formatPrice(price) {
+            // 如果已經有 $ 符號，先移除
+            let priceString = price.toString().replace(/[$,]/g, '');
+            
+            // 嘗試解析數字
+            let numericPrice = parseFloat(priceString);
+            
+            // 如果不是有效數字，返回原始值
+            if (isNaN(numericPrice)) {
+                return price;
+            }
+            
+            // 格式化為整數，加上千位分隔符
+            let formattedPrice = Math.round(numericPrice).toLocaleString('zh-TW');
+            
+            // 加上 $ 符號
+            return '$' + formattedPrice;
+        }
+        
         // 獲取 URL 參數
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1483,7 +1503,7 @@
                     
                     <div class="share-info">
                         <h2 class="share-name">${data.name}</h2>
-                        <div class="share-price">${data.price}</div>
+                        <div class="share-price">${formatPrice(data.price)}</div>
                         <div class="share-price-note">${data.priceNote || ''}</div>
                         <p class="share-description">${data.description}</p>
                         
