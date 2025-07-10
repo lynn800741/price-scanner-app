@@ -1373,7 +1373,189 @@
             margin-top: 10px;
         }
 
-        /* 登入/註冊頁面樣式 */
+        /* 忘記密碼頁面樣式 */
+        .forgot-password-page {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background: #fff;
+            z-index: 4600;
+            display: none;
+            flex-direction: column;
+        }
+
+        .forgot-password-page.active {
+            display: flex;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .forgot-header {
+            position: relative;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .forgot-back-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .forgot-back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        .forgot-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .forgot-content {
+            flex: 1;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .forgot-icon {
+            width: 80px;
+            height: 80px;
+            background: #FFF3E0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .forgot-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #FF6B35;
+        }
+
+        .forgot-description {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 300px;
+        }
+
+        .forgot-form {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .forgot-button {
+            width: 100%;
+            padding: 14px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .forgot-button:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* 成功訊息樣式 */
+        .success-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .success-dialog.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-content {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .success-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .success-button {
+            padding: 12px 30px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
         .auth-page {
             position: fixed;
             top: 0;
@@ -1569,7 +1751,7 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: #ddd;
+            background: #999;
         }
 
         .divider span {
@@ -2729,6 +2911,59 @@
             </div>
         </div>
         
+        <!-- 忘記密碼頁面 -->
+        <div class="forgot-password-page" id="forgotPasswordPage">
+            <div class="forgot-header">
+                <button class="forgot-back-btn" onclick="closeForgotPassword()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="forgot-title">忘記密碼</h1>
+            </div>
+            
+            <div class="forgot-content">
+                <div class="forgot-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                
+                <p class="forgot-description">
+                    請輸入您註冊時使用的電子郵件地址<br>
+                    我們將發送密碼重設連結給您
+                </p>
+                
+                <form class="forgot-form" onsubmit="handlePasswordReset(event)">
+                    <div class="form-group">
+                        <label class="form-label">電子郵件地址</label>
+                        <input type="email" class="form-input" id="resetEmailInput" placeholder="輸入您的電子郵件" required>
+                    </div>
+                    
+                    <button type="submit" class="forgot-button">繼續</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 成功訊息對話框 -->
+        <div class="success-dialog" id="successDialog">
+            <div class="success-content">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                </div>
+                <h2 class="success-title">郵件已發送！</h2>
+                <p class="success-message">
+                    密碼重設連結已發送至您的信箱<br>
+                    請查看郵件並點擊連結重設密碼<br>
+                    <br>
+                    如未收到郵件，請檢查垃圾郵件資料夾
+                </p>
+                <button class="success-button" onclick="closeSuccessDialog()">確定</button>
+            </div>
+        </div>
+        
         <!-- 隱藏的文件輸入 -->
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
         <input type="file" id="multiFileInput" accept="image/*" multiple onchange="handleMultiFileSelect(event)" style="display: none;">
@@ -2794,6 +3029,7 @@
         const proUpgradePage = document.getElementById('proUpgradePage');
         const aiUploadPage = document.getElementById('aiUploadPage');
         const authPage = document.getElementById('authPage');
+        const forgotPasswordPage = document.getElementById('forgotPasswordPage');
         
         // 全域變數儲存當前模式
         let isLoginMode = true;
@@ -2963,13 +3199,41 @@
         
         // 處理忘記密碼
         function handleForgotPassword() {
+            // 顯示忘記密碼頁面
+            forgotPasswordPage.classList.add('active');
+            
+            // 如果有輸入的 email，自動填入
             const email = document.getElementById('emailInput').value;
             if (email) {
-                alert(`密碼重設郵件將發送至：${email}\n\n此功能開發中。`);
-            } else {
-                alert('請先輸入您的電子郵件地址');
-                document.getElementById('emailInput').focus();
+                document.getElementById('resetEmailInput').value = email;
             }
+        }
+        
+        // 關閉忘記密碼頁面
+        function closeForgotPassword() {
+            forgotPasswordPage.classList.remove('active');
+        }
+        
+        // 處理密碼重設
+        function handlePasswordReset(event) {
+            event.preventDefault();
+            const email = document.getElementById('resetEmailInput').value;
+            
+            // 模擬發送郵件
+            setTimeout(() => {
+                // 關閉忘記密碼頁面
+                closeForgotPassword();
+                
+                // 顯示成功訊息
+                document.getElementById('successDialog').classList.add('active');
+            }, 500);
+        }
+        
+        // 關閉成功對話框
+        function closeSuccessDialog() {
+            document.getElementById('successDialog').classList.remove('active');
+            // 關閉所有認證相關頁面
+            closeAuth();
         }
         
         // 處理 Apple 登入
