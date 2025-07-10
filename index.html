@@ -2697,11 +2697,6 @@
                             // 等待關閉動畫完成後打開聊天
                             setTimeout(() => {
                                 openChat();
-                                
-                                // 發送初始訊息
-                                setTimeout(() => {
-                                    sendMessageWithImage('請詳細分析這張圖片，告訴我你看到了什麼，並提供深入的見解。');
-                                }, 500);
                             }, 300);
                         }, 1000);
                     } else {
