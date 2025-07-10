@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>萬物價格掃描器</title>
+    <title>LENSY - 萬物價格掃描器</title>
     <style>
         * {
             margin: 0;
@@ -1217,1476 +1217,253 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* 分享頁面特定樣式 */
+        .share-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .share-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            gap: 20px;
+        }
+
+        .share-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            gap: 20px;
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #999;
+        }
+
+        .error-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .error-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .share-result {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .share-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .share-info {
+            padding: 20px;
+        }
+
+        .share-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .share-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 10px;
+        }
+
+        .share-price-note {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .share-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .share-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            background: #f5f5f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .meta-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .share-footer {
+            padding: 20px;
+            background: #f9f9f9;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 10px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- 設定頁面 -->
-        <div class="page settings-page" id="settingsPage">
-            <div class="nav-header">
-                <h1 class="app-title">設定</h1>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">會員服務</h2>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M5 16L3 5l5.5 0L12 16m3.5 0H21l-2-11L14 5"/>
-                        </svg>
-                        <div class="list-item-content">
-                            <div class="list-item-title">會員狀態</div>
-                            <div class="list-item-subtitle">免費版</div>
-                        </div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <div class="list-item-title" style="margin-left: 39px;">剩餘掃描次數: 50</div>
-                    </div>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        <div class="list-item-title">復原購買</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">Pro 版功能</h2>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
-                        </svg>
-                        <div class="list-item-title">AI智能服務</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item" onclick="openExportDialog()">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"/>
-                        </svg>
-                        <div class="list-item-title">匯出成Excel報告</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item" onclick="openBatchAnalysis()">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                        </svg>
-                        <div class="list-item-title">多張照片批次辨識</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-                        </svg>
-                        <div class="list-item-title">自動儲存到相簿</div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="autoSaveToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">支援</h2>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M21 9L17.5 14.5C17.08 15.08 16.5 15.5 15.91 15.68L11.7 16.89C11.45 16.96 11.21 17 11 17C10.5 17 10.08 16.76 9.82 16.3L7.91 12.72C7.66 12.17 7.9 11.5 8.47 11.28L12.66 9.61C13.22 9.39 13.86 9.63 14.12 10.2L15.38 12.94L18.5 8.5L21 9Z"/>
-                        </svg>
-                        <div class="list-item-title">語言</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-                
-                <div class="list-item">
-                    <div class="list-item-left">
-                        <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-                        </svg>
-                        <div class="list-item-title">聯絡我們</div>
-                    </div>
-                    <svg class="list-item-arrow" viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- 相機頁面 -->
-        <div class="page camera-page" id="cameraPage">
-            <video id="cameraFeed" autoplay playsinline></video>
-            <canvas id="photoCanvas"></canvas>
-            
-            <div class="camera-overlay">
-                <div class="close-camera" onclick="goToHome()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                    </svg>
-                </div>
-
-                <div class="scan-area">
-                    <p class="scan-text">確保物品清晰地位於鏡頭焦點中</p>
-                    <div class="scan-frame" id="scanFrame">
-                        <span class="scan-corner-tl"></span>
-                        <span class="scan-corner-tr"></span>
-                    </div>
-                </div>
-
-                <div class="camera-controls">
-                    <button class="control-btn" onclick="document.getElementById('multiFileInput').click()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                        </svg>
-                    </button>
-                    
-                    <button class="capture-btn" onclick="capturePhoto()"></button>
-                    
-                    <button class="control-btn" onclick="toggleFlash()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <p style="position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 12px;">
-                    長按拍照按鈕可選擇單張照片
-                </p>
-            </div>
-        </div>
-
-        <!-- 照片列表頁面 -->
-        <div class="page list-page active" id="listPage">
-            <div class="nav-header">
-                <h1 class="app-title">照片列表</h1>
-            </div>
-            
-            <div class="search-container">
-                <div class="search-box">
-                    <svg class="search-icon" viewBox="0 0 24 24">
-                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                    </svg>
-                    <input type="text" class="search-input" placeholder="搜尋" id="searchInput" oninput="searchHistory()">
-                </div>
-                <button class="select-btn" id="selectBtn" onclick="toggleSelectMode()">選取</button>
-            </div>
-            
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M4 4h7V2H4c-1.1 0-2 .9-2 2v7h2V4zm6 9l-4 5h12l-3.5-4.5-2.5 3.01L10 13zM22 11V4c0-1.1-.9-2-2-2h-7v2h7v7h2zm-2 9h-7v2h7c1.1 0 2-.9 2-2v-7h-2v7zM4 13H2v7c0 1.1.9 2 2 2h7v-2H4v-7z"/>
-                    </svg>
-                </div>
-                <h3 class="empty-title">拍攝你的第一張照片</h3>
-                <p class="empty-subtitle">開始建立你的價格卡</p>
-            </div>
-            
-            <div class="history-section" id="historySection" style="display: none;">
-                <!-- 歷史記錄會動態加入這裡 -->
-            </div>
-        </div>
-
-        <!-- 批量操作工具列 -->
-        <div class="batch-toolbar" id="batchToolbar">
-            <button class="batch-action-btn batch-share-btn" onclick="batchShare()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                </svg>
-                分享
-            </button>
-            <span class="batch-count">已選取 <span id="selectedCount">0</span> 個</span>
-            <button class="batch-action-btn batch-delete-btn" onclick="batchDelete()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                </svg>
-                刪除
-            </button>
-        </div>
-
-        <!-- 底部導航 -->
-        <div class="bottom-nav" id="bottomNav">
-            <div class="nav-item active" onclick="switchPage('listPage')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/>
-                </svg>
-                <span>照片列表</span>
-            </div>
-            
-            <div class="nav-item nav-camera">
-                <div class="camera-btn" onclick="switchPage('cameraPage')">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="nav-item" onclick="switchPage('settingsPage')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
-                </svg>
-                <span>設定</span>
-            </div>
-        </div>
-
-        <!-- 結果面板 -->
-        <div class="result-panel" id="resultPanel">
-            <div class="panel-header">
-                <div class="panel-handle"></div>
-                <button class="panel-home-btn" onclick="closeResult()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                    </svg>
-                </button>
-                <button class="panel-menu-btn" onclick="togglePanelMenu()">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="5" r="2"/>
-                        <circle cx="12" cy="12" r="2"/>
-                        <circle cx="12" cy="19" r="2"/>
-                    </svg>
-                </button>
-                <div class="panel-dropdown" id="panelDropdown">
-                    <div class="dropdown-item" onclick="reanalyzeImage()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        更正物品識別
-                    </div>
-                    <div class="dropdown-item" onclick="editItemName()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                        </svg>
-                        編輯名稱
-                    </div>
-                    <div class="dropdown-item delete" onclick="deleteCurrentItem()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg>
-                        刪除
-                    </div>
-                </div>
-            </div>
-            <div class="result-content" id="resultContent">
-                <!-- 動態內容 -->
-            </div>
-        </div>
-
-        <!-- 編輯名稱對話框 -->
-        <div class="edit-dialog" id="editDialog">
-            <div class="edit-dialog-content">
-                <h3 class="edit-dialog-title">編輯名稱</h3>
-                <input type="text" class="edit-input" id="editNameInput" placeholder="輸入新名稱">
-                <div class="edit-dialog-buttons">
-                    <button class="edit-dialog-btn save" onclick="saveEditedName()">儲存</button>
-                    <button class="edit-dialog-btn cancel" onclick="closeEditDialog()">取消</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 載入動畫 -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loader"></div>
-            <div class="loading-text">AI 正在分析中...</div>
+        <div class="nav-header">
+            <h1 class="app-title">LENSY 分享</h1>
         </div>
         
-        <!-- 聊天頁面 -->
-        <div class="chat-page" id="chatPage">
-            <div class="chat-header">
-                <h1 class="chat-title">AI 助手</h1>
-                <button class="chat-close-btn" onclick="closeChat()">
+        <div class="share-content" id="shareContent">
+            <div class="share-loading" id="shareLoading">
+                <div class="loader"></div>
+                <div class="loading-text">載入中...</div>
+            </div>
+            
+            <div class="share-error" id="shareError" style="display: none;">
+                <div class="error-icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                     </svg>
-                </button>
-            </div>
-            <div class="view-image-section" id="viewImageSection" style="display: none;">
-                <button class="view-image-btn" onclick="sendMessageWithImage('請重新查看這張圖片並告訴我你看到了什麼。')">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                    </svg>
-                    重新查看圖片
-                </button>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <!-- 對話內容會動態加入這裡 -->
-            </div>
-            <div class="chat-input-area">
-                <div class="quick-prompts" id="quickPrompts">
-                    <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
                 </div>
-                <div class="chat-input-container">
-                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." rows="1"></textarea>
-                    <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                        </svg>
-                    </button>
-                </div>
+                <h2 class="error-title">找不到分享內容</h2>
+                <p class="error-subtitle">此分享連結可能已過期或不存在</p>
+                <button class="download-btn" onclick="goToApp()">下載 LENSY</button>
+            </div>
+            
+            <div id="shareResult" style="display: none;">
+                <!-- 動態內容會插入這裡 -->
             </div>
         </div>
-        
-        <!-- 隱藏的文件輸入 -->
-        <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
-        <input type="file" id="multiFileInput" accept="image/*" multiple onchange="handleMultiFileSelect(event)" style="display: none;">
     </div>
 
     <script>
-        // 全域變數
-        let stream = null;
-        let capturedImage = null;
-        let currentAnalysisData = null;
-        let flashMode = 'off';
-        let currentChatItemId = null;
-        let isSelectMode = false;
-        let selectedItems = new Set();
-        let currentHistoryItem = null;
+        // 獲取 URL 參數
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
         
-        // DOM 元素
-        const pages = {
-            settingsPage: document.getElementById('settingsPage'),
-            cameraPage: document.getElementById('cameraPage'),
-            listPage: document.getElementById('listPage')
-        };
-        
-        const bottomNav = document.getElementById('bottomNav');
-        const chatPage = document.getElementById('chatPage');
-        
-        // 初始化應用
-        window.addEventListener('load', () => {
-            // 檢查並顯示歷史記錄
-            displayHistory();
-            // 設定拍照按鈕長按功能
-            setupCaptureButton();
+        // 初始化頁面
+        window.addEventListener('load', async () => {
+            const shareId = getUrlParameter('id');
+            
+            if (!shareId) {
+                showError();
+                return;
+            }
+            
+            await loadShareContent(shareId);
         });
         
-        // 回到首頁（照片列表頁）
-        function goToHome() {
-            switchPage('listPage');
-        }
-        
-        // 切換頁面
-        function switchPage(pageId) {
-            // 隱藏所有頁面
-            Object.values(pages).forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // 顯示目標頁面
-            if (pages[pageId]) {
-                pages[pageId].classList.add('active');
-                
-                // 更新底部導航
-                updateBottomNav(pageId);
-                
-                // 如果切換到相機頁面，啟動相機並隱藏底部導航
-                if (pageId === 'cameraPage') {
-                    initCamera();
-                    bottomNav.classList.add('hidden');
-                } else {
-                    // 關閉相機並顯示底部導航
-                    stopCamera();
-                    bottomNav.classList.remove('hidden');
-                }
-                
-                // 如果切換到列表頁，更新歷史記錄
-                if (pageId === 'listPage') {
-                    displayHistory();
-                }
-            }
-        }
-        
-        // 更新底部導航狀態
-        function updateBottomNav(activePageId) {
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // 根據頁面設定對應的導航項目
-            if (activePageId === 'listPage') {
-                navItems[0].classList.add('active');
-            } else if (activePageId === 'settingsPage') {
-                navItems[2].classList.add('active');
-            }
-        }
-        
-        // 初始化相機
-        async function initCamera() {
-            try {
-                const cameraFeed = document.getElementById('cameraFeed');
-                const constraints = {
-                    video: {
-                        facingMode: 'environment',
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 }
-                    }
-                };
-                
-                // 如果支援，加入閃光燈設定
-                if ('torch' in navigator.mediaDevices.getSupportedConstraints()) {
-                    constraints.video.torch = flashMode === 'on';
-                }
-                
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
-                cameraFeed.srcObject = stream;
-            } catch (error) {
-                console.error('無法存取相機:', error);
-                alert('請允許相機權限以使用此應用程式');
-                switchPage('listPage');
-            }
-        }
-        
-        // 停止相機
-        function stopCamera() {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
-        }
-        
-        // 切換閃光燈
-        async function toggleFlash() {
-            if (!stream) return;
+        // 載入分享內容
+        async function loadShareContent(shareId) {
+            const shareLoading = document.getElementById('shareLoading');
+            const shareError = document.getElementById('shareError');
+            const shareResult = document.getElementById('shareResult');
             
             try {
-                const track = stream.getVideoTracks()[0];
-                const capabilities = track.getCapabilities();
-                
-                if (!capabilities.torch) {
-                    alert('此裝置不支援閃光燈功能');
-                    return;
-                }
-                
-                flashMode = flashMode === 'off' ? 'on' : 'off';
-                await track.applyConstraints({
-                    advanced: [{ torch: flashMode === 'on' }]
-                });
-                
-                // 更新圖標狀態（可選）
-                const flashBtn = document.querySelector('.control-btn:last-child svg');
-                flashBtn.style.fill = flashMode === 'on' ? '#FFD700' : '#fff';
-            } catch (error) {
-                console.error('閃光燈控制失敗:', error);
-                alert('無法控制閃光燈');
-            }
-        }
-        
-        // 打開批次分析（從設定頁面）
-        function openBatchAnalysis() {
-            document.getElementById('multiFileInput').click();
-        }
-        
-        // 處理選擇的檔案
-        async function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            // 檢查檔案類型
-            if (!file.type.startsWith('image/')) {
-                alert('請選擇圖片檔案');
-                return;
-            }
-            
-            // 讀取並顯示圖片
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                capturedImage = e.target.result;
-                
-                // 建立圖片元素來調整大小
-                const img = new Image();
-                img.onload = async function() {
-                    const photoCanvas = document.getElementById('photoCanvas');
-                    const context = photoCanvas.getContext('2d');
-                    
-                    // 調整大小
-                    const maxWidth = 800;
-                    const maxHeight = 800;
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > maxWidth || height > maxHeight) {
-                        const ratio = Math.min(maxWidth / width, maxHeight / height);
-                        width *= ratio;
-                        height *= ratio;
-                    }
-                    
-                    photoCanvas.width = width;
-                    photoCanvas.height = height;
-                    context.drawImage(img, 0, 0, width, height);
-                    
-                    // 更新 capturedImage 為調整後的圖片
-                    capturedImage = photoCanvas.toDataURL('image/jpeg', 0.7);
-                    
-                    // 分析圖片
-                    analyzeImage();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            
-            // 清除輸入值，允許重複選擇同一檔案
-            event.target.value = '';
-        }
-        
-        // 處理多個檔案選擇
-        async function handleMultiFileSelect(event) {
-            const files = Array.from(event.target.files);
-            if (files.length === 0) return;
-            
-            // 檢查檔案數量
-            if (files.length > 10) {
-                alert('一次最多只能分析 10 張圖片');
-                return;
-            }
-            
-            // 檢查檔案類型
-            const imageFiles = files.filter(file => file.type.startsWith('image/'));
-            if (imageFiles.length !== files.length) {
-                alert('請只選擇圖片檔案');
-                return;
-            }
-            
-            // 顯示批次分析進度
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingText = loadingOverlay.querySelector('.loading-text');
-            loadingOverlay.classList.add('active');
-            
-            let successCount = 0;
-            const results = [];
-            
-            // 逐一分析圖片
-            for (let i = 0; i < imageFiles.length; i++) {
-                const file = imageFiles[i];
-                loadingText.textContent = `正在分析第 ${i + 1} / ${imageFiles.length} 張圖片...`;
-                
-                try {
-                    // 讀取圖片
-                    const imageDataUrl = await readFileAsDataURL(file);
-                    
-                    // 調整圖片大小
-                    const resizedImage = await resizeImage(imageDataUrl, 800, 800);
-                    
-                    // 準備 FormData
-                    const blob = await dataURLtoBlob(resizedImage);
-                    const formData = new FormData();
-                    formData.append('image', blob, `image${i}.jpg`);
-                    
-                    // 呼叫 API
-                    const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.success && result.data) {
-                            successCount++;
-                            
-                            // 儲存到歷史記錄
-                            capturedImage = resizedImage;
-                            currentAnalysisData = result.data;
-                            saveToHistory(result.data);
-                            
-                            results.push({
-                                image: resizedImage,
-                                data: result.data,
-                                timestamp: new Date().toISOString()
-                            });
-                        }
-                    }
-                } catch (error) {
-                    console.error(`分析第 ${i + 1} 張圖片失敗:`, error);
-                }
-            }
-            
-            // 隱藏載入動畫
-            loadingOverlay.classList.remove('active');
-            loadingText.textContent = 'AI 正在分析中...';
-            
-            // 顯示結果
-            if (successCount > 0) {
-                alert(`批次分析完成！\n成功：${successCount} 張\n失敗：${imageFiles.length - successCount} 張`);
-                
-                // 切換到列表頁面並重新載入
-                switchPage('listPage');
-                displayHistory();
-            } else {
-                alert('批次分析失敗，請稍後再試');
-            }
-            
-            // 清除輸入值
-            event.target.value = '';
-        }
-        
-        // 讀取檔案為 DataURL
-        function readFileAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = e => resolve(e.target.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-        
-        // 調整圖片大小
-        function resizeImage(dataUrl, maxWidth, maxHeight) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > maxWidth || height > maxHeight) {
-                        const ratio = Math.min(maxWidth / width, maxHeight / height);
-                        width *= ratio;
-                        height *= ratio;
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    resolve(canvas.toDataURL('image/jpeg', 0.7));
-                };
-                img.src = dataUrl;
-            });
-        }
-        
-        // DataURL 轉 Blob
-        function dataURLtoBlob(dataURL) {
-            const arr = dataURL.split(',');
-            const mime = arr[0].match(/:(.*?);/)[1];
-            const bstr = atob(arr[1]);
-            let n = bstr.length;
-            const u8arr = new Uint8Array(n);
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], { type: mime });
-        }
-        
-        // 打開匯出對話框
-        function openExportDialog() {
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            
-            if (history.length === 0) {
-                alert('沒有可匯出的資料');
-                return;
-            }
-            
-            // 建立選擇對話框
-            const dialog = document.createElement('div');
-            dialog.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.8);
-                z-index: 4000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            `;
-            
-            const content = document.createElement('div');
-            content.style.cssText = `
-                background: white;
-                border-radius: 20px;
-                width: 90%;
-                max-width: 400px;
-                max-height: 80vh;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            `;
-            
-            content.innerHTML = `
-                <div style="padding: 20px; border-bottom: 1px solid #eee;">
-                    <h2 style="margin: 0; font-size: 20px;">選擇要匯出的照片</h2>
-                </div>
-                
-                <div style="padding: 15px 20px; background: #f9f9f9; border-bottom: 1px solid #eee;">
-                    <label style="display: flex; align-items: center;">
-                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="margin-right: 10px;">
-                        <span style="font-weight: 600;">全選</span>
-                    </label>
-                </div>
-                
-                <div id="exportList" style="flex: 1; overflow-y: auto; padding: 15px;">
-                    ${history.map((item, index) => `
-                        <label style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 10px;">
-                            <input type="checkbox" class="export-item" value="${index}" style="margin-right: 10px;">
-                            <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">${item.name}</div>
-                                <div style="font-size: 12px; color: #666;">${item.price}</div>
-                            </div>
-                        </label>
-                    `).join('')}
-                </div>
-                
-                <div style="padding: 15px 20px; border-top: 1px solid #eee; background: #fff;">
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="exportToExcel()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                            匯出 Excel
-                        </button>
-                        <button onclick="closeExportDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                            取消
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            dialog.appendChild(content);
-            document.body.appendChild(dialog);
-            
-            // 保存對話框參考
-            window.currentExportDialog = dialog;
-        }
-        
-        // 全選/取消全選
-        window.toggleSelectAll = function() {
-            const selectAll = document.getElementById('selectAll');
-            const checkboxes = document.querySelectorAll('.export-item');
-            checkboxes.forEach(cb => cb.checked = selectAll.checked);
-        };
-        
-        // 關閉匯出對話框
-        window.closeExportDialog = function() {
-            if (window.currentExportDialog) {
-                window.currentExportDialog.remove();
-                window.currentExportDialog = null;
-            }
-        };
-        
-        // 匯出到 Excel
-        window.exportToExcel = async function() {
-            const selectedIndexes = Array.from(document.querySelectorAll('.export-item:checked'))
-                .map(cb => parseInt(cb.value));
-            
-            if (selectedIndexes.length === 0) {
-                alert('請至少選擇一個項目');
-                return;
-            }
-            
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const selectedItems = selectedIndexes.map(index => history[index]);
-            
-            try {
-                // 準備資料
-                const exportData = selectedItems.map(item => ({
-                    '物品名稱': item.name,
-                    '價格': item.price,
-                    '價格說明': item.data.priceNote || '',
-                    '描述': item.data.description || '',
-                    '材質': item.data.material || '',
-                    '用途': item.data.usage || '',
-                    '分類': item.data.category || '',
-                    '品牌': item.data.brand || '',
-                    '購買地點': item.data.availability || '',
-                    '掃描日期': formatDateDisplay(item.timestamp)
-                }));
-                
-                // 呼叫後端 API 生成 Excel
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/export/excel';
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ data: exportData })
-                });
-                
-                if (response.ok) {
-                    // 下載檔案
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `price_scanner_${new Date().getTime()}.xlsx`;
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    
-                    closeExportDialog();
-                    alert('Excel 檔案已下載！');
-                } else {
-                    throw new Error('匯出失敗');
-                }
-                
-            } catch (error) {
-                console.error('匯出錯誤:', error);
-                // 如果 API 還未實現，使用 CSV 替代
-                exportToCSV(selectedItems);
-            }
-        };
-        
-        // 匯出為 CSV（備用方案）
-        function exportToCSV(items) {
-            const headers = ['物品名稱', '價格', '價格說明', '描述', '材質', '用途', '分類', '品牌', '購買地點', '掃描日期'];
-            const rows = items.map(item => [
-                item.name,
-                item.price,
-                item.data.priceNote || '',
-                item.data.description || '',
-                item.data.material || '',
-                item.data.usage || '',
-                item.data.category || '',
-                item.data.brand || '',
-                item.data.availability || '',
-                formatDateDisplay(item.timestamp)
-            ]);
-            
-            // 建立 CSV 內容
-            const csvContent = [
-                headers.join(','),
-                ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-            
-            // 加入 BOM 以支援中文
-            const BOM = '\uFEFF';
-            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
-            
-            // 下載檔案
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `price_scanner_${new Date().getTime()}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            closeExportDialog();
-            alert('CSV 檔案已下載！\n\n注意：後端 Excel 功能尚未實現，暫時使用 CSV 格式。');
-        }
-        
-        // 拍照功能
-        async function capturePhoto() {
-            const cameraFeed = document.getElementById('cameraFeed');
-            const photoCanvas = document.getElementById('photoCanvas');
-            const context = photoCanvas.getContext('2d');
-            
-            // 設定畫布尺寸
-            const maxWidth = 800;
-            const maxHeight = 800;
-            
-            let width = cameraFeed.videoWidth;
-            let height = cameraFeed.videoHeight;
-            
-            if (width > maxWidth || height > maxHeight) {
-                const ratio = Math.min(maxWidth / width, maxHeight / height);
-                width *= ratio;
-                height *= ratio;
-            }
-            
-            photoCanvas.width = width;
-            photoCanvas.height = height;
-            context.drawImage(cameraFeed, 0, 0, width, height);
-            
-            // 轉換為 base64
-            capturedImage = photoCanvas.toDataURL('image/jpeg', 0.7);
-            
-            // 觸發分析
-            analyzeImage();
-        }
-        
-        // 長按拍照按鈕時選擇單張照片
-        function setupCaptureButton() {
-            const captureBtn = document.querySelector('.capture-btn');
-            let pressTimer;
-            
-            // 長按開始
-            captureBtn.addEventListener('mousedown', function() {
-                pressTimer = setTimeout(function() {
-                    document.getElementById('fileInput').click();
-                }, 800); // 800ms 後觸發
-            });
-            
-            captureBtn.addEventListener('touchstart', function() {
-                pressTimer = setTimeout(function() {
-                    document.getElementById('fileInput').click();
-                }, 800);
-            });
-            
-            // 取消長按
-            captureBtn.addEventListener('mouseup', function() {
-                clearTimeout(pressTimer);
-            });
-            
-            captureBtn.addEventListener('touchend', function() {
-                clearTimeout(pressTimer);
-            });
-            
-            captureBtn.addEventListener('mouseleave', function() {
-                clearTimeout(pressTimer);
-            });
-        }
-        
-        // 分析圖片
-        async function analyzeImage() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const resultPanel = document.getElementById('resultPanel');
-            const resultContent = document.getElementById('resultContent');
-            
-            // 顯示載入動畫
-            loadingOverlay.classList.add('active');
-            
-            try {
-                // 將 canvas 轉換為 blob
-                const photoCanvas = document.getElementById('photoCanvas');
-                const blob = await new Promise(resolve => {
-                    photoCanvas.toBlob(resolve, 'image/jpeg', 0.7);
-                });
-                
-                // 準備 FormData
-                const formData = new FormData();
-                formData.append('image', blob, 'capture.jpg');
-                
-                // 呼叫後端 API
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
+                // 呼叫 API 獲取分享內容
+                const API_URL = `https://price-scanner-backend.vercel.app/api/share/${shareId}`;
+                const response = await fetch(API_URL);
                 
                 if (!response.ok) {
-                    throw new Error('API 請求失敗');
+                    throw new Error('無法獲取分享內容');
                 }
                 
                 const result = await response.json();
                 
-                // 隱藏載入動畫
-                loadingOverlay.classList.remove('active');
-                
-                if (result.success && result.data) {
-                    // 保存當前分析數據
-                    currentAnalysisData = result.data;
-                    
-                    // 顯示結果
-                    displayResult(result.data);
-                    
-                    // 儲存到歷史記錄
-                    saveToHistory(result.data);
-                    
-                    // 切換到列表頁面並顯示結果
-                    switchPage('listPage');
-                    resultPanel.classList.add('active');
-                } else {
-                    throw new Error(result.error || '分析失敗');
+                if (!result.success || !result.data) {
+                    throw new Error('分享內容無效');
                 }
+                
+                // 顯示分享內容
+                displayShareContent(result.data);
+                
+                // 隱藏載入，顯示結果
+                shareLoading.style.display = 'none';
+                shareResult.style.display = 'block';
                 
             } catch (error) {
-                console.error('分析錯誤:', error);
-                loadingOverlay.classList.remove('active');
-                alert('分析失敗：' + error.message + '\n請確認網路連線並重試');
+                console.error('載入分享內容失敗:', error);
+                showError();
             }
         }
         
-        // 儲存到歷史記錄
-        function saveToHistory(data) {
-            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            
-            const historyItem = {
-                id: Date.now(),
-                name: data.name,
-                price: data.price,
-                image: capturedImage,
-                data: data,
-                timestamp: new Date().toISOString()
-            };
-            
-            history.unshift(historyItem);
-            
-            // 只保留最新 50 筆
-            history = history.slice(0, 50);
-            
-            localStorage.setItem('scanHistory', JSON.stringify(history));
-            
-            // 設定當前聊天項目 ID
-            currentChatItemId = historyItem.id;
-            currentHistoryItem = historyItem;  // 保存當前歷史項目
-        }
-        
-        // 搜尋歷史記錄
-        function searchHistory() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            
-            // 過濾符合搜尋條件的項目
-            const filteredHistory = history.filter(item => {
-                return item.name.toLowerCase().includes(searchTerm) ||
-                       item.price.toLowerCase().includes(searchTerm);
-            });
-            
-            // 顯示過濾後的結果
-            displayHistoryItems(filteredHistory);
-        }
-        
-        // 顯示歷史記錄項目（共用函數）
-        function displayHistoryItems(items) {
-            const emptyState = document.getElementById('emptyState');
-            const historySection = document.getElementById('historySection');
-            
-            if (items.length === 0) {
-                emptyState.style.display = 'flex';
-                historySection.style.display = 'none';
-            } else {
-                emptyState.style.display = 'none';
-                historySection.style.display = 'block';
-                
-                // 按月份分組
-                const groupedByMonth = {};
-                items.forEach(item => {
-                    const date = new Date(item.timestamp);
-                    const monthKey = `${date.getFullYear()}年${date.getMonth() + 1}月`;
-                    
-                    if (!groupedByMonth[monthKey]) {
-                        groupedByMonth[monthKey] = [];
-                    }
-                    groupedByMonth[monthKey].push(item);
-                });
-                
-                // 生成HTML
-                let html = '';
-                Object.keys(groupedByMonth).forEach(month => {
-                    html += `<div class="month-label">${month}</div>`;
-                    html += '<div class="history-grid">';
-                    
-                    groupedByMonth[month].forEach(item => {
-                        html += `
-                            <div class="history-item ${selectedItems.has(item.id) ? 'selected' : ''}" 
-                                 onclick="handleHistoryItemClick(event, ${item.id})"
-                                 data-id="${item.id}">
-                                <div class="history-item-checkbox ${selectedItems.has(item.id) ? 'checked' : ''}" 
-                                     onclick="toggleItemSelection(event, ${item.id})"></div>
-                                <img src="${item.image}" alt="${item.name}" class="history-img">
-                                <div class="history-info">
-                                    <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${item.price}</div>
-                                    <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    html += '</div>';
-                });
-                
-                historySection.innerHTML = html;
-            }
-        }
-        
-        // 顯示歷史記錄
-        function displayHistory() {
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            displayHistoryItems(history);
-        }
-        
-        // 切換選取模式
-        function toggleSelectMode() {
-            isSelectMode = !isSelectMode;
-            const selectBtn = document.getElementById('selectBtn');
-            const batchToolbar = document.getElementById('batchToolbar');
-            const listPage = document.getElementById('listPage');
-            
-            if (isSelectMode) {
-                selectBtn.textContent = '取消';
-                selectBtn.classList.add('active');
-                listPage.classList.add('select-mode');
-                selectedItems.clear();
-                updateSelectedCount();
-            } else {
-                selectBtn.textContent = '選取';
-                selectBtn.classList.remove('active');
-                listPage.classList.remove('select-mode');
-                batchToolbar.classList.remove('active');
-                selectedItems.clear();
-                // 移除所有選中狀態
-                document.querySelectorAll('.history-item').forEach(item => {
-                    item.classList.remove('selected');
-                    item.querySelector('.history-item-checkbox').classList.remove('checked');
-                });
-            }
-        }
-        
-        // 處理歷史項目點擊
-        function handleHistoryItemClick(event, id) {
-            if (isSelectMode) {
-                event.preventDefault();
-                toggleItemSelection(event, id);
-            } else {
-                showHistoryItem(id);
-            }
-        }
-        
-        // 切換項目選擇狀態
-        function toggleItemSelection(event, id) {
-            event.stopPropagation();
-            
-            const historyItem = document.querySelector(`.history-item[data-id="${id}"]`);
-            const checkbox = historyItem.querySelector('.history-item-checkbox');
-            
-            if (selectedItems.has(id)) {
-                selectedItems.delete(id);
-                historyItem.classList.remove('selected');
-                checkbox.classList.remove('checked');
-            } else {
-                selectedItems.add(id);
-                historyItem.classList.add('selected');
-                checkbox.classList.add('checked');
-            }
-            
-            updateSelectedCount();
-        }
-        
-        // 更新選中數量
-        function updateSelectedCount() {
-            const count = selectedItems.size;
-            document.getElementById('selectedCount').textContent = count;
-            
-            const batchToolbar = document.getElementById('batchToolbar');
-            if (count > 0) {
-                batchToolbar.classList.add('active');
-            } else {
-                batchToolbar.classList.remove('active');
-            }
-        }
-        
-        // 批量分享
-        async function batchShare() {
-            if (selectedItems.size === 0) {
-                alert('請選擇要分享的項目');
-                return;
-            }
-            
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const selectedData = Array.from(selectedItems).map(id => 
-                history.find(item => item.id === id)
-            ).filter(Boolean);
-            
-            try {
-                // 建立分享文字
-                let shareText = '我用萬物價格掃描器掃描了以下物品：\n\n';
-                selectedData.forEach(item => {
-                    shareText += `• ${item.name} - ${item.price}\n`;
-                });
-                shareText += '\n立即試用：https://lynn800741.github.io/price-scanner-app/';
-                
-                if (navigator.share) {
-                    await navigator.share({
-                        title: '萬物價格掃描器',
-                        text: shareText
-                    });
-                } else {
-                    await navigator.clipboard.writeText(shareText);
-                    alert('分享內容已複製到剪貼板！');
-                }
-                
-                // 退出選取模式
-                toggleSelectMode();
-                
-            } catch (error) {
-                console.error('分享失敗:', error);
-                if (error.name !== 'AbortError') {
-                    alert('分享失敗，請稍後再試');
-                }
-            }
-        }
-        
-        // 批量刪除
-        function batchDelete() {
-            if (selectedItems.size === 0) {
-                alert('請選擇要刪除的項目');
-                return;
-            }
-            
-            const confirmMsg = `確定要刪除 ${selectedItems.size} 個項目嗎？`;
-            if (!confirm(confirmMsg)) {
-                return;
-            }
-            
-            // 從歷史記錄中刪除選中的項目
-            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            history = history.filter(item => !selectedItems.has(item.id));
-            localStorage.setItem('scanHistory', JSON.stringify(history));
-            
-            // 同時刪除相關的聊天記錄
-            const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-            selectedItems.forEach(id => {
-                delete chatHistory[id];
-            });
-            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-            
-            // 退出選取模式並重新顯示
-            toggleSelectMode();
-            displayHistory();
-        }
-        
-        // 顯示歷史記錄項目
-        function showHistoryItem(id) {
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const item = history.find(h => h.id === id);
-            
-            if (item) {
-                capturedImage = item.image;
-                currentAnalysisData = item.data;
-                currentChatItemId = item.id;  // 設定當前聊天項目 ID
-                currentHistoryItem = item;     // 保存當前歷史項目
-                displayResult(item.data);
-                
-                const resultPanel = document.getElementById('resultPanel');
-                resultPanel.classList.add('active');
-            }
-        }
-        
-        // 切換面板選單
-        function togglePanelMenu() {
-            const dropdown = document.getElementById('panelDropdown');
-            dropdown.classList.toggle('active');
-            
-            // 點擊其他地方關閉選單
-            setTimeout(() => {
-                document.addEventListener('click', closePanelMenu);
-            }, 100);
-        }
-        
-        // 關閉面板選單
-        function closePanelMenu(event) {
-            const dropdown = document.getElementById('panelDropdown');
-            const menuBtn = document.querySelector('.panel-menu-btn');
-            
-            if (!dropdown.contains(event.target) && !menuBtn.contains(event.target)) {
-                dropdown.classList.remove('active');
-                document.removeEventListener('click', closePanelMenu);
-            }
-        }
-        
-        // 重新分析圖片
-        async function reanalyzeImage() {
-            // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
-            
-            // 確認重新分析
-            if (!confirm('確定要重新識別這個物品嗎？')) {
-                return;
-            }
-            
-            // 顯示載入動畫
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            loadingOverlay.classList.add('active');
-            
-            try {
-                // 將 base64 圖片轉換為 blob
-                const base64Data = capturedImage.split(',')[1];
-                const byteCharacters = atob(base64Data);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: 'image/jpeg' });
-                
-                // 準備 FormData
-                const formData = new FormData();
-                formData.append('image', blob, 'capture.jpg');
-                
-                // 呼叫後端 API
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API 請求失敗');
-                }
-                
-                const result = await response.json();
-                
-                // 隱藏載入動畫
-                loadingOverlay.classList.remove('active');
-                
-                if (result.success && result.data) {
-                    // 更新當前分析數據
-                    currentAnalysisData = result.data;
-                    
-                    // 更新歷史記錄
-                    let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-                    const index = history.findIndex(h => h.id === currentHistoryItem.id);
-                    if (index !== -1) {
-                        history[index].data = result.data;
-                        history[index].name = result.data.name;
-                        history[index].price = result.data.price;
-                        localStorage.setItem('scanHistory', JSON.stringify(history));
-                    }
-                    
-                    // 重新顯示結果
-                    displayResult(result.data);
-                    
-                    alert('物品識別已更新！');
-                } else {
-                    throw new Error(result.error || '分析失敗');
-                }
-                
-            } catch (error) {
-                console.error('重新分析錯誤:', error);
-                loadingOverlay.classList.remove('active');
-                alert('重新分析失敗：' + error.message);
-            }
-        }
-        
-        // 編輯物品名稱
-        function editItemName() {
-            // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
-            
-            // 顯示編輯對話框
-            const editDialog = document.getElementById('editDialog');
-            const editInput = document.getElementById('editNameInput');
-            editInput.value = currentAnalysisData.name;
-            editDialog.classList.add('active');
-            
-            // 聚焦輸入框
-            setTimeout(() => editInput.focus(), 100);
-        }
-        
-        // 關閉編輯對話框
-        function closeEditDialog() {
-            document.getElementById('editDialog').classList.remove('active');
-        }
-        
-        // 儲存編輯的名稱
-        function saveEditedName() {
-            const newName = document.getElementById('editNameInput').value.trim();
-            
-            if (!newName) {
-                alert('請輸入新名稱');
-                return;
-            }
-            
-            // 更新當前數據
-            currentAnalysisData.name = newName;
-            
-            // 更新歷史記錄
-            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const index = history.findIndex(h => h.id === currentHistoryItem.id);
-            if (index !== -1) {
-                history[index].name = newName;
-                history[index].data.name = newName;
-                localStorage.setItem('scanHistory', JSON.stringify(history));
-            }
-            
-            // 重新顯示結果
-            displayResult(currentAnalysisData);
-            
-            // 關閉對話框
-            closeEditDialog();
-            
-            // 更新列表顯示
-            displayHistory();
-        }
-        
-        // 刪除當前項目
-        function deleteCurrentItem() {
-            // 關閉選單
-            document.getElementById('panelDropdown').classList.remove('active');
-            
-            if (!confirm('確定要刪除這個項目嗎？')) {
-                return;
-            }
-            
-            // 從歷史記錄中刪除
-            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            history = history.filter(item => item.id !== currentHistoryItem.id);
-            localStorage.setItem('scanHistory', JSON.stringify(history));
-            
-            // 刪除相關聊天記錄
-            const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-            delete chatHistory[currentHistoryItem.id];
-            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-            
-            // 關閉結果面板
-            closeResult();
-            
-            // 更新列表顯示
-            displayHistory();
-        }
-        
-        // 格式化日期顯示
-        function formatDateDisplay(timestamp) {
-            const date = new Date(timestamp);
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            
-            return `${year}/${month}/${day}`;
-        }
-        
-        // 格式化日期（保留原函數用於其他地方）
-        function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            
-            if (diff < 60000) return '剛剛';
-            if (diff < 3600000) return `${Math.floor(diff / 60000)} 分鐘前`;
-            if (diff < 86400000) return `${Math.floor(diff / 3600000)} 小時前`;
-            if (diff < 604800000) return `${Math.floor(diff / 86400000)} 天前`;
-            
-            return date.toLocaleDateString('zh-TW');
-        }
-        
-        // 顯示結果
-        function displayResult(data) {
-            const resultContent = document.getElementById('resultContent');
+        // 顯示分享內容
+        function displayShareContent(data) {
+            const shareResult = document.getElementById('shareResult');
             
             // 生成購買連結
             let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
                 purchaseLinks = `
-                    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3 style="font-size: 18px; margin-bottom: 15px; color: #333;">購買管道</h3>
+                    <div style="margin: 20px 0;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px;">購買管道</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             ${data.purchaseLinks.online.map(link => `
                                 <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
@@ -2700,45 +1477,38 @@
                 `;
             }
             
-            resultContent.innerHTML = `
-                <img src="${capturedImage}" alt="拍攝的物品" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
-                
-                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">${data.name}</h2>
-                
-                <div class="price-section">
-                    <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
-                    <div class="price-value">${data.price}</div>
-                    <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
+            shareResult.innerHTML = `
+                <div class="share-result">
+                    <img src="${data.image}" alt="${data.name}" class="share-image">
+                    
+                    <div class="share-info">
+                        <h2 class="share-name">${data.name}</h2>
+                        <div class="share-price">${data.price}</div>
+                        <div class="share-price-note">${data.priceNote || ''}</div>
+                        <p class="share-description">${data.description}</p>
+                        
+                        ${purchaseLinks}
+                        
+                        <div class="share-meta">
+                            ${data.category ? `<div class="meta-item"><span class="meta-label">分類：</span>${data.category}</div>` : ''}
+                            ${data.brand && data.brand !== '未知' ? `<div class="meta-item"><span class="meta-label">品牌：</span>${data.brand}</div>` : ''}
+                            ${data.material ? `<div class="meta-item"><span class="meta-label">材質：</span>${data.material}</div>` : ''}
+                        </div>
+                        
+                        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="font-size: 18px; margin-bottom: 10px;">在哪裡買</h3>
+                            <p style="color: #666; line-height: 1.6;">${data.availability}</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <button onclick="openChat()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        詢問 AI
+                <div class="share-footer">
+                    <div class="footer-logo">LENSY</div>
+                    <p class="footer-text">萬物價格掃描器 - AI 智能識別與價格分析</p>
+                    <button class="download-btn" onclick="goToApp()">
+                        立即下載 LENSY
                     </button>
                 </div>
-                
-                ${purchaseLinks}
-                
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">基本資訊</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.description}</p>
-                </div>
-                
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="font-size: 18px; margin-bottom: 10px; color: #333;">在哪裡買</h3>
-                    <p style="color: #666; line-height: 1.6;">${data.availability}</p>
-                </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="shareResult()" style="flex: 1; padding: 15px; background: #2196F3; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        分享
-                    </button>
-                    <button onclick="closeResult()" style="flex: 1; padding: 15px; background: #FF6B35; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;">
-                        關閉
-                    </button>
-                </div>
-                
-                <p class="disclaimer-text">所有資訊皆由 GPT 產出</p>
             `;
         }
         
@@ -2754,376 +1524,17 @@
             return urls[platform] || '#';
         }
         
-        // 打開聊天頁面
-        function openChat() {
-            // 設定當前聊天項目 ID
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const currentItem = history.find(item => 
-                item.image === capturedImage && 
-                item.data.name === currentAnalysisData.name
-            );
-            
-            if (currentItem) {
-                currentChatItemId = currentItem.id;
-                loadChatHistory();
-                chatPage.classList.add('active');
-                
-                // 如果沒有歷史對話，顯示歡迎訊息
-                const chatHistory = getChatHistory();
-                if (chatHistory.length === 0) {
-                    // 第一次對話，隱藏重新查看圖片按鈕
-                    document.getElementById('viewImageSection').style.display = 'none';
-                    
-                    addMessage('assistant', `你好！我是 AI 助手，我可以回答關於「${currentAnalysisData.name}」的任何問題。請問有什麼想了解的嗎？`);
-                    // 第一次對話，記錄已經看過圖片
-                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-                    if (!allChats[currentChatItemId]) {
-                        allChats[currentChatItemId] = [];
-                    }
-                    allChats[currentChatItemId].imageAnalyzed = true;
-                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
-                }
-                
-                // 更新快速提示詞
-                updateQuickPrompts();
-            }
+        // 顯示錯誤
+        function showError() {
+            document.getElementById('shareLoading').style.display = 'none';
+            document.getElementById('shareError').style.display = 'flex';
+            document.getElementById('shareResult').style.display = 'none';
         }
         
-        // 更新快速提示詞
-        function updateQuickPrompts() {
-            const quickPrompts = document.getElementById('quickPrompts');
-            const prompts = [
-                '這個值得買嗎？',
-                '有更便宜的替代品嗎？',
-                '如何保養這個物品？',
-                '這個物品的優缺點是什麼？',
-                '使用時要注意什麼？'
-            ];
-            
-            // 根據物品類型動態調整提示詞
-            if (currentAnalysisData.category) {
-                if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
-                    prompts[3] = '營養價值如何？';
-                    prompts[4] = '保存期限多久？';
-                } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
-                    prompts[3] = '規格比較';
-                    prompts[4] = '保固服務如何？';
-                }
-            }
-            
-            quickPrompts.innerHTML = prompts.map(prompt => 
-                `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
-            ).join('');
+        // 前往應用程式
+        function goToApp() {
+            window.location.href = 'https://lynn800741.github.io/price-scanner-app/';
         }
-        
-        // 發送快速提示
-        function sendQuickPrompt(prompt) {
-            document.getElementById('chatInput').value = prompt;
-            sendMessage();
-        }
-        
-        // 關閉聊天頁面
-        function closeChat() {
-            chatPage.classList.remove('active');
-            currentChatItemId = null;
-        }
-        
-        // 獲取聊天歷史
-        function getChatHistory() {
-            if (!currentChatItemId) return [];
-            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-            return allChats[currentChatItemId] || [];
-        }
-        
-        // 檢查是否已分析過圖片
-        function hasImageBeenAnalyzed() {
-            if (!currentChatItemId) return false;
-            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-            return allChats[currentChatItemId] && allChats[currentChatItemId].imageAnalyzed;
-        }
-        
-        // 保存聊天歷史
-        function saveChatHistory(messages) {
-            if (!currentChatItemId) return;
-            const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-            allChats[currentChatItemId] = messages;
-            // 保留 imageAnalyzed 標記
-            const imageAnalyzed = allChats[currentChatItemId] && allChats[currentChatItemId].imageAnalyzed;
-            if (imageAnalyzed) {
-                allChats[currentChatItemId].imageAnalyzed = true;
-            }
-            localStorage.setItem('chatHistory', JSON.stringify(allChats));
-        }
-        
-        // 載入聊天歷史
-        function loadChatHistory() {
-            const messages = getChatHistory();
-            const chatMessages = document.getElementById('chatMessages');
-            const viewImageSection = document.getElementById('viewImageSection');
-            chatMessages.innerHTML = '';
-            
-            // 如果有歷史，顯示重新查看圖片按鈕
-            if (messages.length > 0) {
-                viewImageSection.style.display = 'flex';
-            } else {
-                viewImageSection.style.display = 'none';
-            }
-            
-            messages.forEach(msg => {
-                if (msg.role && msg.content) {  // 確保訊息格式正確
-                    addMessageToUI(msg.role, msg.content);
-                }
-            });
-            
-            // 滾動到底部
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        // 添加訊息到 UI
-        function addMessageToUI(role, content) {
-            const chatMessages = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            
-            const avatarText = role === 'user' ? '你' : 'AI';
-            
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${avatarText}</div>
-                <div class="message-content">${content}</div>
-            `;
-            
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        // 添加訊息並保存
-        function addMessage(role, content) {
-            const messages = getChatHistory();
-            messages.push({ role, content, timestamp: new Date().toISOString() });
-            saveChatHistory(messages);
-            addMessageToUI(role, content);
-        }
-        
-        // 發送帶圖片的訊息
-        async function sendMessageWithImage(message) {
-            if (!message) {
-                message = document.getElementById('chatInput').value.trim();
-            }
-            
-            if (!message) return;
-            
-            // 清空輸入框
-            if (!message || message === document.getElementById('chatInput').value.trim()) {
-                document.getElementById('chatInput').value = '';
-                document.getElementById('chatInput').style.height = 'auto';
-            }
-            
-            // 發送帶圖片的請求
-            await sendMessageInternal(message, true);
-        }
-        
-        // 發送訊息
-        async function sendMessage() {
-            const message = document.getElementById('chatInput').value.trim();
-            if (!message) return;
-            
-            document.getElementById('chatInput').value = '';
-            document.getElementById('chatInput').style.height = 'auto';
-            
-            // 檢查是否是第一次對話
-            const isFirstMessage = !hasImageBeenAnalyzed();
-            await sendMessageInternal(message, isFirstMessage);
-        }
-        
-        // 內部發送訊息函數
-        async function sendMessageInternal(message, includeImage = false) {
-            const chatSendBtn = document.getElementById('chatSendBtn');
-            
-            // 添加用戶訊息
-            addMessage('user', message);
-            
-            // 禁用發送按鈕
-            chatSendBtn.disabled = true;
-            
-            // 顯示載入動畫
-            const chatMessages = document.getElementById('chatMessages');
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message assistant';
-            loadingDiv.innerHTML = `
-                <div class="message-avatar">AI</div>
-                <div class="message-content">
-                    <div class="chat-loading">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            `;
-            chatMessages.appendChild(loadingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            try {
-                // 準備請求數據
-                const formData = new FormData();
-                
-                // 只在需要時包含圖片
-                if (includeImage) {
-                    // 將 base64 圖片轉換為 Blob
-                    const base64Data = capturedImage.split(',')[1];
-                    const byteCharacters = atob(base64Data);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    const byteArray = new Uint8Array(byteNumbers);
-                    const blob = new Blob([byteArray], { type: 'image/jpeg' });
-                    
-                    formData.append('image', blob, 'item.jpg');
-                    
-                    // 標記已分析過圖片
-                    const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
-                    if (!allChats[currentChatItemId]) {
-                        allChats[currentChatItemId] = [];
-                    }
-                    allChats[currentChatItemId].imageAnalyzed = true;
-                    localStorage.setItem('chatHistory', JSON.stringify(allChats));
-                }
-                
-                formData.append('message', message);
-                formData.append('itemInfo', JSON.stringify(currentAnalysisData));
-                formData.append('chatHistory', JSON.stringify(getChatHistory()));
-                formData.append('includeImage', includeImage.toString());
-                
-                // 呼叫 API
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API 請求失敗');
-                }
-                
-                const result = await response.json();
-                
-                // 移除載入動畫
-                loadingDiv.remove();
-                
-                if (result.success) {
-                    // 添加 AI 回覆
-                    addMessage('assistant', result.data.reply);
-                } else {
-                    throw new Error(result.error || '回覆失敗');
-                }
-                
-            } catch (error) {
-                console.error('聊天錯誤:', error);
-                loadingDiv.remove();
-                addMessage('assistant', '抱歉，我現在無法回答您的問題。請稍後再試。');
-            } finally {
-                // 重新啟用發送按鈕
-                chatSendBtn.disabled = false;
-            }
-        }
-        
-        // 監聽輸入框 Enter 鍵
-        document.getElementById('chatInput').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
-        
-        // 自動調整輸入框高度
-        document.getElementById('chatInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-        
-        // 分享結果
-        async function shareResult() {
-            if (!currentAnalysisData) {
-                alert('沒有可分享的資料');
-                return;
-            }
-            
-            try {
-                // 準備分享數據
-                const shareData = {
-                    name: currentAnalysisData.name,
-                    price: currentAnalysisData.price,
-                    priceNote: currentAnalysisData.priceNote,
-                    description: currentAnalysisData.description,
-                    availability: currentAnalysisData.availability,
-                    purchaseLinks: currentAnalysisData.purchaseLinks,
-                    image: capturedImage
-                };
-                
-                // 呼叫後端 API 生成分享連結
-                const API_URL = 'https://price-scanner-backend.vercel.app/api/share';
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(shareData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('分享失敗');
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
-                    const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
-                    
-                    if (navigator.share) {
-                        navigator.share({
-                            title: '萬物價格掃描器',
-                            text: shareText,
-                            url: shareUrl
-                        }).catch(err => console.log('分享取消'));
-                    } else {
-                        // 複製到剪貼板
-                        navigator.clipboard.writeText(shareText).then(() => {
-                            alert('分享連結已複製到剪貼板！');
-                        });
-                    }
-                } else {
-                    throw new Error(result.error || '分享失敗');
-                }
-                
-            } catch (error) {
-                console.error('分享錯誤:', error);
-                // 如果 API 還未實現，使用本地分享
-                const shareText = `我用萬物價格掃描器發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
-                
-                if (navigator.share) {
-                    navigator.share({
-                        title: '萬物價格掃描器',
-                        text: shareText
-                    }).catch(err => console.log('分享取消'));
-                } else {
-                    navigator.clipboard.writeText(shareText).then(() => {
-                        alert('分享文字已複製到剪貼板！\n\n注意：分享連結功能需要後端支援。');
-                    });
-                }
-            }
-        }
-        
-        // 關閉結果面板
-        function closeResult() {
-            const resultPanel = document.getElementById('resultPanel');
-            resultPanel.classList.remove('active');
-        }
-        
-        // 清理資源
-        window.addEventListener('beforeunload', () => {
-            stopCamera();
-        });
     </script>
 </body>
 </html>
