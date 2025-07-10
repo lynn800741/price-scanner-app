@@ -2147,6 +2147,26 @@
             yearly: 1188  // 99 * 12
         };
         
+        // 價格格式化函數 - 統一所有價格顯示
+        function formatPrice(price) {
+            // 如果已經有 $ 符號，先移除
+            let priceString = price.toString().replace(/[$,]/g, '');
+            
+            // 嘗試解析數字
+            let numericPrice = parseFloat(priceString);
+            
+            // 如果不是有效數字，返回原始值
+            if (isNaN(numericPrice)) {
+                return price;
+            }
+            
+            // 格式化為整數，加上千位分隔符
+            let formattedPrice = Math.round(numericPrice).toLocaleString('zh-TW');
+            
+            // 加上 $ 符號
+            return '$' + formattedPrice;
+        }
+        
         // 計算折扣百分比
         function calculateDiscount() {
             const monthlyYearTotal = PRICING.monthly * 12;
@@ -2201,22 +2221,22 @@
             updateDiscountBadge();
             
             // 更新年繳月均價
-            const yearlyMonthlyPrice = (PRICING.yearly / 12).toFixed(2);
+            const yearlyMonthlyPrice = Math.round(PRICING.yearly / 12);
             const yearlyPriceElement = document.querySelector('#yearlyPlan .pricing-price');
             if (yearlyPriceElement) {
-                yearlyPriceElement.textContent = `${yearlyMonthlyPrice}`;
+                yearlyPriceElement.textContent = formatPrice(yearlyMonthlyPrice);
             }
             
             // 更新年繳總價
             const yearlyPeriodElement = document.querySelector('#yearlyPlan .pricing-period');
             if (yearlyPeriodElement) {
-                yearlyPeriodElement.textContent = `${PRICING.yearly}/年`;
+                yearlyPeriodElement.textContent = `${formatPrice(PRICING.yearly)}/年`;
             }
             
             // 更新月繳價格
             const monthlyPriceElement = document.querySelector('#monthlyPlan .pricing-price');
             if (monthlyPriceElement) {
-                monthlyPriceElement.textContent = `${PRICING.monthly}`;
+                monthlyPriceElement.textContent = formatPrice(PRICING.monthly);
             }
         }
         
@@ -2244,11 +2264,12 @@
         
         // 開始免費試用
         function startFreeTrial() {
-            const yearlyYearTotal = PRICING.yearly;
-            const monthlyTotal = PRICING.monthly;
+            const yearlyYearTotal = formatPrice(PRICING.yearly);
+            const monthlyTotal = formatPrice(PRICING.monthly);
+            const yearlyMonthly = formatPrice(Math.round(PRICING.yearly / 12));
             
             const planText = selectedPricingPlan === 'yearly' 
-                ? `年繳方案（${yearlyYearTotal}/年，平均每月 ${(yearlyYearTotal/12).toFixed(2)}）` 
+                ? `年繳方案（${yearlyYearTotal}/年，平均每月 ${yearlyMonthly}）` 
                 : `月繳方案（${monthlyTotal}/月）`;
                 
             alert(`即將開始 3 天免費試用\n\n您選擇的是：${planText}\n\n試用期結束後將自動扣款\n\n此功能尚在開發中，敬請期待！`);
@@ -2643,7 +2664,7 @@
                             <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
                             <div style="flex: 1;">
                                 <div style="font-weight: 600;">${item.name}</div>
-                                <div style="font-size: 12px; color: #666;">${item.price}</div>
+                                <div style="font-size: 12px; color: #666;">${formatPrice(item.price)}</div>
                             </div>
                         </label>
                     `).join('')}
@@ -2700,7 +2721,7 @@
                 // 準備資料
                 const exportData = selectedItems.map(item => ({
                     '物品名稱': item.name,
-                    '價格': item.price,
+                    '價格': formatPrice(item.price),
                     '價格說明': item.data.priceNote || '',
                     '描述': item.data.description || '',
                     '材質': item.data.material || '',
@@ -2749,7 +2770,7 @@
             const headers = ['物品名稱', '價格', '價格說明', '描述', '材質', '用途', '分類', '品牌', '購買地點', '掃描日期'];
             const rows = items.map(item => [
                 item.name,
-                item.price,
+                formatPrice(item.price),
                 item.data.priceNote || '',
                 item.data.description || '',
                 item.data.material || '',
@@ -2983,7 +3004,7 @@
                                 <img src="${item.image}" alt="${item.name}" class="history-img">
                                 <div class="history-info">
                                     <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${item.price}</div>
+                                    <div class="history-price">${formatPrice(item.price)}</div>
                                     <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
                                 </div>
                             </div>
@@ -3089,7 +3110,7 @@
                 // 建立分享文字
                 let shareText = '我用 LENSY 掃描了以下物品：\n\n';
                 selectedData.forEach(item => {
-                    shareText += `• ${item.name} - ${item.price}\n`;
+                    shareText += `• ${item.name} - ${formatPrice(item.price)}\n`;
                 });
                 shareText += '\n立即試用：https://lynn800741.github.io/price-scanner-app/';
                 
@@ -3388,7 +3409,7 @@
                 
                 <div class="price-section">
                     <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
-                    <div class="price-value">${data.price}</div>
+                    <div class="price-value">${formatPrice(data.price)}</div>
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
@@ -3928,7 +3949,7 @@
                 
                 if (result.success) {
                     const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
-                    const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
+                    const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${formatPrice(currentAnalysisData.price)}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
                     
                     if (navigator.share) {
                         navigator.share({
@@ -3949,7 +3970,7 @@
             } catch (error) {
                 console.error('分享錯誤:', error);
                 // 如果 API 還未實現，使用本地分享
-                const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${currentAnalysisData.price}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
+                const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${formatPrice(currentAnalysisData.price)}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
                 
                 if (navigator.share) {
                     navigator.share({
