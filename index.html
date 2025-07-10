@@ -2080,7 +2080,7 @@
                 <div class="pricing-section">
                     <div class="pricing-container">
                         <div class="pricing-card popular" id="yearlyPlan" onclick="selectPlan('yearly')">
-                            <div class="discount-badge">省31%</div>
+                            <div class="discount-badge">省17%</div>
                             <div class="pricing-radio"></div>
                             <div class="pricing-title">年繳方案</div>
                             <div class="pricing-price">$124.17</div>
@@ -2129,6 +2129,20 @@
         let currentHistoryItem = null;
         let selectedPricingPlan = 'yearly'; // 預設選擇年繳方案
         
+        // 價格配置
+        const PRICING = {
+            monthly: 150,
+            yearly: 1490
+        };
+        
+        // 計算折扣百分比
+        function calculateDiscount() {
+            const monthlyYearTotal = PRICING.monthly * 12;
+            const yearlyTotal = PRICING.yearly;
+            const discount = ((monthlyYearTotal - yearlyTotal) / monthlyYearTotal * 100).toFixed(0);
+            return discount;
+        }
+        
         // DOM 元素
         const pages = {
             settingsPage: document.getElementById('settingsPage'),
@@ -2149,11 +2163,49 @@
             setupCaptureButton();
             // 預設選擇年繳方案
             selectPlan('yearly');
+            // 更新折扣顯示
+            updateDiscountBadge();
         });
+        
+        // 更新折扣標籤
+        function updateDiscountBadge() {
+            const discountBadge = document.querySelector('.discount-badge');
+            if (discountBadge) {
+                const discount = calculateDiscount();
+                discountBadge.textContent = `省${discount}%`;
+            }
+        }
         
         // 打開升級PRO頁面
         function openProUpgrade() {
             proUpgradePage.classList.add('active');
+            // 更新價格顯示和折扣
+            updatePricingDisplay();
+        }
+        
+        // 更新價格顯示
+        function updatePricingDisplay() {
+            // 更新折扣標籤
+            updateDiscountBadge();
+            
+            // 更新年繳月均價
+            const yearlyMonthlyPrice = (PRICING.yearly / 12).toFixed(2);
+            const yearlyPriceElement = document.querySelector('#yearlyPlan .pricing-price');
+            if (yearlyPriceElement) {
+                yearlyPriceElement.textContent = `${yearlyMonthlyPrice}`;
+            }
+            
+            // 更新年繳總價
+            const yearlyPeriodElement = document.querySelector('#yearlyPlan .pricing-period');
+            if (yearlyPeriodElement) {
+                yearlyPeriodElement.textContent = `${PRICING.yearly}/年`;
+            }
+            
+            // 更新月繳價格
+            const monthlyPriceElement = document.querySelector('#monthlyPlan .pricing-price');
+            if (monthlyPriceElement) {
+                monthlyPriceElement.textContent = `${PRICING.monthly}`;
+            }
         }
         
         // 關閉升級PRO頁面
@@ -2180,9 +2232,12 @@
         
         // 開始免費試用
         function startFreeTrial() {
+            const yearlyYearTotal = PRICING.yearly;
+            const monthlyTotal = PRICING.monthly;
+            
             const planText = selectedPricingPlan === 'yearly' 
-                ? '年繳方案（$1,490/年）' 
-                : '月繳方案（$150/月）';
+                ? `年繳方案（${yearlyYearTotal}/年，平均每月 ${(yearlyYearTotal/12).toFixed(2)}）` 
+                : `月繳方案（${monthlyTotal}/月）`;
                 
             alert(`即將開始 3 天免費試用\n\n您選擇的是：${planText}\n\n試用期結束後將自動扣款\n\n此功能尚在開發中，敬請期待！`);
             
