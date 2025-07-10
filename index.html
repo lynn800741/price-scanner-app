@@ -1638,6 +1638,145 @@
         .terms-links a:hover {
             color: #FF6B35;
         }
+        
+        /* AI上傳頁面樣式 */
+        .ai-upload-page {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background: #fff;
+            z-index: 3500;
+            display: none;
+            flex-direction: column;
+        }
+
+        .ai-upload-page.active {
+            display: flex;
+        }
+
+        .ai-upload-header {
+            position: relative;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-upload-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ai-upload-close-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ai-upload-close-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .ai-upload-close-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .ai-upload-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .upload-box {
+            width: 100%;
+            max-width: 350px;
+            padding: 60px 40px;
+            background: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .upload-box:hover {
+            border-color: #FF6B35;
+            background: #FFF3E0;
+        }
+
+        .upload-icon-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: #FF6B35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .upload-icon-container:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .upload-icon-container svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+        }
+
+        .upload-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .upload-tips {
+            margin-top: 30px;
+            padding: 15px;
+            background: #FFF3E0;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .upload-tips-title {
+            font-weight: 600;
+            color: #FF6B35;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -1688,7 +1827,7 @@
             <div class="section">
                 <h2 class="section-title">Pro 版功能</h2>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="openAIUpload()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
@@ -2180,9 +2319,41 @@
             </div>
         </div>
         
+        <!-- AI上傳頁面 -->
+        <div class="ai-upload-page" id="aiUploadPage">
+            <div class="ai-upload-header">
+                <button class="ai-upload-close-btn" onclick="closeAIUpload()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="ai-upload-title">AI智能服務</h1>
+            </div>
+            
+            <div class="ai-upload-content">
+                <div class="upload-box">
+                    <div class="upload-icon-container" onclick="document.getElementById('aiMultiFileInput').click()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <h2 class="upload-text">上傳照片與AI開始對談</h2>
+                    <p class="upload-subtext">點擊上方圖示選擇照片<br>開始智能對話分析</p>
+                    
+                    <div class="upload-tips">
+                        <div class="upload-tips-title">💡 使用提示</div>
+                        • 可一次選擇多張照片<br>
+                        • AI會深度分析每張照片內容<br>
+                        • 提供個性化的見解與建議
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- 隱藏的文件輸入 -->
         <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
         <input type="file" id="multiFileInput" accept="image/*" multiple onchange="handleMultiFileSelect(event)" style="display: none;">
+        <input type="file" id="aiMultiFileInput" accept="image/*" multiple onchange="handleAIFileSelect(event)" style="display: none;">
     </div>
 
     <script>
@@ -2242,6 +2413,7 @@
         const bottomNav = document.getElementById('bottomNav');
         const chatPage = document.getElementById('chatPage');
         const proUpgradePage = document.getElementById('proUpgradePage');
+        const aiUploadPage = document.getElementById('aiUploadPage');
         
         // 初始化應用
         window.addEventListener('load', () => {
