@@ -1739,6 +1739,22 @@
             </div>
 
             <div class="section">
+                <h2 class="section-title">帳號</h2>
+                
+                <div class="list-item" onclick="handleLogin()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <div class="list-item-title">登入/註冊</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="section">
                 <h2 class="section-title">支援</h2>
                 
                 <div class="list-item">
@@ -1765,16 +1781,56 @@
                     </svg>
                 </div>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="showHelp()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
                         </svg>
-                        <div class="list-item-title">升級訂閱方案</div>
+                        <div class="list-item-title">輔助說明</div>
                     </div>
-                    <div class="list-item-arrow" style="background: #FF6B35; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
-                        $1,188/年
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">關於APP</h2>
+                
+                <div class="list-item" onclick="showAppInfo()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                        <div class="list-item-title">APP資訊</div>
                     </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                
+                <div class="list-item" onclick="rateApp()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <div class="list-item-title">評價APP</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                
+                <div class="list-item" onclick="shareApp()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                        </svg>
+                        <div class="list-item-title">分享給朋友</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
                 </div>
             </div>
         </div>
@@ -2294,6 +2350,64 @@
         // 恢復購買
         function restorePurchase() {
             alert('恢復購買功能即將推出！\n\n如果您之前已經購買過，將可以在此恢復您的訂閱。');
+        }
+        
+        // 處理登入/註冊
+        function handleLogin() {
+            alert('登入/註冊功能即將推出！\n\n您將可以：\n• 同步您的掃描記錄\n• 備份您的資料到雲端\n• 在多個裝置間同步使用');
+        }
+        
+        // 顯示輔助說明
+        function showHelp() {
+            alert('輔助說明\n\n歡迎使用 LENSY！\n\n基本操作：\n• 點擊相機按鈕開始掃描\n• 對準物品拍照即可識別價格\n• 可從相簿選擇照片進行識別\n\n如需更多協助，請聯絡我們。');
+        }
+        
+        // 顯示APP資訊
+        function showAppInfo() {
+            alert('LENSY - 萬物價格掃描器\n\n版本：1.0.0\n開發者：LENSY Team\n\n使用 AI 技術，精準識別物品並估算價格。\n\n© 2024 LENSY. All rights reserved.');
+        }
+        
+        // 評價APP
+        function rateApp() {
+            // 如果是 iOS
+            if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                alert('即將跳轉到 App Store...\n\n感謝您的支持！您的評價對我們非常重要。');
+                // window.location.href = 'https://apps.apple.com/app/idXXXXXXXXX';
+            } 
+            // 如果是 Android
+            else if (/Android/i.test(navigator.userAgent)) {
+                alert('即將跳轉到 Google Play...\n\n感謝您的支持！您的評價對我們非常重要。');
+                // window.location.href = 'https://play.google.com/store/apps/details?id=com.lensy.scanner';
+            }
+            // 網頁版
+            else {
+                alert('感謝您的支持！\n\n網頁版暫時無法評價，請在手機 App 中進行評價。');
+            }
+        }
+        
+        // 分享APP
+        async function shareApp() {
+            const shareData = {
+                title: 'LENSY - 萬物價格掃描器',
+                text: '推薦你一個超棒的 APP！\n\nLENSY 可以：\n• 拍照識別任何物品\n• AI 智能估算價格\n• 提供購買建議\n\n快來試試看吧！',
+                url: 'https://lynn800741.github.io/price-scanner-app/'
+            };
+            
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // 如果不支援原生分享，複製連結
+                    const shareText = `${shareData.text}\n\n下載連結：${shareData.url}`;
+                    await navigator.clipboard.writeText(shareText);
+                    alert('分享連結已複製到剪貼板！\n\n快去分享給朋友吧～');
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('分享失敗:', error);
+                    alert('分享失敗，請稍後再試');
+                }
+            }
         }
         
         // 回到首頁（照片列表頁）
