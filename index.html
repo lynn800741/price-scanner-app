@@ -2504,9 +2504,6 @@
                     </button>
                 </div>
                 
-                <p style="position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 12px;">
-                    長按拍照按鈕可選擇單張照片
-                </p>
             </div>
         </div>
 
@@ -3043,7 +3040,6 @@
             // 檢查並顯示歷史記錄
             displayHistory();
             // 設定拍照按鈕長按功能
-            setupCaptureButton();
             // 預設選擇年繳方案
             selectPlan('yearly');
             // 更新折扣顯示
@@ -3992,36 +3988,6 @@
         }
         
         // 長按拍照按鈕時選擇單張照片
-        function setupCaptureButton() {
-            const captureBtn = document.querySelector('.capture-btn');
-            let pressTimer;
-            
-            // 長按開始
-            captureBtn.addEventListener('mousedown', function() {
-                pressTimer = setTimeout(function() {
-                    document.getElementById('fileInput').click();
-                }, 800); // 800ms 後觸發
-            });
-            
-            captureBtn.addEventListener('touchstart', function() {
-                pressTimer = setTimeout(function() {
-                    document.getElementById('fileInput').click();
-                }, 800);
-            });
-            
-            // 取消長按
-            captureBtn.addEventListener('mouseup', function() {
-                clearTimeout(pressTimer);
-            });
-            
-            captureBtn.addEventListener('touchend', function() {
-                clearTimeout(pressTimer);
-            });
-            
-            captureBtn.addEventListener('mouseleave', function() {
-                clearTimeout(pressTimer);
-            });
-        }
         
         // 分析圖片
         async function analyzeImage() {
