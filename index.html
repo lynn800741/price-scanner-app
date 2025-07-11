@@ -2756,7 +2756,7 @@
         <!-- 載入動畫 -->
         <div class="loading-overlay" id="loadingOverlay">
             <div class="loader"></div>
-            <div class="loading-text">AI 正在分析中...</div>
+            <div class="loading-text" data-i18n="common.aiAnalyzing">AI 正在分析中...</div>
         </div>
         
         <!-- 聊天頁面 -->
@@ -3679,10 +3679,10 @@
                     </svg>
                 </div>
                 <div style="color: white; font-size: 20px; font-weight: 600; margin-bottom: 10px;">
-                    AI 正在分析中
+                    ${t('common.aiAnalyzingTitle')}
                 </div>
                 <div style="color: rgba(255, 255, 255, 0.7); font-size: 16px;">
-                    正在深度理解圖片內容...
+                    ${t('common.aiAnalyzingDesc')}
                 </div>
                 <style>
                     @keyframes dashRotate {
@@ -3956,7 +3956,7 @@
             
             // 隱藏載入動畫
             loadingOverlay.classList.remove('active');
-            loadingText.textContent = 'AI 正在分析中...';
+            loadingText.textContent = t('common.aiAnalyzing');
             
             // 顯示結果
             if (successCount > 0) {
@@ -5504,7 +5504,12 @@
                 // 成功對話框
                 'success.emailSent': '郵件已發送！',
                 'success.resetMessage': '密碼重設連結已發送至您的信箱<br>請查看郵件並點擊連結重設密碼<br><br>如未收到郵件，請檢查垃圾郵件資料夾',
-                'success.confirmButton': '確定'
+                'success.confirmButton': '確定',
+                
+                // AI 分析
+                'common.aiAnalyzing': 'AI 正在分析中...',
+                'common.aiAnalyzingTitle': 'AI 正在分析中',
+                'common.aiAnalyzingDesc': '正在深度理解圖片內容...'
             },
             'zh-CN': {
                 'app.title': 'LENSY - 万物价格扫描器',
@@ -5612,7 +5617,12 @@
                 // 成功对话框
                 'success.emailSent': '邮件已发送！',
                 'success.resetMessage': '密码重设链接已发送至您的信箱<br>请查看邮件并点击链接重设密码<br><br>如未收到邮件，请检查垃圾邮件文件夹',
-                'success.confirmButton': '确定'
+                'success.confirmButton': '确定',
+                
+                // AI 分析
+                'common.aiAnalyzing': 'AI 正在分析中...',
+                'common.aiAnalyzingTitle': 'AI 正在分析中',
+                'common.aiAnalyzingDesc': '正在深度理解图片内容...'
             },
             'en': {
                 'app.title': 'LENSY - Universal Price Scanner',
@@ -5720,7 +5730,12 @@
                 // Success Dialog
                 'success.emailSent': 'Email Sent!',
                 'success.resetMessage': 'Password reset link has been sent to your inbox<br>Please check your email and click the link to reset your password<br><br>If you don\'t receive it, check your spam folder',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // AI Analysis
+                'common.aiAnalyzing': 'AI is analyzing...',
+                'common.aiAnalyzingTitle': 'AI is analyzing',
+                'common.aiAnalyzingDesc': 'Understanding image content...'
             },
             'ja': {
                 'app.title': 'LENSY - 万物価格スキャナー',
@@ -5828,7 +5843,12 @@
                 // Success Dialog
                 'success.emailSent': 'メール送信完了！',
                 'success.resetMessage': 'パスワードリセットリンクをメールで送信しました<br>メールを確認してリンクをクリックしてパスワードをリセットしてください<br><br>メールが届かない場合は、迷惑メールフォルダをご確認ください',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // AI 分析
+                'common.aiAnalyzing': 'AI分析中...',
+                'common.aiAnalyzingTitle': 'AI分析中',
+                'common.aiAnalyzingDesc': '画像内容を深く理解しています...'
             },
             'ko': {
                 'app.title': 'LENSY - 만물 가격 스캐너',
@@ -5936,7 +5956,12 @@
                 // Success Dialog
                 'success.emailSent': '이메일 전송 완료!',
                 'success.resetMessage': '비밀번호 재설정 링크가 이메일로 전송되었습니다<br>이메일을 확인하고 링크를 클릭하여 비밀번호를 재설정하세요<br><br>이메일을 받지 못하셨다면 스팸 폴더를 확인하세요',
-                'success.confirmButton': '확인'
+                'success.confirmButton': '확인',
+                
+                // AI 분석
+                'common.aiAnalyzing': 'AI가 분석 중입니다...',
+                'common.aiAnalyzingTitle': 'AI가 분석 중입니다',
+                'common.aiAnalyzingDesc': '이미지 내용을 이해하고 있습니다...'
             },
             'th': {
                 'app.title': 'LENSY - เครื่องสแกนราคาสินค้า',
@@ -6044,7 +6069,12 @@
                 // Success Dialog
                 'success.emailSent': 'ส่งอีเมลแล้ว!',
                 'success.resetMessage': 'ลิงก์รีเซ็ตรหัสผ่านถูกส่งไปยังอีเมลของคุณแล้ว<br>กรุณาตรวจสอบอีเมลและคลิกลิงก์เพื่อรีเซ็ตรหัสผ่าน<br><br>หากไม่ได้รับอีเมล กรุณาตรวจสอบโฟลเดอร์สแปม',
-                'success.confirmButton': 'ตกลง'
+                'success.confirmButton': 'ตกลง',
+                
+                // การวิเคราะห์ AI
+                'common.aiAnalyzing': 'AI กำลังวิเคราะห์...',
+                'common.aiAnalyzingTitle': 'AI กำลังวิเคราะห์',
+                'common.aiAnalyzingDesc': 'กำลังทำความเข้าใจเนื้อหารูปภาพ...'
             },
             'vi': {
                 'app.title': 'LENSY - Máy quét giá vạn vật',
@@ -6152,7 +6182,12 @@
                 // Success Dialog
                 'success.emailSent': 'Đã gửi email!',
                 'success.resetMessage': 'Liên kết đặt lại mật khẩu đã được gửi đến hộp thư của bạn<br>Vui lòng kiểm tra email và nhấp vào liên kết để đặt lại mật khẩu<br><br>Nếu không nhận được, hãy kiểm tra thư mục spam',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Phân tích AI
+                'common.aiAnalyzing': 'AI đang phân tích...',
+                'common.aiAnalyzingTitle': 'AI đang phân tích',
+                'common.aiAnalyzingDesc': 'Đang hiểu nội dung hình ảnh...'
             },
             'es': {
                 'app.title': 'LENSY - Escáner Universal de Precios',
@@ -6260,7 +6295,12 @@
                 // Success Dialog
                 'success.emailSent': '¡Correo Enviado!',
                 'success.resetMessage': 'El enlace para restablecer la contraseña ha sido enviado a tu correo<br>Por favor revisa tu correo y haz clic en el enlace para restablecer tu contraseña<br><br>Si no lo recibes, revisa tu carpeta de spam',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Análisis de IA
+                'common.aiAnalyzing': 'IA analizando...',
+                'common.aiAnalyzingTitle': 'IA analizando',
+                'common.aiAnalyzingDesc': 'Comprendiendo el contenido de la imagen...'
             },
             'fr': {
                 'app.title': 'LENSY - Scanner de Prix Universel',
@@ -6368,7 +6408,12 @@
                 // Success Dialog
                 'success.emailSent': 'Email Envoyé!',
                 'success.resetMessage': 'Le lien de réinitialisation du mot de passe a été envoyé à votre boîte mail<br>Veuillez vérifier votre email et cliquer sur le lien pour réinitialiser votre mot de passe<br><br>Si vous ne le recevez pas, vérifiez votre dossier spam',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Analyse IA
+                'common.aiAnalyzing': 'L\'IA analyse...',
+                'common.aiAnalyzingTitle': 'L\'IA analyse',
+                'common.aiAnalyzingDesc': 'Comprendre le contenu de l\'image...'
             },
             'de': {
                 'app.title': 'LENSY - Universeller Preisscanner',
@@ -6476,7 +6521,12 @@
                 // Success Dialog
                 'success.emailSent': 'E-Mail Gesendet!',
                 'success.resetMessage': 'Der Link zum Zurücksetzen des Passworts wurde an Ihren Posteingang gesendet<br>Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um Ihr Passwort zurückzusetzen<br><br>Wenn Sie ihn nicht erhalten, überprüfen Sie Ihren Spam-Ordner',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // KI-Analyse
+                'common.aiAnalyzing': 'KI analysiert...',
+                'common.aiAnalyzingTitle': 'KI analysiert',
+                'common.aiAnalyzingDesc': 'Bildinhalt verstehen...'
             },
             'it': {
                 'app.title': 'LENSY - Scanner Universale dei Prezzi',
@@ -6584,7 +6634,12 @@
                 // Success Dialog
                 'success.emailSent': 'Email Inviata!',
                 'success.resetMessage': 'Il link per reimpostare la password è stato inviato alla tua casella di posta<br>Controlla la tua email e clicca sul link per reimpostare la password<br><br>Se non lo ricevi, controlla la cartella spam',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Analisi AI
+                'common.aiAnalyzing': 'L\'IA sta analizzando...',
+                'common.aiAnalyzingTitle': 'L\'IA sta analizzando',
+                'common.aiAnalyzingDesc': 'Comprensione del contenuto dell\'immagine...'
             },
             'pt': {
                 'app.title': 'LENSY - Scanner Universal de Preços',
@@ -6692,7 +6747,12 @@
                 // Success Dialog
                 'success.emailSent': 'Email Enviado!',
                 'success.resetMessage': 'O link para redefinir a senha foi enviado para sua caixa de entrada<br>Verifique seu email e clique no link para redefinir sua senha<br><br>Se não receber, verifique a pasta de spam',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Análise de IA
+                'common.aiAnalyzing': 'IA analisando...',
+                'common.aiAnalyzingTitle': 'IA analisando',
+                'common.aiAnalyzingDesc': 'Compreendendo o conteúdo da imagem...'
             },
             'ar': {
                 'app.title': 'LENSY - ماسح الأسعار العالمي',
@@ -6800,7 +6860,12 @@
                 // Success Dialog
                 'success.emailSent': 'تم إرسال البريد الإلكتروني!',
                 'success.resetMessage': 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الوارد<br>يرجى التحقق من بريدك الإلكتروني والنقر على الرابط لإعادة تعيين كلمة المرور<br><br>إذا لم تستلمه، تحقق من مجلد البريد العشوائي',
-                'success.confirmButton': 'موافق'
+                'success.confirmButton': 'موافق',
+                
+                // تحليل الذكاء الاصطناعي
+                'common.aiAnalyzing': 'جارٍ التحليل بواسطة الذكاء الاصطناعي...',
+                'common.aiAnalyzingTitle': 'جارٍ التحليل بواسطة الذكاء الاصطناعي',
+                'common.aiAnalyzingDesc': 'فهم محتوى الصورة...'
             },
             'tr': {
                 'app.title': 'LENSY - Evrensel Fiyat Tarayıcı',
@@ -6908,7 +6973,12 @@
                 // Success Dialog
                 'success.emailSent': 'E-posta Gönderildi!',
                 'success.resetMessage': 'Şifre sıfırlama bağlantısı gelen kutunuza gönderildi<br>Lütfen e-postanızı kontrol edin ve şifrenizi sıfırlamak için bağlantıya tıklayın<br><br>Almazsanız, spam klasörünüzü kontrol edin',
-                'success.confirmButton': 'Tamam'
+                'success.confirmButton': 'Tamam',
+                
+                // AI Analizi
+                'common.aiAnalyzing': 'AI analiz ediyor...',
+                'common.aiAnalyzingTitle': 'AI analiz ediyor',
+                'common.aiAnalyzingDesc': 'Görüntü içeriğini anlıyor...'
             },
             'ru': {
                 'app.title': 'LENSY - Универсальный сканер цен',
@@ -7016,7 +7086,12 @@
                 // Success Dialog
                 'success.emailSent': 'Письмо отправлено!',
                 'success.resetMessage': 'Ссылка для сброса пароля отправлена на вашу почту<br>Пожалуйста, проверьте вашу электронную почту и нажмите на ссылку для сброса пароля<br><br>Если вы не получили письмо, проверьте папку со спамом',
-                'success.confirmButton': 'ОК'
+                'success.confirmButton': 'ОК',
+                
+                // Анализ ИИ
+                'common.aiAnalyzing': 'ИИ анализирует...',
+                'common.aiAnalyzingTitle': 'ИИ анализирует',
+                'common.aiAnalyzingDesc': 'Понимание содержания изображения...'
             },
             'id': {
                 'app.title': 'LENSY - Pemindai Harga Universal',
@@ -7124,7 +7199,12 @@
                 // Success Dialog
                 'success.emailSent': 'Email Terkirim!',
                 'success.resetMessage': 'Tautan reset kata sandi telah dikirim ke kotak masuk Anda<br>Silakan periksa email Anda dan klik tautan untuk mereset kata sandi<br><br>Jika tidak menerima, periksa folder spam Anda',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Analisis AI
+                'common.aiAnalyzing': 'AI sedang menganalisis...',
+                'common.aiAnalyzingTitle': 'AI sedang menganalisis',
+                'common.aiAnalyzingDesc': 'Memahami konten gambar...'
             },
             'tl': {
                 'app.title': 'LENSY - Universal na Scanner ng Presyo',
@@ -7232,7 +7312,12 @@
                 // Success Dialog
                 'success.emailSent': 'Naipadala na ang Email!',
                 'success.resetMessage': 'Naipadala na ang password reset link sa iyong inbox<br>Pakicheck ang iyong email at i-click ang link para i-reset ang password<br><br>Kung hindi mo natanggap, tingnan ang spam folder',
-                'success.confirmButton': 'OK'
+                'success.confirmButton': 'OK',
+                
+                // Pagsusuri ng AI
+                'common.aiAnalyzing': 'Sinusuri ng AI...',
+                'common.aiAnalyzingTitle': 'Sinusuri ng AI',
+                'common.aiAnalyzingDesc': 'Nauunawaan ang nilalaman ng larawan...'
             }
         };
         
