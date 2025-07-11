@@ -4026,9 +4026,10 @@
         // 打開匯出對話框
         function openExportDialog() {
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const lang = getCurrentLanguage();
             
             if (history.length === 0) {
-                alert('沒有可匯出的資料');
+                alert(i18n[lang]?.['export.noData'] || i18n['zh-TW']['export.noData']);
                 return;
             }
             
@@ -4061,13 +4062,13 @@
             
             content.innerHTML = `
                 <div style="padding: 20px; border-bottom: 1px solid #eee;">
-                    <h2 style="margin: 0; font-size: 20px;">選擇要匯出的照片</h2>
+                    <h2 style="margin: 0; font-size: 20px;">${i18n[lang]?.['export.selectPhotos'] || i18n['zh-TW']['export.selectPhotos']}</h2>
                 </div>
                 
                 <div style="padding: 15px 20px; background: #f9f9f9; border-bottom: 1px solid #eee;">
                     <label style="display: flex; align-items: center;">
                         <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="margin-right: 10px;">
-                        <span style="font-weight: 600;">全選</span>
+                        <span style="font-weight: 600;">${i18n[lang]?.['export.selectAll'] || i18n['zh-TW']['export.selectAll']}</span>
                     </label>
                 </div>
                 
@@ -4087,10 +4088,10 @@
                 <div style="padding: 15px 20px; border-top: 1px solid #eee; background: #fff;">
                     <div style="display: flex; gap: 10px;">
                         <button onclick="exportToExcel()" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                            匯出 Excel
+                            ${i18n[lang]?.['export.exportButton'] || i18n['zh-TW']['export.exportButton']}
                         </button>
                         <button onclick="closeExportDialog()" style="flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;">
-                            取消
+                            ${i18n[lang]?.['export.cancelButton'] || i18n['zh-TW']['export.cancelButton']}
                         </button>
                     </div>
                 </div>
@@ -4122,9 +4123,10 @@
         window.exportToExcel = async function() {
             const selectedIndexes = Array.from(document.querySelectorAll('.export-item:checked'))
                 .map(cb => parseInt(cb.value));
+            const lang = getCurrentLanguage();
             
             if (selectedIndexes.length === 0) {
-                alert('請至少選擇一個項目');
+                alert(i18n[lang]?.['export.selectAtLeastOne'] || i18n['zh-TW']['export.selectAtLeastOne']);
                 return;
             }
             
@@ -5403,6 +5405,12 @@
                 'settings.proFeatures': 'Pro 版功能',
                 'settings.aiService': 'AI智能服務',
                 'settings.exportExcel': '匯出成Excel報告',
+                'export.selectPhotos': '選擇要匯出的照片',
+                'export.selectAll': '全選',
+                'export.exportButton': '匯出 Excel',
+                'export.cancelButton': '取消',
+                'export.noData': '沒有可匯出的資料',
+                'export.selectAtLeastOne': '請至少選擇一個項目',
                 'settings.batchRecognition': '多張照片批次辨識',
                 'settings.autoSaveAlbum': '自動儲存到相簿',
                 'settings.general': '一般',
@@ -5525,6 +5533,12 @@
                 'settings.proFeatures': 'Pro 版功能',
                 'settings.aiService': 'AI智能服务',
                 'settings.exportExcel': '导出成Excel报告',
+                'export.selectPhotos': '选择要导出的照片',
+                'export.selectAll': '全选',
+                'export.exportButton': '导出 Excel',
+                'export.cancelButton': '取消',
+                'export.noData': '没有可导出的数据',
+                'export.selectAtLeastOne': '请至少选择一个项目',
                 'settings.batchRecognition': '多张照片批次识别',
                 'settings.autoSaveAlbum': '自动保存到相册',
                 'settings.general': '常规',
@@ -5639,6 +5653,12 @@
                 'settings.proFeatures': 'Pro Features',
                 'settings.aiService': 'AI Smart Service',
                 'settings.exportExcel': 'Export to Excel Report',
+                'export.selectPhotos': 'Select Photos to Export',
+                'export.selectAll': 'Select All',
+                'export.exportButton': 'Export Excel',
+                'export.cancelButton': 'Cancel',
+                'export.noData': 'No data to export',
+                'export.selectAtLeastOne': 'Please select at least one item',
                 'settings.batchRecognition': 'Batch Photo Recognition',
                 'settings.autoSaveAlbum': 'Auto Save to Album',
                 'settings.general': 'General',
@@ -5753,6 +5773,12 @@
                 'settings.proFeatures': 'Pro版機能',
                 'settings.aiService': 'AIスマートサービス',
                 'settings.exportExcel': 'Excelレポートにエクスポート',
+                'export.selectPhotos': 'エクスポートする写真を選択',
+                'export.selectAll': 'すべて選択',
+                'export.exportButton': 'Excel エクスポート',
+                'export.cancelButton': 'キャンセル',
+                'export.noData': 'エクスポートするデータがありません',
+                'export.selectAtLeastOne': '少なくとも1つの項目を選択してください',
                 'settings.batchRecognition': '複数写真バッチ認識',
                 'settings.autoSaveAlbum': 'アルバムに自動保存',
                 'settings.general': '一般',
@@ -5867,6 +5893,12 @@
                 'settings.proFeatures': 'Pro 버전 기능',
                 'settings.aiService': 'AI 스마트 서비스',
                 'settings.exportExcel': 'Excel 보고서로 내보내기',
+                'export.selectPhotos': '내보낼 사진 선택',
+                'export.selectAll': '모두 선택',
+                'export.exportButton': 'Excel 내보내기',
+                'export.cancelButton': '취소',
+                'export.noData': '내보낼 데이터가 없습니다',
+                'export.selectAtLeastOne': '최소 하나의 항목을 선택하세요',
                 'settings.batchRecognition': '여러 사진 일괄 인식',
                 'settings.autoSaveAlbum': '앨범에 자동 저장',
                 'settings.general': '일반',
@@ -6009,6 +6041,12 @@
                 'settings.proFeatures': 'ฟีเจอร์ Pro',
                 'settings.aiService': 'บริการ AI อัจฉริยะ',
                 'settings.exportExcel': 'ส่งออกเป็นรายงาน Excel',
+                'export.selectPhotos': 'เลือกรูปภาพที่จะส่งออก',
+                'export.selectAll': 'เลือกทั้งหมด',
+                'export.exportButton': 'ส่งออก Excel',
+                'export.cancelButton': 'ยกเลิก',
+                'export.noData': 'ไม่มีข้อมูลที่จะส่งออก',
+                'export.selectAtLeastOne': 'กรุณาเลือกอย่างน้อยหนึ่งรายการ',
                 'settings.batchRecognition': 'จดจำรูปหลายรูปพร้อมกัน',
                 'settings.autoSaveAlbum': 'บันทึกอัตโนมัติไปยังอัลบั้ม',
                 'settings.loginRegister': 'เข้าสู่ระบบ/สมัครสมาชิก',
@@ -6123,6 +6161,12 @@
                 'settings.proFeatures': 'Tính năng Pro',
                 'settings.aiService': 'Dịch vụ AI thông minh',
                 'settings.exportExcel': 'Xuất báo cáo Excel',
+                'export.selectPhotos': 'Chọn ảnh để xuất',
+                'export.selectAll': 'Chọn tất cả',
+                'export.exportButton': 'Xuất Excel',
+                'export.cancelButton': 'Hủy',
+                'export.noData': 'Không có dữ liệu để xuất',
+                'export.selectAtLeastOne': 'Vui lòng chọn ít nhất một mục',
                 'settings.batchRecognition': 'Nhận diện nhiều ảnh cùng lúc',
                 'settings.autoSaveAlbum': 'Tự động lưu vào album',
                 'settings.loginRegister': 'Đăng nhập/Đăng ký',
@@ -6237,6 +6281,12 @@
                 'settings.proFeatures': 'Funciones Pro',
                 'settings.aiService': 'Servicio Inteligente IA',
                 'settings.exportExcel': 'Exportar a Informe Excel',
+                'export.selectPhotos': 'Seleccionar fotos para exportar',
+                'export.selectAll': 'Seleccionar todo',
+                'export.exportButton': 'Exportar Excel',
+                'export.cancelButton': 'Cancelar',
+                'export.noData': 'No hay datos para exportar',
+                'export.selectAtLeastOne': 'Por favor seleccione al menos un elemento',
                 'settings.batchRecognition': 'Reconocimiento de Fotos por Lotes',
                 'settings.autoSaveAlbum': 'Guardar Automáticamente en Álbum',
                 'settings.loginRegister': 'Iniciar Sesión/Registrarse',
@@ -6351,6 +6401,12 @@
                 'settings.proFeatures': 'Fonctionnalités Pro',
                 'settings.aiService': 'Service IA Intelligent',
                 'settings.exportExcel': 'Exporter vers Rapport Excel',
+                'export.selectPhotos': 'Sélectionner les photos à exporter',
+                'export.selectAll': 'Tout sélectionner',
+                'export.exportButton': 'Exporter Excel',
+                'export.cancelButton': 'Annuler',
+                'export.noData': 'Aucune donnée à exporter',
+                'export.selectAtLeastOne': 'Veuillez sélectionner au moins un élément',
                 'settings.batchRecognition': 'Reconnaissance de Photos par Lots',
                 'settings.autoSaveAlbum': 'Enregistrement Automatique dans l\'Album',
                 'settings.loginRegister': 'Connexion/Inscription',
@@ -6465,6 +6521,12 @@
                 'settings.proFeatures': 'Pro-Funktionen',
                 'settings.aiService': 'KI Intelligenter Service',
                 'settings.exportExcel': 'Als Excel-Bericht Exportieren',
+                'export.selectPhotos': 'Fotos zum Exportieren auswählen',
+                'export.selectAll': 'Alle auswählen',
+                'export.exportButton': 'Excel exportieren',
+                'export.cancelButton': 'Abbrechen',
+                'export.noData': 'Keine Daten zum Exportieren',
+                'export.selectAtLeastOne': 'Bitte wählen Sie mindestens ein Element aus',
                 'settings.batchRecognition': 'Stapel-Fotoerkennung',
                 'settings.autoSaveAlbum': 'Automatisch im Album Speichern',
                 'settings.loginRegister': 'Anmelden/Registrieren',
@@ -6579,6 +6641,12 @@
                 'settings.proFeatures': 'Funzionalità Pro',
                 'settings.aiService': 'Servizio IA Intelligente',
                 'settings.exportExcel': 'Esporta in Report Excel',
+                'export.selectPhotos': 'Seleziona foto da esportare',
+                'export.selectAll': 'Seleziona tutto',
+                'export.exportButton': 'Esporta Excel',
+                'export.cancelButton': 'Annulla',
+                'export.noData': 'Nessun dato da esportare',
+                'export.selectAtLeastOne': 'Seleziona almeno un elemento',
                 'settings.batchRecognition': 'Riconoscimento Foto in Batch',
                 'settings.autoSaveAlbum': 'Salvataggio Automatico nell\'Album',
                 'settings.loginRegister': 'Accedi/Registrati',
@@ -6693,6 +6761,12 @@
                 'settings.proFeatures': 'Recursos Pro',
                 'settings.aiService': 'Serviço IA Inteligente',
                 'settings.exportExcel': 'Exportar para Relatório Excel',
+                'export.selectPhotos': 'Selecionar fotos para exportar',
+                'export.selectAll': 'Selecionar tudo',
+                'export.exportButton': 'Exportar Excel',
+                'export.cancelButton': 'Cancelar',
+                'export.noData': 'Sem dados para exportar',
+                'export.selectAtLeastOne': 'Por favor, selecione pelo menos um item',
                 'settings.batchRecognition': 'Reconhecimento de Fotos em Lote',
                 'settings.autoSaveAlbum': 'Salvar Automaticamente no Álbum',
                 'settings.loginRegister': 'Entrar/Registrar',
@@ -6807,6 +6881,12 @@
                 'settings.proFeatures': 'مميزات Pro',
                 'settings.aiService': 'خدمة الذكاء الاصطناعي الذكية',
                 'settings.exportExcel': 'تصدير إلى تقرير Excel',
+                'export.selectPhotos': 'اختر الصور للتصدير',
+                'export.selectAll': 'تحديد الكل',
+                'export.exportButton': 'تصدير Excel',
+                'export.cancelButton': 'إلغاء',
+                'export.noData': 'لا توجد بيانات للتصدير',
+                'export.selectAtLeastOne': 'الرجاء تحديد عنصر واحد على الأقل',
                 'settings.batchRecognition': 'التعرف على الصور بالدفعة',
                 'settings.autoSaveAlbum': 'الحفظ التلقائي في الألبوم',
                 'settings.loginRegister': 'تسجيل الدخول/التسجيل',
@@ -6921,6 +7001,12 @@
                 'settings.proFeatures': 'Pro Özellikleri',
                 'settings.aiService': 'AI Akıllı Hizmet',
                 'settings.exportExcel': 'Excel Raporuna Aktar',
+                'export.selectPhotos': 'Dışa aktarmak için fotoğrafları seçin',
+                'export.selectAll': 'Tümünü Seç',
+                'export.exportButton': 'Excel\'e Aktar',
+                'export.cancelButton': 'İptal',
+                'export.noData': 'Dışa aktarılacak veri yok',
+                'export.selectAtLeastOne': 'Lütfen en az bir öğe seçin',
                 'settings.batchRecognition': 'Toplu Fotoğraf Tanıma',
                 'settings.autoSaveAlbum': 'Albüme Otomatik Kaydet',
                 'settings.loginRegister': 'Giriş Yap/Kayıt Ol',
@@ -7035,6 +7121,12 @@
                 'settings.proFeatures': 'Функции Pro',
                 'settings.aiService': 'ИИ Умный сервис',
                 'settings.exportExcel': 'Экспорт в Excel отчет',
+                'export.selectPhotos': 'Выберите фото для экспорта',
+                'export.selectAll': 'Выбрать все',
+                'export.exportButton': 'Экспорт Excel',
+                'export.cancelButton': 'Отмена',
+                'export.noData': 'Нет данных для экспорта',
+                'export.selectAtLeastOne': 'Пожалуйста, выберите хотя бы один элемент',
                 'settings.batchRecognition': 'Пакетное распознавание фото',
                 'settings.autoSaveAlbum': 'Автосохранение в альбом',
                 'settings.loginRegister': 'Войти/Регистрация',
@@ -7149,6 +7241,12 @@
                 'settings.proFeatures': 'Fitur Pro',
                 'settings.aiService': 'Layanan AI Cerdas',
                 'settings.exportExcel': 'Ekspor ke Laporan Excel',
+                'export.selectPhotos': 'Pilih foto untuk diekspor',
+                'export.selectAll': 'Pilih Semua',
+                'export.exportButton': 'Ekspor Excel',
+                'export.cancelButton': 'Batal',
+                'export.noData': 'Tidak ada data untuk diekspor',
+                'export.selectAtLeastOne': 'Silakan pilih setidaknya satu item',
                 'settings.batchRecognition': 'Pengenalan Foto Batch',
                 'settings.autoSaveAlbum': 'Simpan Otomatis ke Album',
                 'settings.loginRegister': 'Masuk/Daftar',
@@ -7263,6 +7361,12 @@
                 'settings.proFeatures': 'Mga Feature ng Pro',
                 'settings.aiService': 'AI Matalinong Serbisyo',
                 'settings.exportExcel': 'I-export sa Excel Report',
+                'export.selectPhotos': 'Pumili ng mga larawan na i-export',
+                'export.selectAll': 'Piliin Lahat',
+                'export.exportButton': 'I-export Excel',
+                'export.cancelButton': 'Kanselahin',
+                'export.noData': 'Walang data na mai-export',
+                'export.selectAtLeastOne': 'Pumili ng kahit isang item',
                 'settings.batchRecognition': 'Batch na Pagkilala ng Larawan',
                 'settings.autoSaveAlbum': 'Awtomatikong I-save sa Album',
                 'settings.loginRegister': 'Mag-login/Mag-rehistro',
