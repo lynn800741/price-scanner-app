@@ -2271,6 +2271,123 @@
             color: #FF6B35;
             margin-bottom: 5px;
         }
+        
+        /* 語言選擇頁面樣式 */
+        .language-selector-page {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background: #fff;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .language-selector-page.active {
+            display: flex;
+            animation: slideInRight 0.3s ease forwards;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(50%) translateX(100%);
+            }
+            to {
+                transform: translateX(-50%) translateX(0);
+            }
+        }
+        
+        .language-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .language-close-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        .language-close-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+        
+        .language-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+        
+        .language-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .language-section {
+            margin-top: 20px;
+        }
+        
+        .language-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+            margin: 0 20px 10px;
+            text-transform: uppercase;
+        }
+        
+        .language-list {
+            background: #fff;
+        }
+        
+        .language-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .language-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .language-item:active {
+            background: #eee;
+        }
+        
+        .language-name {
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .language-check {
+            font-size: 20px;
+            color: #FF6B35;
+            display: none;
+        }
+        
+        .language-check.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -2278,11 +2395,11 @@
         <!-- 設定頁面 -->
         <div class="page settings-page" id="settingsPage">
             <div class="nav-header">
-                <h1 class="app-title">設定</h1>
+                <h1 class="app-title" data-i18n="settings.title">設定</h1>
             </div>
             
             <div class="section">
-                <h2 class="section-title">會員服務</h2>
+                <h2 class="section-title" data-i18n="settings.membership">會員服務</h2>
                 
                 <div class="list-item" onclick="openProUpgrade()">
                     <div class="list-item-left">
@@ -2290,8 +2407,8 @@
                             <path d="M5 16L3 5l5.5 0L12 16m3.5 0H21l-2-11L14 5"/>
                         </svg>
                         <div class="list-item-content">
-                            <div class="list-item-title">會員狀態</div>
-                            <div class="list-item-subtitle">免費版</div>
+                            <div class="list-item-title" data-i18n="settings.memberStatus">會員狀態</div>
+                            <div class="list-item-subtitle" data-i18n="settings.memberStatusFree">免費版</div>
                         </div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
@@ -2301,7 +2418,7 @@
                 
                 <div class="list-item">
                     <div class="list-item-left">
-                        <div class="list-item-title" style="margin-left: 39px;">剩餘掃描次數: 50</div>
+                        <div class="list-item-title" style="margin-left: 39px;"><span data-i18n="settings.remainingScans">剩餘掃描次數</span>: 50</div>
                     </div>
                 </div>
                 
@@ -2310,7 +2427,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
                         </svg>
-                        <div class="list-item-title">復原購買</div>
+                        <div class="list-item-title" data-i18n="settings.restorePurchase">復原購買</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2319,14 +2436,14 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">Pro 版功能</h2>
+                <h2 class="section-title" data-i18n="settings.proFeatures">Pro 版功能</h2>
                 
                 <div class="list-item" onclick="openAIUpload()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M22 2.53L16.47 8 13 11.5l-1.5 1.5L8 16.47 2.53 22 1 20.47 6.47 15 11 10.5l1.5-1.5L16 5.47 20.47 1 22 2.53M10.94 13L2 22v-2l8.94-9L11 11l-.06 2M13 10.94L22 2h-2l-9 8.94v.12L13 13v-2.06"/>
                         </svg>
-                        <div class="list-item-title">AI智能服務</div>
+                        <div class="list-item-title" data-i18n="settings.aiService">AI智能服務</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2338,7 +2455,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"/>
                         </svg>
-                        <div class="list-item-title">匯出成Excel報告</div>
+                        <div class="list-item-title" data-i18n="settings.exportExcel">匯出成Excel報告</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2350,7 +2467,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                         </svg>
-                        <div class="list-item-title">多張照片批次辨識</div>
+                        <div class="list-item-title" data-i18n="settings.batchRecognition">多張照片批次辨識</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2362,7 +2479,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
                         </svg>
-                        <div class="list-item-title">自動儲存到相簿</div>
+                        <div class="list-item-title" data-i18n="settings.autoSaveAlbum">自動儲存到相簿</div>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="autoSaveToggle">
@@ -2372,14 +2489,14 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">帳號</h2>
+                <h2 class="section-title" data-i18n="settings.account">帳號</h2>
                 
                 <div class="list-item" onclick="handleLogin()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </svg>
-                        <div class="list-item-title">登入/註冊</div>
+                        <div class="list-item-title" data-i18n="settings.loginRegister">登入/註冊</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2388,14 +2505,14 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">支援</h2>
+                <h2 class="section-title" data-i18n="settings.support">支援</h2>
                 
-                <div class="list-item">
+                <div class="list-item" onclick="showLanguageSelector()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M21 9L17.5 14.5C17.08 15.08 16.5 15.5 15.91 15.68L11.7 16.89C11.45 16.96 11.21 17 11 17C10.5 17 10.08 16.76 9.82 16.3L7.91 12.72C7.66 12.17 7.9 11.5 8.47 11.28L12.66 9.61C13.22 9.39 13.86 9.63 14.12 10.2L15.38 12.94L18.5 8.5L21 9Z"/>
                         </svg>
-                        <div class="list-item-title">語言</div>
+                        <div class="list-item-title" data-i18n="settings.language">語言</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2407,7 +2524,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
                         </svg>
-                        <div class="list-item-title">聯絡我們</div>
+                        <div class="list-item-title" data-i18n="settings.contactUs">聯絡我們</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2419,7 +2536,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
                         </svg>
-                        <div class="list-item-title">輔助說明</div>
+                        <div class="list-item-title" data-i18n="settings.help">輔助說明</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2428,14 +2545,14 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">關於APP</h2>
+                <h2 class="section-title" data-i18n="settings.about">關於APP</h2>
                 
                 <div class="list-item" onclick="showAppInfo()">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
                         </svg>
-                        <div class="list-item-title">APP資訊</div>
+                        <div class="list-item-title" data-i18n="settings.appInfo">APP資訊</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2447,7 +2564,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
-                        <div class="list-item-title">評價APP</div>
+                        <div class="list-item-title" data-i18n="settings.rateApp">評價APP</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2459,7 +2576,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
                         </svg>
-                        <div class="list-item-title">分享給朋友</div>
+                        <div class="list-item-title" data-i18n="settings.shareApp">分享給朋友</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2481,7 +2598,7 @@
                 </div>
 
                 <div class="scan-area">
-                    <p class="scan-text">確保物品清晰地位於鏡頭焦點中</p>
+                    <p class="scan-text" data-i18n="camera.scanHint">確保物品清晰地位於鏡頭焦點中</p>
                     <div class="scan-frame" id="scanFrame">
                         <span class="scan-corner-tl"></span>
                         <span class="scan-corner-tr"></span>
@@ -2520,7 +2637,7 @@
                     </svg>
                     <input type="text" class="search-input" placeholder="搜尋" id="searchInput" oninput="searchHistory()">
                 </div>
-                <button class="select-btn" id="selectBtn" onclick="toggleSelectMode()">選取</button>
+                <button class="select-btn" id="selectBtn" onclick="toggleSelectMode()" data-i18n="list.selectMode">選取</button>
             </div>
             
             <div class="empty-state" id="emptyState">
@@ -2529,8 +2646,8 @@
                         <path d="M4 4h7V2H4c-1.1 0-2 .9-2 2v7h2V4zm6 9l-4 5h12l-3.5-4.5-2.5 3.01L10 13zM22 11V4c0-1.1-.9-2-2-2h-7v2h7v7h2zm-2 9h-7v2h7c1.1 0 2-.9 2-2v-7h-2v7zM4 13H2v7c0 1.1.9 2 2 2h7v-2H4v-7z"/>
                     </svg>
                 </div>
-                <h3 class="empty-title">拍攝你的第一張照片</h3>
-                <p class="empty-subtitle">開始建立你的價格卡</p>
+                <h3 class="empty-title" data-i18n="list.empty.title">拍攝你的第一張照片</h3>
+                <p class="empty-subtitle" data-i18n="list.empty.desc">開始建立你的價格卡</p>
             </div>
             
             <div class="history-section" id="historySection" style="display: none;">
@@ -2605,7 +2722,7 @@
                 <svg viewBox="0 0 24 24">
                     <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/>
                 </svg>
-                <span>照片列表</span>
+                <span data-i18n="nav.list">照片列表</span>
             </div>
             
             <div class="nav-item nav-camera">
@@ -2620,7 +2737,7 @@
                 <svg viewBox="0 0 24 24">
                     <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
-                <span>設定</span>
+                <span data-i18n="nav.settings">設定</span>
             </div>
         </div>
 
@@ -2690,15 +2807,15 @@
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                     </svg>
                 </button>
-                <h1 class="app-title">升級方案</h1>
+                <h1 class="app-title" data-i18n="pro.title">升級方案</h1>
             </div>
             
             <div class="pro-content">
                 <div class="pro-hero">
                     <div class="pro-logo">L</div>
                     <h2 class="pro-title">LENSY PRO</h2>
-                    <p class="pro-subtitle">解鎖所有強大功能，讓掃描分析更專業</p>
-                    <p class="trial-info">3 天免費試用</p>
+                    <p class="pro-subtitle" data-i18n="pro.subtitle">解鎖所有強大功能，讓掃描分析更專業</p>
+                    <p class="trial-info" data-i18n="pro.trialInfo">3 天免費試用</p>
                 </div>
 
                 <div class="features-list">
@@ -2709,8 +2826,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">AI 智能服務</div>
-                            <div class="feature-desc">更精準的物品識別與價格分析</div>
+                            <div class="feature-title" data-i18n="pro.feature1Title">AI 智能服務</div>
+                            <div class="feature-desc" data-i18n="pro.feature1Desc">更精準的物品識別與價格分析</div>
                         </div>
                     </div>
 
@@ -2721,8 +2838,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">每月 1000 次掃描分析</div>
-                            <div class="feature-desc">滿足你的所有掃描需求</div>
+                            <div class="feature-title" data-i18n="pro.feature2Title">每月 1000 次掃描分析</div>
+                            <div class="feature-desc" data-i18n="pro.feature2Desc">滿足你的所有掃描需求</div>
                         </div>
                     </div>
 
@@ -2733,8 +2850,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">去除煩人的應用程式廣告</div>
-                            <div class="feature-desc">享受純淨無干擾的使用體驗</div>
+                            <div class="feature-title" data-i18n="pro.feature3Title">去除煩人的應用程式廣告</div>
+                            <div class="feature-desc" data-i18n="pro.feature3Desc">享受純淨無干擾的使用體驗</div>
                         </div>
                     </div>
 
@@ -2745,8 +2862,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">匯出 Excel 報告</div>
-                            <div class="feature-desc">專業的數據整理與分析報告</div>
+                            <div class="feature-title" data-i18n="pro.feature4Title">匯出 Excel 報告</div>
+                            <div class="feature-desc" data-i18n="pro.feature4Desc">專業的數據整理與分析報告</div>
                         </div>
                     </div>
 
@@ -2757,8 +2874,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">多張照片批次辨識</div>
-                            <div class="feature-desc">一次處理多張照片，節省時間</div>
+                            <div class="feature-title" data-i18n="pro.feature5Title">多張照片批次辨識</div>
+                            <div class="feature-desc" data-i18n="pro.feature5Desc">一次處理多張照片，節省時間</div>
                         </div>
                     </div>
 
@@ -2769,8 +2886,8 @@
                             </svg>
                         </div>
                         <div class="feature-text">
-                            <div class="feature-title">自動儲存到相簿</div>
-                            <div class="feature-desc">掃描結果自動備份不遺失</div>
+                            <div class="feature-title" data-i18n="pro.feature6Title">自動儲存到相簿</div>
+                            <div class="feature-desc" data-i18n="pro.feature6Desc">掃描結果自動備份不遺失</div>
                         </div>
                     </div>
                 </div>
@@ -2778,20 +2895,20 @@
                 <div class="pricing-section">
                     <div class="pricing-container">
                         <div class="pricing-card popular" id="yearlyPlan" onclick="selectPlan('yearly')">
-                            <div class="discount-badge">省34%</div>
+                            <div class="discount-badge" data-i18n="pro.discountBadge">省34%</div>
                             <div class="pricing-radio"></div>
-                            <div class="pricing-title">年繳方案</div>
+                            <div class="pricing-title" data-i18n="pro.yearlyPlan">年繳方案</div>
                             <div class="pricing-price">$99</div>
-                            <div class="pricing-note">每月</div>
-                            <div class="pricing-period">$1,188/年</div>
+                            <div class="pricing-note" data-i18n="pro.perMonth">每月</div>
+                            <div class="pricing-period"><span data-i18n="pro.yearlyTotal">$1,188/年</span></div>
                         </div>
 
                         <div class="pricing-card" id="monthlyPlan" onclick="selectPlan('monthly')">
                             <div class="pricing-radio"></div>
-                            <div class="pricing-title">月繳方案</div>
+                            <div class="pricing-title" data-i18n="pro.monthlyPlan">月繳方案</div>
                             <div class="pricing-price">$150</div>
-                            <div class="pricing-note">每月</div>
-                            <div class="pricing-period">按月計費</div>
+                            <div class="pricing-note" data-i18n="pro.perMonth">每月</div>
+                            <div class="pricing-period" data-i18n="pro.monthlyBilling">按月計費</div>
                         </div>
                     </div>
                 </div>
@@ -2799,13 +2916,13 @@
 
             <div class="bottom-section">
                 <button class="subscribe-btn" onclick="startFreeTrial()">
-                    開始免費試用
+                    <span data-i18n="pro.startFreeTrial">開始免費試用</span>
                 </button>
                 <div class="terms-links">
-                    <a href="#" onclick="showTerms('usage'); return false;">使用條款</a>
-                    <a href="#" onclick="showTerms('privacy'); return false;">隱私政策</a>
-                    <a href="#" onclick="showTerms('subscription'); return false;">訂閱條款</a>
-                    <a href="#" onclick="restorePurchase(); return false;">恢復購買</a>
+                    <a href="#" onclick="showTerms('usage'); return false;" data-i18n="pro.termsOfUse">使用條款</a>
+                    <a href="#" onclick="showTerms('privacy'); return false;" data-i18n="pro.privacyPolicy">隱私政策</a>
+                    <a href="#" onclick="showTerms('subscription'); return false;" data-i18n="pro.subscriptionTerms">訂閱條款</a>
+                    <a href="#" onclick="restorePurchase(); return false;" data-i18n="pro.restorePurchase">恢復購買</a>
                 </div>
             </div>
         </div>
@@ -2822,18 +2939,18 @@
             
             <div class="auth-content">
                 <h1 class="auth-logo">LENSY</h1>
-                <p class="auth-subtitle">萬物價格掃描器</p>
+                <p class="auth-subtitle" data-i18n="auth.subtitle">萬物價格掃描器</p>
                 
                 <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
                     <div class="form-group">
-                        <label class="form-label">電子郵件地址</label>
-                        <input type="email" class="form-input" id="emailInput" placeholder="輸入您的電子郵件" required>
+                        <label class="form-label" data-i18n="auth.emailLabel">電子郵件地址</label>
+                        <input type="email" class="form-input" id="emailInput" placeholder="輸入您的電子郵件" data-i18n-placeholder="auth.emailPlaceholder" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">密碼</label>
+                        <label class="form-label" data-i18n="auth.passwordLabel">密碼</label>
                         <div class="form-input-wrapper">
-                            <input type="password" class="form-input" id="passwordInput" placeholder="輸入您的密碼" required>
+                            <input type="password" class="form-input" id="passwordInput" placeholder="輸入您的密碼" data-i18n-placeholder="auth.passwordPlaceholder" required>
                             <button type="button" class="password-toggle" onclick="togglePassword()">
                                 <svg viewBox="0 0 24 24" id="eyeIcon">
                                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
@@ -2842,17 +2959,17 @@
                         </div>
                     </div>
                     
-                    <a href="#" class="forgot-password" onclick="handleForgotPassword()">忘記密碼？</a>
+                    <a href="#" class="forgot-password" onclick="handleForgotPassword()" data-i18n="auth.forgotPassword">忘記密碼？</a>
                     
-                    <button type="submit" class="auth-button" id="authButton">登入</button>
+                    <button type="submit" class="auth-button" id="authButton" data-i18n="auth.loginButton">登入</button>
                     
                     <div class="auth-switch" id="authSwitch">
-                        尚未註冊帳號？ <a href="#" onclick="toggleAuthMode()">註冊</a>
+                        <span data-i18n="auth.noAccount">尚未註冊帳號？</span> <a href="#" onclick="toggleAuthMode()" data-i18n="auth.registerLink">註冊</a>
                     </div>
                 </form>
                 
                 <div class="divider">
-                    <span>或</span>
+                    <span data-i18n="auth.or">或</span>
                 </div>
                 
                 <div class="social-login">
@@ -2860,7 +2977,7 @@
                         <svg viewBox="0 0 24 24" fill="white">
                             <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                         </svg>
-                        使用 Apple 登入
+                        <span data-i18n="auth.signInWithApple">使用 Apple 登入</span>
                     </button>
                     
                     <button class="social-button google-button" onclick="handleGoogleLogin()">
@@ -2870,7 +2987,7 @@
                             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                         </svg>
-                        使用 Google 登入
+                        <span data-i18n="auth.signInWithGoogle">使用 Google 登入</span>
                     </button>
                 </div>
                 
@@ -2889,7 +3006,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="ai-upload-title">AI智能服務</h1>
+                <h1 class="ai-upload-title" data-i18n="ai.title">AI智能服務</h1>
             </div>
             
             <div class="ai-upload-content">
@@ -2899,14 +3016,126 @@
                             <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
                         </svg>
                     </div>
-                    <h2 class="upload-text">上傳照片與AI開始對談</h2>
-                    <p class="upload-subtext">點擊上方圖示選擇照片<br>開始智能對話分析</p>
+                    <h2 class="upload-text" data-i18n="ai.uploadText">上傳照片與AI開始對談</h2>
+                    <p class="upload-subtext" data-i18n="ai.uploadSubtext">點擊上方圖示選擇照片<br>開始智能對話分析</p>
                     
                     <div class="upload-tips">
-                        <div class="upload-tips-title">💡 使用提示</div>
+                        <div class="upload-tips-title" data-i18n="ai.tips.title">💡 使用提示</div>
+                        <div class="upload-tips-content" data-i18n="ai.tips.content">
                         • 選擇一張清晰的照片<br>
                         • AI會深度分析照片內容<br>
                         • 提供個性化的見解與建議
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 語言選擇頁面 -->
+        <div class="language-selector-page" id="languageSelectorPage">
+            <div class="language-header">
+                <button class="language-close-btn" onclick="closeLanguageSelector()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="language-title" data-i18n="language.title">選擇語言</h1>
+            </div>
+            
+            <div class="language-content">
+                <!-- 常用語言 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="language.common">常用</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeLanguage('zh-TW')">
+                            <span class="language-name">繁體中文</span>
+                            <span class="language-check" data-lang="zh-TW">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('zh-CN')">
+                            <span class="language-name">简体中文</span>
+                            <span class="language-check" data-lang="zh-CN">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('en')">
+                            <span class="language-name">English</span>
+                            <span class="language-check" data-lang="en">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 亞洲語言 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="language.asia">亞洲</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeLanguage('ja')">
+                            <span class="language-name">日本語</span>
+                            <span class="language-check" data-lang="ja">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('ko')">
+                            <span class="language-name">한국어</span>
+                            <span class="language-check" data-lang="ko">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('th')">
+                            <span class="language-name">ภาษาไทย</span>
+                            <span class="language-check" data-lang="th">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('vi')">
+                            <span class="language-name">Tiếng Việt</span>
+                            <span class="language-check" data-lang="vi">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 歐洲語言 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="language.europe">歐洲</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeLanguage('es')">
+                            <span class="language-name">Español</span>
+                            <span class="language-check" data-lang="es">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('fr')">
+                            <span class="language-name">Français</span>
+                            <span class="language-check" data-lang="fr">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('de')">
+                            <span class="language-name">Deutsch</span>
+                            <span class="language-check" data-lang="de">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('it')">
+                            <span class="language-name">Italiano</span>
+                            <span class="language-check" data-lang="it">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('pt')">
+                            <span class="language-name">Português</span>
+                            <span class="language-check" data-lang="pt">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 其他語言 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="language.other">其他</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeLanguage('ar')">
+                            <span class="language-name">العربية</span>
+                            <span class="language-check" data-lang="ar">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('tr')">
+                            <span class="language-name">Türkçe</span>
+                            <span class="language-check" data-lang="tr">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('ru')">
+                            <span class="language-name">Русский</span>
+                            <span class="language-check" data-lang="ru">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('id')">
+                            <span class="language-name">Bahasa Indonesia</span>
+                            <span class="language-check" data-lang="id">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeLanguage('tl')">
+                            <span class="language-name">Filipino</span>
+                            <span class="language-check" data-lang="tl">✓</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2920,7 +3149,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="forgot-title">忘記密碼</h1>
+                <h1 class="forgot-title" data-i18n="forgot.title">忘記密碼</h1>
             </div>
             
             <div class="forgot-content">
@@ -2931,17 +3160,16 @@
                 </div>
                 
                 <p class="forgot-description">
-                    請輸入您註冊時使用的電子郵件地址<br>
-                    我們將發送密碼重設連結給您
+                    <span data-i18n="forgot.description">請輸入您註冊時使用的電子郵件地址<br>我們將發送密碼重設連結給您</span>
                 </p>
                 
                 <form class="forgot-form" onsubmit="handlePasswordReset(event)">
                     <div class="form-group">
-                        <label class="form-label">電子郵件地址</label>
-                        <input type="email" class="form-input" id="resetEmailInput" placeholder="輸入您的電子郵件" required>
+                        <label class="form-label" data-i18n="forgot.emailLabel">電子郵件地址</label>
+                        <input type="email" class="form-input" id="resetEmailInput" placeholder="輸入您的電子郵件" data-i18n-placeholder="forgot.emailPlaceholder" required>
                     </div>
                     
-                    <button type="submit" class="forgot-button">繼續</button>
+                    <button type="submit" class="forgot-button" data-i18n="forgot.continueButton">繼續</button>
                 </form>
             </div>
         </div>
@@ -2954,14 +3182,11 @@
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                     </svg>
                 </div>
-                <h2 class="success-title">郵件已發送！</h2>
+                <h2 class="success-title" data-i18n="success.emailSent">郵件已發送！</h2>
                 <p class="success-message">
-                    密碼重設連結已發送至您的信箱<br>
-                    請查看郵件並點擊連結重設密碼<br>
-                    <br>
-                    如未收到郵件，請檢查垃圾郵件資料夾
+                    <span data-i18n="success.resetMessage">密碼重設連結已發送至您的信箱<br>請查看郵件並點擊連結重設密碼<br><br>如未收到郵件，請檢查垃圾郵件資料夾</span>
                 </p>
-                <button class="success-button" onclick="closeSuccessDialog()">確定</button>
+                <button class="success-button" onclick="closeSuccessDialog()" data-i18n="success.confirmButton">確定</button>
             </div>
         </div>
         
@@ -3051,7 +3276,25 @@
             const discountBadge = document.querySelector('.discount-badge');
             if (discountBadge) {
                 const discount = calculateDiscount();
-                discountBadge.textContent = `省${discount}%`;
+                const lang = getCurrentLanguage();
+                
+                // 根據語言設定折扣文字格式
+                let discountText;
+                switch(lang) {
+                    case 'en':
+                        discountText = `Save ${discount}%`;
+                        break;
+                    case 'ja':
+                        discountText = `${discount}%割引`;
+                        break;
+                    case 'ko':
+                        discountText = `${discount}% 할인`;
+                        break;
+                    default:
+                        discountText = `省${discount}%`;
+                }
+                
+                discountBadge.textContent = discountText;
             }
         }
         
@@ -3075,9 +3318,24 @@
             }
             
             // 更新年繳總價
-            const yearlyPeriodElement = document.querySelector('#yearlyPlan .pricing-period');
+            const yearlyPeriodElement = document.querySelector('#yearlyPlan .pricing-period span[data-i18n="pro.yearlyTotal"]');
             if (yearlyPeriodElement) {
-                yearlyPeriodElement.textContent = `${formatPrice(PRICING.yearly)}/年`;
+                const lang = getCurrentLanguage();
+                let yearText;
+                switch(lang) {
+                    case 'en':
+                        yearText = `${formatPrice(PRICING.yearly)}/year`;
+                        break;
+                    case 'ja':
+                        yearText = `${formatPrice(PRICING.yearly)}/年`;
+                        break;
+                    case 'ko':
+                        yearText = `${formatPrice(PRICING.yearly)}/년`;
+                        break;
+                    default:
+                        yearText = `${formatPrice(PRICING.yearly)}/年`;
+                }
+                yearlyPeriodElement.textContent = yearText;
             }
             
             // 更新月繳價格
@@ -3174,11 +3432,13 @@
             const authSwitch = document.getElementById('authSwitch');
             
             if (isLoginMode) {
-                authButton.textContent = '登入';
-                authSwitch.innerHTML = '尚未註冊帳號？ <a href="#" onclick="toggleAuthMode()">註冊</a>';
+                authButton.setAttribute('data-i18n', 'auth.loginButton');
+                authButton.textContent = t('auth.loginButton');
+                authSwitch.innerHTML = `<span data-i18n="auth.noAccount">${t('auth.noAccount')}</span> <a href="#" onclick="toggleAuthMode()" data-i18n="auth.registerLink">${t('auth.registerLink')}</a>`;
             } else {
-                authButton.textContent = '註冊';
-                authSwitch.innerHTML = '已有帳號？ <a href="#" onclick="toggleAuthMode()">登入</a>';
+                authButton.setAttribute('data-i18n', 'auth.registerButton');
+                authButton.textContent = t('auth.registerButton');
+                authSwitch.innerHTML = `<span data-i18n="auth.hasAccount">${t('auth.hasAccount')}</span> <a href="#" onclick="toggleAuthMode()" data-i18n="auth.loginLink">${t('auth.loginLink')}</a>`;
             }
         }
         
@@ -4156,13 +4416,13 @@
             const listPage = document.getElementById('listPage');
             
             if (isSelectMode) {
-                selectBtn.textContent = '取消';
+                selectBtn.textContent = t('list.cancel');
                 selectBtn.classList.add('active');
                 listPage.classList.add('select-mode');
                 selectedItems.clear();
                 updateSelectedCount();
             } else {
-                selectBtn.textContent = '選取';
+                selectBtn.textContent = t('list.selectMode');
                 selectBtn.classList.remove('active');
                 listPage.classList.remove('select-mode');
                 batchToolbar.classList.remove('active');
@@ -5122,6 +5382,1963 @@
         // 測試 AI 功能是否正常
         console.log('AI Upload function loaded:', typeof openAIUpload);
         console.log('AI Upload page element:', document.getElementById('aiUploadPage'));
+        
+        // 多語言系統
+        const i18n = {
+            'zh-TW': {
+                // 應用名稱
+                'app.title': 'LENSY - 萬物價格掃描器',
+                
+                // 底部導航
+                'nav.list': '列表',
+                'nav.settings': '設定',
+                
+                // 設定頁面
+                'settings.title': '設定',
+                'settings.membership': '會員服務',
+                'settings.memberStatus': '會員狀態',
+                'settings.memberStatusFree': '免費版',
+                'settings.remainingScans': '剩餘掃描次數',
+                'settings.restorePurchase': '復原購買',
+                'settings.proFeatures': 'Pro 版功能',
+                'settings.aiService': 'AI智能服務',
+                'settings.exportExcel': '匯出成Excel報告',
+                'settings.batchRecognition': '多張照片批次辨識',
+                'settings.autoSaveAlbum': '自動儲存到相簿',
+                'settings.general': '一般',
+                'settings.aiMode': 'AI模式',
+                'settings.batchAnalysis': '批次分析多張照片',
+                'settings.theme': '深色主題',
+                'settings.support': '支援',
+                'settings.language': '語言',
+                'settings.loginRegister': '登入/註冊',
+                'settings.contactUs': '聯絡我們',
+                'settings.help': '輔助說明',
+                'settings.about': '關於APP',
+                'settings.appInfo': 'APP資訊',
+                'settings.rateApp': '評價APP',
+                'settings.shareApp': '分享給朋友',
+                'settings.feedback': '意見回饋',
+                'settings.aboutVersion': '關於與版本',
+                'settings.account': '帳號',
+                'settings.logout': '登出',
+                
+                // 語言選擇頁面
+                'language.title': '選擇語言',
+                'language.common': '常用',
+                'language.asia': '亞洲',
+                'language.europe': '歐洲',
+                'language.other': '其他',
+                
+                // 列表頁面
+                'list.search': '搜尋照片',
+                'list.selectMode': '選擇',
+                'list.cancel': '取消',
+                'list.selectAll': '全選',
+                'list.deleteSelected': '刪除已選',
+                'list.empty.title': '開始掃描與記錄',
+                'list.empty.desc': '掃描物品並記錄價格',
+                
+                // 相機頁面
+                'camera.scanHint': '對準物品開始掃描',
+                
+                // AI上傳頁面
+                'ai.title': 'AI智能服務',
+                'ai.uploadText': '上傳照片與AI開始對談',
+                'ai.uploadSubtext': '點擊上方圖示選擇照片\n開始智能對話分析',
+                'ai.tips.title': '💡 使用提示',
+                'ai.tips.content': '• 選擇一張清晰的照片\n• AI會深度分析照片內容\n• 提供個性化的見解與建議',
+                
+                // 登入/註冊頁面
+                'auth.subtitle': '萬物價格掃描器',
+                'auth.emailLabel': '電子郵件地址',
+                'auth.emailPlaceholder': '輸入您的電子郵件',
+                'auth.passwordLabel': '密碼',
+                'auth.passwordPlaceholder': '輸入您的密碼',
+                'auth.forgotPassword': '忘記密碼？',
+                'auth.loginButton': '登入',
+                'auth.registerButton': '註冊',
+                'auth.noAccount': '尚未註冊帳號？',
+                'auth.hasAccount': '已有帳號？',
+                'auth.registerLink': '註冊',
+                'auth.loginLink': '登入',
+                'auth.or': '或',
+                'auth.signInWithApple': '使用 Apple 登入',
+                'auth.signInWithGoogle': '使用 Google 登入',
+                
+                // 會員升級頁面
+                'pro.title': '升級方案',
+                'pro.subtitle': '解鎖所有強大功能，讓掃描分析更專業',
+                'pro.trialInfo': '3 天免費試用',
+                'pro.feature1Title': 'AI 智能服務',
+                'pro.feature1Desc': '更精準的物品識別與價格分析',
+                'pro.feature2Title': '每月 1000 次掃描分析',
+                'pro.feature2Desc': '滿足你的所有掃描需求',
+                'pro.feature3Title': '去除煩人的應用程式廣告',
+                'pro.feature3Desc': '享受純淨無干擾的使用體驗',
+                'pro.feature4Title': '匯出 Excel 報告',
+                'pro.feature4Desc': '專業的數據整理與分析報告',
+                'pro.feature5Title': '多張照片批次辨識',
+                'pro.feature5Desc': '一次處理多張照片，節省時間',
+                'pro.feature6Title': '自動儲存到相簿',
+                'pro.feature6Desc': '掃描結果自動備份不遺失',
+                'pro.discountBadge': '省34%',
+                'pro.yearlyPlan': '年繳方案',
+                'pro.monthlyPlan': '月繳方案',
+                'pro.perMonth': '每月',
+                'pro.yearlyTotal': '$1,188/年',
+                'pro.monthlyBilling': '按月計費',
+                'pro.startFreeTrial': '開始免費試用',
+                'pro.termsOfUse': '使用條款',
+                'pro.privacyPolicy': '隱私政策',
+                'pro.subscriptionTerms': '訂閱條款',
+                'pro.restorePurchase': '恢復購買',
+                
+                // 忘記密碼頁面
+                'forgot.title': '忘記密碼',
+                'forgot.description': '請輸入您註冊時使用的電子郵件地址<br>我們將發送密碼重設連結給您',
+                'forgot.emailLabel': '電子郵件地址',
+                'forgot.emailPlaceholder': '輸入您的電子郵件',
+                'forgot.continueButton': '繼續',
+                
+                // 成功對話框
+                'success.emailSent': '郵件已發送！',
+                'success.resetMessage': '密碼重設連結已發送至您的信箱<br>請查看郵件並點擊連結重設密碼<br><br>如未收到郵件，請檢查垃圾郵件資料夾',
+                'success.confirmButton': '確定'
+            },
+            'zh-CN': {
+                'app.title': 'LENSY - 万物价格扫描器',
+                'nav.list': '列表',
+                'nav.settings': '设置',
+                'settings.title': '设置',
+                'settings.membership': '会员服务',
+                'settings.memberStatus': '会员状态',
+                'settings.memberStatusFree': '免费版',
+                'settings.remainingScans': '剩余扫描次数',
+                'settings.restorePurchase': '恢复购买',
+                'settings.proFeatures': 'Pro 版功能',
+                'settings.aiService': 'AI智能服务',
+                'settings.exportExcel': '导出成Excel报告',
+                'settings.batchRecognition': '多张照片批次识别',
+                'settings.autoSaveAlbum': '自动保存到相册',
+                'settings.general': '常规',
+                'settings.aiMode': 'AI模式',
+                'settings.batchAnalysis': '批量分析多张照片',
+                'settings.theme': '深色主题',
+                'settings.support': '支持',
+                'settings.language': '语言',
+                'settings.loginRegister': '登录/注册',
+                'settings.contactUs': '联系我们',
+                'settings.help': '帮助说明',
+                'settings.about': '关于APP',
+                'settings.appInfo': 'APP信息',
+                'settings.rateApp': '评价APP',
+                'settings.shareApp': '分享给朋友',
+                'settings.feedback': '意见反馈',
+                'settings.aboutVersion': '关于与版本',
+                'settings.account': '账号',
+                'settings.logout': '退出',
+                'language.title': '选择语言',
+                'language.common': '常用',
+                'language.asia': '亚洲',
+                'language.europe': '欧洲',
+                'language.other': '其他',
+                'list.search': '搜索照片',
+                'list.selectMode': '选择',
+                'list.cancel': '取消',
+                'list.selectAll': '全选',
+                'list.deleteSelected': '删除已选',
+                'list.empty.title': '开始扫描与记录',
+                'list.empty.desc': '扫描物品并记录价格',
+                'camera.scanHint': '对准物品开始扫描',
+                'ai.title': 'AI智能服务',
+                'ai.uploadText': '上传照片与AI开始对话',
+                'ai.uploadSubtext': '点击上方图标选择照片\n开始智能对话分析',
+                'ai.tips.title': '💡 使用提示',
+                'ai.tips.content': '• 选择一张清晰的照片\n• AI会深度分析照片内容\n• 提供个性化的见解与建议',
+                
+                // 登录/注册页面
+                'auth.subtitle': '万物价格扫描器',
+                'auth.emailLabel': '电子邮件地址',
+                'auth.emailPlaceholder': '输入您的电子邮件',
+                'auth.passwordLabel': '密码',
+                'auth.passwordPlaceholder': '输入您的密码',
+                'auth.forgotPassword': '忘记密码？',
+                'auth.loginButton': '登录',
+                'auth.registerButton': '注册',
+                'auth.noAccount': '尚未注册账号？',
+                'auth.hasAccount': '已有账号？',
+                'auth.registerLink': '注册',
+                'auth.loginLink': '登录',
+                'auth.or': '或',
+                'auth.signInWithApple': '使用 Apple 登录',
+                'auth.signInWithGoogle': '使用 Google 登录',
+                
+                // 会员升级页面
+                'pro.title': '升级方案',
+                'pro.subtitle': '解锁所有强大功能，让扫描分析更专业',
+                'pro.trialInfo': '3 天免费试用',
+                'pro.feature1Title': 'AI 智能服务',
+                'pro.feature1Desc': '更精准的物品识别与价格分析',
+                'pro.feature2Title': '每月 1000 次扫描分析',
+                'pro.feature2Desc': '满足你的所有扫描需求',
+                'pro.feature3Title': '去除烦人的应用程序广告',
+                'pro.feature3Desc': '享受纯净无干扰的使用体验',
+                'pro.feature4Title': '导出 Excel 报告',
+                'pro.feature4Desc': '专业的数据整理与分析报告',
+                'pro.feature5Title': '多张照片批次识别',
+                'pro.feature5Desc': '一次处理多张照片，节省时间',
+                'pro.feature6Title': '自动保存到相册',
+                'pro.feature6Desc': '扫描结果自动备份不丢失',
+                'pro.discountBadge': '省34%',
+                'pro.yearlyPlan': '年缴方案',
+                'pro.monthlyPlan': '月缴方案',
+                'pro.perMonth': '每月',
+                'pro.yearlyTotal': '$1,188/年',
+                'pro.monthlyBilling': '按月计费',
+                'pro.startFreeTrial': '开始免费试用',
+                'pro.termsOfUse': '使用条款',
+                'pro.privacyPolicy': '隐私政策',
+                'pro.subscriptionTerms': '订阅条款',
+                'pro.restorePurchase': '恢复购买',
+                
+                // 忘记密码页面
+                'forgot.title': '忘记密码',
+                'forgot.description': '请输入您注册时使用的电子邮件地址<br>我们将发送密码重设链接给您',
+                'forgot.emailLabel': '电子邮件地址',
+                'forgot.emailPlaceholder': '输入您的电子邮件',
+                'forgot.continueButton': '继续',
+                
+                // 成功对话框
+                'success.emailSent': '邮件已发送！',
+                'success.resetMessage': '密码重设链接已发送至您的信箱<br>请查看邮件并点击链接重设密码<br><br>如未收到邮件，请检查垃圾邮件文件夹',
+                'success.confirmButton': '确定'
+            },
+            'en': {
+                'app.title': 'LENSY - Universal Price Scanner',
+                'nav.list': 'List',
+                'nav.settings': 'Settings',
+                'settings.title': 'Settings',
+                'settings.membership': 'Membership',
+                'settings.memberStatus': 'Member Status',
+                'settings.memberStatusFree': 'Free Version',
+                'settings.remainingScans': 'Remaining Scans',
+                'settings.restorePurchase': 'Restore Purchase',
+                'settings.proFeatures': 'Pro Features',
+                'settings.aiService': 'AI Smart Service',
+                'settings.exportExcel': 'Export to Excel Report',
+                'settings.batchRecognition': 'Batch Photo Recognition',
+                'settings.autoSaveAlbum': 'Auto Save to Album',
+                'settings.general': 'General',
+                'settings.aiMode': 'AI Mode',
+                'settings.batchAnalysis': 'Batch Analysis Multiple Photos',
+                'settings.theme': 'Dark Theme',
+                'settings.support': 'Support',
+                'settings.language': 'Language',
+                'settings.loginRegister': 'Login/Register',
+                'settings.contactUs': 'Contact Us',
+                'settings.help': 'Help',
+                'settings.about': 'About APP',
+                'settings.appInfo': 'APP Info',
+                'settings.rateApp': 'Rate APP',
+                'settings.shareApp': 'Share with Friends',
+                'settings.feedback': 'Feedback',
+                'settings.aboutVersion': 'About & Version',
+                'settings.account': 'Account',
+                'settings.logout': 'Logout',
+                'language.title': 'Select Language',
+                'language.common': 'Common',
+                'language.asia': 'Asia',
+                'language.europe': 'Europe',
+                'language.other': 'Other',
+                'list.search': 'Search photos',
+                'list.selectMode': 'Select',
+                'list.cancel': 'Cancel',
+                'list.selectAll': 'Select All',
+                'list.deleteSelected': 'Delete Selected',
+                'list.empty.title': 'Start Scanning & Recording',
+                'list.empty.desc': 'Scan items and record prices',
+                'camera.scanHint': 'Align item to start scanning',
+                'ai.title': 'AI Smart Service',
+                'ai.uploadText': 'Upload Photo to Start AI Chat',
+                'ai.uploadSubtext': 'Click the icon above to select photo\nStart intelligent dialogue analysis',
+                'ai.tips.title': '💡 Usage Tips',
+                'ai.tips.content': '• Choose a clear photo\n• AI will analyze photo content\n• Provide personalized insights',
+                
+                // Login/Register page
+                'auth.subtitle': 'Universal Price Scanner',
+                'auth.emailLabel': 'Email Address',
+                'auth.emailPlaceholder': 'Enter your email',
+                'auth.passwordLabel': 'Password',
+                'auth.passwordPlaceholder': 'Enter your password',
+                'auth.forgotPassword': 'Forgot password?',
+                'auth.loginButton': 'Sign In',
+                'auth.registerButton': 'Sign Up',
+                'auth.noAccount': 'Don\'t have an account?',
+                'auth.hasAccount': 'Already have an account?',
+                'auth.registerLink': 'Sign Up',
+                'auth.loginLink': 'Sign In',
+                'auth.or': 'or',
+                'auth.signInWithApple': 'Sign in with Apple',
+                'auth.signInWithGoogle': 'Sign in with Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Upgrade Plan',
+                'pro.subtitle': 'Unlock all powerful features for professional scanning',
+                'pro.trialInfo': '3-day free trial',
+                'pro.feature1Title': 'AI Smart Service',
+                'pro.feature1Desc': 'More accurate item recognition and price analysis',
+                'pro.feature2Title': '1000 Scans per Month',
+                'pro.feature2Desc': 'Meet all your scanning needs',
+                'pro.feature3Title': 'Remove Annoying Ads',
+                'pro.feature3Desc': 'Enjoy a clean, uninterrupted experience',
+                'pro.feature4Title': 'Export Excel Reports',
+                'pro.feature4Desc': 'Professional data organization and analysis reports',
+                'pro.feature5Title': 'Batch Photo Recognition',
+                'pro.feature5Desc': 'Process multiple photos at once, save time',
+                'pro.feature6Title': 'Auto Save to Album',
+                'pro.feature6Desc': 'Scan results automatically backed up',
+                'pro.discountBadge': 'Save 34%',
+                'pro.yearlyPlan': 'Annual Plan',
+                'pro.monthlyPlan': 'Monthly Plan',
+                'pro.perMonth': 'per month',
+                'pro.yearlyTotal': '$1,188/year',
+                'pro.monthlyBilling': 'Billed monthly',
+                'pro.startFreeTrial': 'Start Free Trial',
+                'pro.termsOfUse': 'Terms of Use',
+                'pro.privacyPolicy': 'Privacy Policy',
+                'pro.subscriptionTerms': 'Subscription Terms',
+                'pro.restorePurchase': 'Restore Purchase',
+                
+                // Forgot Password page
+                'forgot.title': 'Forgot Password',
+                'forgot.description': 'Enter the email address you used to register<br>We\'ll send you a password reset link',
+                'forgot.emailLabel': 'Email Address',
+                'forgot.emailPlaceholder': 'Enter your email',
+                'forgot.continueButton': 'Continue',
+                
+                // Success Dialog
+                'success.emailSent': 'Email Sent!',
+                'success.resetMessage': 'Password reset link has been sent to your inbox<br>Please check your email and click the link to reset your password<br><br>If you don\'t receive it, check your spam folder',
+                'success.confirmButton': 'OK'
+            },
+            'ja': {
+                'app.title': 'LENSY - 万物価格スキャナー',
+                'nav.list': 'リスト',
+                'nav.settings': '設定',
+                'settings.title': '設定',
+                'settings.membership': '会員サービス',
+                'settings.memberStatus': '会員ステータス',
+                'settings.memberStatusFree': '無料版',
+                'settings.remainingScans': '残りスキャン回数',
+                'settings.restorePurchase': '購入の復元',
+                'settings.proFeatures': 'Pro版機能',
+                'settings.aiService': 'AIスマートサービス',
+                'settings.exportExcel': 'Excelレポートにエクスポート',
+                'settings.batchRecognition': '複数写真バッチ認識',
+                'settings.autoSaveAlbum': 'アルバムに自動保存',
+                'settings.general': '一般',
+                'settings.aiMode': 'AIモード',
+                'settings.batchAnalysis': '複数写真の一括分析',
+                'settings.theme': 'ダークテーマ',
+                'settings.support': 'サポート',
+                'settings.language': '言語',
+                'settings.loginRegister': 'ログイン/登録',
+                'settings.contactUs': 'お問い合わせ',
+                'settings.help': 'ヘルプ',
+                'settings.about': 'アプリについて',
+                'settings.appInfo': 'アプリ情報',
+                'settings.rateApp': 'アプリを評価',
+                'settings.shareApp': '友達と共有',
+                'settings.feedback': 'フィードバック',
+                'settings.aboutVersion': 'バージョン情報',
+                'settings.account': 'アカウント',
+                'settings.logout': 'ログアウト',
+                'language.title': '言語を選択',
+                'language.common': 'よく使う',
+                'language.asia': 'アジア',
+                'language.europe': 'ヨーロッパ',
+                'language.other': 'その他',
+                'list.search': '写真を検索',
+                'list.selectMode': '選択',
+                'list.cancel': 'キャンセル',
+                'list.selectAll': 'すべて選択',
+                'list.deleteSelected': '選択項目を削除',
+                'list.empty.title': 'スキャンと記録を開始',
+                'list.empty.desc': 'アイテムをスキャンして価格を記録',
+                'camera.scanHint': 'アイテムに合わせてスキャン開始',
+                'ai.title': 'AIスマートサービス',
+                'ai.uploadText': '写真をアップロードしてAIチャット開始',
+                'ai.uploadSubtext': '上のアイコンをクリックして写真を選択\nインテリジェント対話分析を開始',
+                'ai.tips.title': '💡 使用のヒント',
+                'ai.tips.content': '• 鮮明な写真を選択\n• AIが写真内容を分析\n• パーソナライズされた洞察を提供',
+                
+                // Login/Register page
+                'auth.subtitle': '万物価格スキャナー',
+                'auth.emailLabel': 'メールアドレス',
+                'auth.emailPlaceholder': 'メールアドレスを入力',
+                'auth.passwordLabel': 'パスワード',
+                'auth.passwordPlaceholder': 'パスワードを入力',
+                'auth.forgotPassword': 'パスワードをお忘れですか？',
+                'auth.loginButton': 'ログイン',
+                'auth.registerButton': '新規登録',
+                'auth.noAccount': 'アカウントをお持ちでない方',
+                'auth.hasAccount': 'すでにアカウントをお持ちの方',
+                'auth.registerLink': '新規登録',
+                'auth.loginLink': 'ログイン',
+                'auth.or': 'または',
+                'auth.signInWithApple': 'Appleでサインイン',
+                'auth.signInWithGoogle': 'Googleでサインイン',
+                
+                // Pro Upgrade page
+                'pro.title': 'プランをアップグレード',
+                'pro.subtitle': 'プロフェッショナルスキャン用のすべての強力な機能をアンロック',
+                'pro.trialInfo': '3日間無料トライアル',
+                'pro.feature1Title': 'AIスマートサービス',
+                'pro.feature1Desc': 'より正確なアイテム認識と価格分析',
+                'pro.feature2Title': '月1000回スキャン',
+                'pro.feature2Desc': 'すべてのスキャンニーズに対応',
+                'pro.feature3Title': '広告を削除',
+                'pro.feature3Desc': 'クリーンで中断のない体験を楽しむ',
+                'pro.feature4Title': 'Excelレポートエクスポート',
+                'pro.feature4Desc': 'プロフェッショナルなデータ整理と分析レポート',
+                'pro.feature5Title': 'バッチ写真認識',
+                'pro.feature5Desc': '複数の写真を一度に処理、時間を節約',
+                'pro.feature6Title': 'アルバムに自動保存',
+                'pro.feature6Desc': 'スキャン結果を自動的にバックアップ',
+                'pro.discountBadge': '34%オフ',
+                'pro.yearlyPlan': '年間プラン',
+                'pro.monthlyPlan': '月間プラン',
+                'pro.perMonth': '月額',
+                'pro.yearlyTotal': '年額¥1,188',
+                'pro.monthlyBilling': '月次請求',
+                'pro.startFreeTrial': '無料トライアルを開始',
+                'pro.termsOfUse': '利用規約',
+                'pro.privacyPolicy': 'プライバシーポリシー',
+                'pro.subscriptionTerms': 'サブスクリプション条件',
+                'pro.restorePurchase': '購入を復元',
+                
+                // Forgot Password page
+                'forgot.title': 'パスワードを忘れた',
+                'forgot.description': '登録時に使用したメールアドレスを入力してください<br>パスワードリセットリンクをお送りします',
+                'forgot.emailLabel': 'メールアドレス',
+                'forgot.emailPlaceholder': 'メールアドレスを入力',
+                'forgot.continueButton': '続ける',
+                
+                // Success Dialog
+                'success.emailSent': 'メール送信完了！',
+                'success.resetMessage': 'パスワードリセットリンクをメールで送信しました<br>メールを確認してリンクをクリックしてパスワードをリセットしてください<br><br>メールが届かない場合は、迷惑メールフォルダをご確認ください',
+                'success.confirmButton': 'OK'
+            },
+            'ko': {
+                'app.title': 'LENSY - 만물 가격 스캐너',
+                'nav.list': '목록',
+                'nav.settings': '설정',
+                'settings.title': '설정',
+                'settings.membership': '회원 서비스',
+                'settings.memberStatus': '회원 상태',
+                'settings.memberStatusFree': '무료 버전',
+                'settings.remainingScans': '남은 스캔 횟수',
+                'settings.restorePurchase': '구매 복원',
+                'settings.proFeatures': 'Pro 버전 기능',
+                'settings.aiService': 'AI 스마트 서비스',
+                'settings.exportExcel': 'Excel 보고서로 내보내기',
+                'settings.batchRecognition': '여러 사진 일괄 인식',
+                'settings.autoSaveAlbum': '앨범에 자동 저장',
+                'settings.general': '일반',
+                'settings.aiMode': 'AI 모드',
+                'settings.batchAnalysis': '여러 사진 일괄 분석',
+                'settings.theme': '다크 테마',
+                'settings.support': '지원',
+                'settings.language': '언어',
+                'settings.loginRegister': '로그인/가입',
+                'settings.contactUs': '문의하기',
+                'settings.help': '도움말',
+                'settings.about': '앱 정보',
+                'settings.appInfo': '앱 정보',
+                'settings.rateApp': '앱 평가',
+                'settings.shareApp': '친구에게 공유',
+                'settings.feedback': '피드백',
+                'settings.aboutVersion': '정보 및 버전',
+                'settings.account': '계정',
+                'settings.logout': '로그아웃',
+                'language.title': '언어 선택',
+                'language.common': '자주 사용',
+                'language.asia': '아시아',
+                'language.europe': '유럽',
+                'language.other': '기타',
+                'list.search': '사진 검색',
+                'list.selectMode': '선택',
+                'list.cancel': '취소',
+                'list.selectAll': '모두 선택',
+                'list.deleteSelected': '선택 항목 삭제',
+                'list.empty.title': '스캔 및 기록 시작',
+                'list.empty.desc': '아이템을 스캔하고 가격을 기록',
+                'camera.scanHint': '아이템에 맞춰 스캔 시작',
+                'ai.title': 'AI 스마트 서비스',
+                'ai.uploadText': '사진 업로드로 AI 채팅 시작',
+                'ai.uploadSubtext': '위 아이콘을 클릭하여 사진 선택\n지능형 대화 분석 시작',
+                'ai.tips.title': '💡 사용 팁',
+                'ai.tips.content': '• 선명한 사진 선택\n• AI가 사진 내용 분석\n• 맞춤형 통찰력 제공',
+                
+                // Login/Register page
+                'auth.subtitle': '만물 가격 스캐너',
+                'auth.emailLabel': '이메일 주소',
+                'auth.emailPlaceholder': '이메일을 입력하세요',
+                'auth.passwordLabel': '비밀번호',
+                'auth.passwordPlaceholder': '비밀번호를 입력하세요',
+                'auth.forgotPassword': '비밀번호를 잊으셨나요?',
+                'auth.loginButton': '로그인',
+                'auth.registerButton': '회원가입',
+                'auth.noAccount': '계정이 없으신가요?',
+                'auth.hasAccount': '이미 계정이 있으신가요?',
+                'auth.registerLink': '회원가입',
+                'auth.loginLink': '로그인',
+                'auth.or': '또는',
+                'auth.signInWithApple': 'Apple로 로그인',
+                'auth.signInWithGoogle': 'Google로 로그인',
+                
+                // Pro Upgrade page
+                'pro.title': '플랜 업그레이드',
+                'pro.subtitle': '전문 스캔을 위한 모든 강력한 기능 잠금 해제',
+                'pro.trialInfo': '3일 무료 체험',
+                'pro.feature1Title': 'AI 스마트 서비스',
+                'pro.feature1Desc': '더 정확한 아이템 인식 및 가격 분석',
+                'pro.feature2Title': '월 1000회 스캔',
+                'pro.feature2Desc': '모든 스캔 요구사항 충족',
+                'pro.feature3Title': '광고 제거',
+                'pro.feature3Desc': '깔끔하고 방해받지 않는 경험 즐기기',
+                'pro.feature4Title': 'Excel 보고서 내보내기',
+                'pro.feature4Desc': '전문적인 데이터 정리 및 분석 보고서',
+                'pro.feature5Title': '배치 사진 인식',
+                'pro.feature5Desc': '여러 사진을 한 번에 처리, 시간 절약',
+                'pro.feature6Title': '앨범에 자동 저장',
+                'pro.feature6Desc': '스캔 결과 자동 백업',
+                'pro.discountBadge': '34% 할인',
+                'pro.yearlyPlan': '연간 플랜',
+                'pro.monthlyPlan': '월간 플랜',
+                'pro.perMonth': '월',
+                'pro.yearlyTotal': '연간 ₩1,188',
+                'pro.monthlyBilling': '월별 청구',
+                'pro.startFreeTrial': '무료 체험 시작',
+                'pro.termsOfUse': '이용약관',
+                'pro.privacyPolicy': '개인정보 보호정책',
+                'pro.subscriptionTerms': '구독 약관',
+                'pro.restorePurchase': '구매 복원',
+                
+                // Forgot Password page
+                'forgot.title': '비밀번호 찾기',
+                'forgot.description': '가입 시 사용한 이메일 주소를 입력하세요<br>비밀번호 재설정 링크를 보내드립니다',
+                'forgot.emailLabel': '이메일 주소',
+                'forgot.emailPlaceholder': '이메일을 입력하세요',
+                'forgot.continueButton': '계속',
+                
+                // Success Dialog
+                'success.emailSent': '이메일 전송 완료!',
+                'success.resetMessage': '비밀번호 재설정 링크가 이메일로 전송되었습니다<br>이메일을 확인하고 링크를 클릭하여 비밀번호를 재설정하세요<br><br>이메일을 받지 못하셨다면 스팸 폴더를 확인하세요',
+                'success.confirmButton': '확인'
+            },
+            'th': {
+                'app.title': 'LENSY - เครื่องสแกนราคาสินค้า',
+                'nav.list': 'รายการ',
+                'nav.settings': 'ตั้งค่า',
+                'settings.title': 'ตั้งค่า',
+                'settings.general': 'ทั่วไป',
+                'settings.aiMode': 'โหมด AI',
+                'settings.batchAnalysis': 'วิเคราะห์รูปหลายรูปพร้อมกัน',
+                'settings.theme': 'ธีมมืด',
+                'settings.support': 'สนับสนุน',
+                'settings.language': 'ภาษา',
+                'settings.feedback': 'ข้อเสนอแนะ',
+                'settings.aboutVersion': 'เกี่ยวกับและเวอร์ชัน',
+                'settings.account': 'บัญชี',
+                'settings.logout': 'ออกจากระบบ',
+                'language.title': 'เลือกภาษา',
+                'language.common': 'ใช้บ่อย',
+                'language.asia': 'เอเชีย',
+                'language.europe': 'ยุโรป',
+                'language.other': 'อื่นๆ',
+                'list.search': 'ค้นหารูปภาพ',
+                'list.selectMode': 'เลือก',
+                'list.cancel': 'ยกเลิก',
+                'list.selectAll': 'เลือกทั้งหมด',
+                'list.deleteSelected': 'ลบที่เลือก',
+                'list.empty.title': 'เริ่มสแกนและบันทึก',
+                'list.empty.desc': 'สแกนสินค้าและบันทึกราคา',
+                'camera.scanHint': 'เล็งไปที่สินค้าเพื่อเริ่มสแกน',
+                'ai.title': 'บริการ AI อัจฉริยะ',
+                'ai.uploadText': 'อัพโหลดรูปเพื่อเริ่มแชท AI',
+                'ai.uploadSubtext': 'คลิกไอคอนด้านบนเพื่อเลือกรูป\nเริ่มการวิเคราะห์การสนทนาอัจฉริยะ',
+                'ai.tips.title': '💡 เคล็ดลับการใช้งาน',
+                'ai.tips.content': '• เลือกรูปที่ชัดเจน\n• AI จะวิเคราะห์เนื้อหารูป\n• ให้ข้อมูลเชิงลึกส่วนบุคคล',
+                'settings.membership': 'บริการสมาชิก',
+                'settings.memberStatus': 'สถานะสมาชิก',
+                'settings.memberStatusFree': 'เวอร์ชันฟรี',
+                'settings.remainingScans': 'จำนวนสแกนที่เหลือ',
+                'settings.restorePurchase': 'กู้คืนการซื้อ',
+                'settings.proFeatures': 'ฟีเจอร์ Pro',
+                'settings.aiService': 'บริการ AI อัจฉริยะ',
+                'settings.exportExcel': 'ส่งออกเป็นรายงาน Excel',
+                'settings.batchRecognition': 'จดจำรูปหลายรูปพร้อมกัน',
+                'settings.autoSaveAlbum': 'บันทึกอัตโนมัติไปยังอัลบั้ม',
+                'settings.loginRegister': 'เข้าสู่ระบบ/สมัครสมาชิก',
+                'settings.contactUs': 'ติดต่อเรา',
+                'settings.help': 'ช่วยเหลือ',
+                'settings.about': 'เกี่ยวกับแอป',
+                'settings.appInfo': 'ข้อมูลแอป',
+                'settings.rateApp': 'ให้คะแนนแอป',
+                'settings.shareApp': 'แบ่งปันให้เพื่อน',
+                
+                // Login/Register page
+                'auth.subtitle': 'เครื่องสแกนราคาสินค้าทุกชนิด',
+                'auth.emailLabel': 'ที่อยู่อีเมล',
+                'auth.emailPlaceholder': 'กรอกอีเมลของคุณ',
+                'auth.passwordLabel': 'รหัสผ่าน',
+                'auth.passwordPlaceholder': 'กรอกรหัสผ่านของคุณ',
+                'auth.forgotPassword': 'ลืมรหัสผ่าน?',
+                'auth.loginButton': 'เข้าสู่ระบบ',
+                'auth.registerButton': 'สมัครสมาชิก',
+                'auth.noAccount': 'ยังไม่มีบัญชี?',
+                'auth.hasAccount': 'มีบัญชีแล้ว?',
+                'auth.registerLink': 'สมัครสมาชิก',
+                'auth.loginLink': 'เข้าสู่ระบบ',
+                'auth.or': 'หรือ',
+                'auth.signInWithApple': 'เข้าสู่ระบบด้วย Apple',
+                'auth.signInWithGoogle': 'เข้าสู่ระบบด้วย Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'อัปเกรดแผน',
+                'pro.subtitle': 'ปลดล็อกฟีเจอร์ที่ทรงพลังทั้งหมดสำหรับการสแกนระดับมืออาชีพ',
+                'pro.trialInfo': 'ทดลองใช้ฟรี 3 วัน',
+                'pro.feature1Title': 'บริการ AI อัจฉริยะ',
+                'pro.feature1Desc': 'การจดจำสินค้าและวิเคราะห์ราคาที่แม่นยำยิ่งขึ้น',
+                'pro.feature2Title': 'สแกน 1000 ครั้งต่อเดือน',
+                'pro.feature2Desc': 'ตอบสนองทุกความต้องการในการสแกน',
+                'pro.feature3Title': 'ลบโฆษณาที่น่ารำคาญ',
+                'pro.feature3Desc': 'เพลิดเพลินกับประสบการณ์ที่สะอาดไม่มีสิ่งรบกวน',
+                'pro.feature4Title': 'ส่งออกรายงาน Excel',
+                'pro.feature4Desc': 'รายงานการจัดระเบียบและวิเคราะห์ข้อมูลระดับมืออาชีพ',
+                'pro.feature5Title': 'จดจำรูปภาพแบบแบตช์',
+                'pro.feature5Desc': 'ประมวลผลหลายรูปพร้อมกัน ประหยัดเวลา',
+                'pro.feature6Title': 'บันทึกอัตโนมัติไปยังอัลบั้ม',
+                'pro.feature6Desc': 'สำรองผลการสแกนอัตโนมัติ',
+                'pro.discountBadge': 'ประหยัด 34%',
+                'pro.yearlyPlan': 'แผนรายปี',
+                'pro.monthlyPlan': 'แผนรายเดือน',
+                'pro.perMonth': 'ต่อเดือน',
+                'pro.yearlyTotal': '฿1,188/ปี',
+                'pro.monthlyBilling': 'เรียกเก็บเงินรายเดือน',
+                'pro.startFreeTrial': 'เริ่มทดลองใช้ฟรี',
+                'pro.termsOfUse': 'ข้อกำหนดการใช้งาน',
+                'pro.privacyPolicy': 'นโยบายความเป็นส่วนตัว',
+                'pro.subscriptionTerms': 'ข้อกำหนดการสมัครสมาชิก',
+                'pro.restorePurchase': 'กู้คืนการซื้อ',
+                
+                // Forgot Password page
+                'forgot.title': 'ลืมรหัสผ่าน',
+                'forgot.description': 'กรอกอีเมลที่คุณใช้ลงทะเบียน<br>เราจะส่งลิงก์รีเซ็ตรหัสผ่านให้คุณ',
+                'forgot.emailLabel': 'ที่อยู่อีเมล',
+                'forgot.emailPlaceholder': 'กรอกอีเมลของคุณ',
+                'forgot.continueButton': 'ดำเนินการต่อ',
+                
+                // Success Dialog
+                'success.emailSent': 'ส่งอีเมลแล้ว!',
+                'success.resetMessage': 'ลิงก์รีเซ็ตรหัสผ่านถูกส่งไปยังอีเมลของคุณแล้ว<br>กรุณาตรวจสอบอีเมลและคลิกลิงก์เพื่อรีเซ็ตรหัสผ่าน<br><br>หากไม่ได้รับอีเมล กรุณาตรวจสอบโฟลเดอร์สแปม',
+                'success.confirmButton': 'ตกลง'
+            },
+            'vi': {
+                'app.title': 'LENSY - Máy quét giá vạn vật',
+                'nav.list': 'Danh sách',
+                'nav.settings': 'Cài đặt',
+                'settings.title': 'Cài đặt',
+                'settings.general': 'Chung',
+                'settings.aiMode': 'Chế độ AI',
+                'settings.batchAnalysis': 'Phân tích nhiều ảnh cùng lúc',
+                'settings.theme': 'Giao diện tối',
+                'settings.support': 'Hỗ trợ',
+                'settings.language': 'Ngôn ngữ',
+                'settings.feedback': 'Phản hồi',
+                'settings.aboutVersion': 'Giới thiệu & Phiên bản',
+                'settings.account': 'Tài khoản',
+                'settings.logout': 'Đăng xuất',
+                'language.title': 'Chọn ngôn ngữ',
+                'language.common': 'Thường dùng',
+                'language.asia': 'Châu Á',
+                'language.europe': 'Châu Âu',
+                'language.other': 'Khác',
+                'list.search': 'Tìm kiếm ảnh',
+                'list.selectMode': 'Chọn',
+                'list.cancel': 'Hủy',
+                'list.selectAll': 'Chọn tất cả',
+                'list.deleteSelected': 'Xóa mục đã chọn',
+                'list.empty.title': 'Bắt đầu quét và ghi lại',
+                'list.empty.desc': 'Quét sản phẩm và ghi lại giá cả',
+                'camera.scanHint': 'Hướng vào sản phẩm để bắt đầu quét',
+                'ai.title': 'Dịch vụ AI thông minh',
+                'ai.uploadText': 'Tải ảnh lên để bắt đầu trò chuyện AI',
+                'ai.uploadSubtext': 'Nhấp vào biểu tượng trên để chọn ảnh\nBắt đầu phân tích hội thoại thông minh',
+                'ai.tips.title': '💡 Mẹo sử dụng',
+                'ai.tips.content': '• Chọn ảnh rõ nét\n• AI sẽ phân tích nội dung ảnh\n• Cung cấp thông tin chi tiết cá nhân hóa',
+                'settings.membership': 'Dịch vụ hội viên',
+                'settings.memberStatus': 'Trạng thái hội viên',
+                'settings.memberStatusFree': 'Phiên bản miễn phí',
+                'settings.remainingScans': 'Số lần quét còn lại',
+                'settings.restorePurchase': 'Khôi phục mua hàng',
+                'settings.proFeatures': 'Tính năng Pro',
+                'settings.aiService': 'Dịch vụ AI thông minh',
+                'settings.exportExcel': 'Xuất báo cáo Excel',
+                'settings.batchRecognition': 'Nhận diện nhiều ảnh cùng lúc',
+                'settings.autoSaveAlbum': 'Tự động lưu vào album',
+                'settings.loginRegister': 'Đăng nhập/Đăng ký',
+                'settings.contactUs': 'Liên hệ chúng tôi',
+                'settings.help': 'Trợ giúp',
+                'settings.about': 'Về ứng dụng',
+                'settings.appInfo': 'Thông tin ứng dụng',
+                'settings.rateApp': 'Đánh giá ứng dụng',
+                'settings.shareApp': 'Chia sẻ với bạn bè',
+                
+                // Login/Register page
+                'auth.subtitle': 'Máy quét giá vạn vật',
+                'auth.emailLabel': 'Địa chỉ email',
+                'auth.emailPlaceholder': 'Nhập email của bạn',
+                'auth.passwordLabel': 'Mật khẩu',
+                'auth.passwordPlaceholder': 'Nhập mật khẩu của bạn',
+                'auth.forgotPassword': 'Quên mật khẩu?',
+                'auth.loginButton': 'Đăng nhập',
+                'auth.registerButton': 'Đăng ký',
+                'auth.noAccount': 'Chưa có tài khoản?',
+                'auth.hasAccount': 'Đã có tài khoản?',
+                'auth.registerLink': 'Đăng ký',
+                'auth.loginLink': 'Đăng nhập',
+                'auth.or': 'hoặc',
+                'auth.signInWithApple': 'Đăng nhập bằng Apple',
+                'auth.signInWithGoogle': 'Đăng nhập bằng Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Nâng cấp gói',
+                'pro.subtitle': 'Mở khóa tất cả tính năng mạnh mẽ cho quét chuyên nghiệp',
+                'pro.trialInfo': 'Dùng thử miễn phí 3 ngày',
+                'pro.feature1Title': 'Dịch vụ AI thông minh',
+                'pro.feature1Desc': 'Nhận diện sản phẩm và phân tích giá chính xác hơn',
+                'pro.feature2Title': 'Quét 1000 lần mỗi tháng',
+                'pro.feature2Desc': 'Đáp ứng mọi nhu cầu quét của bạn',
+                'pro.feature3Title': 'Xóa quảng cáo phiền phức',
+                'pro.feature3Desc': 'Tận hưởng trải nghiệm sạch sẽ, không bị gián đoạn',
+                'pro.feature4Title': 'Xuất báo cáo Excel',
+                'pro.feature4Desc': 'Báo cáo tổ chức và phân tích dữ liệu chuyên nghiệp',
+                'pro.feature5Title': 'Nhận diện ảnh hàng loạt',
+                'pro.feature5Desc': 'Xử lý nhiều ảnh cùng lúc, tiết kiệm thời gian',
+                'pro.feature6Title': 'Tự động lưu vào album',
+                'pro.feature6Desc': 'Kết quả quét được sao lưu tự động',
+                'pro.discountBadge': 'Tiết kiệm 34%',
+                'pro.yearlyPlan': 'Gói năm',
+                'pro.monthlyPlan': 'Gói tháng',
+                'pro.perMonth': 'mỗi tháng',
+                'pro.yearlyTotal': '₫1,188/năm',
+                'pro.monthlyBilling': 'Thanh toán hàng tháng',
+                'pro.startFreeTrial': 'Bắt đầu dùng thử miễn phí',
+                'pro.termsOfUse': 'Điều khoản sử dụng',
+                'pro.privacyPolicy': 'Chính sách bảo mật',
+                'pro.subscriptionTerms': 'Điều khoản đăng ký',
+                'pro.restorePurchase': 'Khôi phục mua hàng',
+                
+                // Forgot Password page
+                'forgot.title': 'Quên mật khẩu',
+                'forgot.description': 'Nhập địa chỉ email bạn đã dùng để đăng ký<br>Chúng tôi sẽ gửi cho bạn liên kết đặt lại mật khẩu',
+                'forgot.emailLabel': 'Địa chỉ email',
+                'forgot.emailPlaceholder': 'Nhập email của bạn',
+                'forgot.continueButton': 'Tiếp tục',
+                
+                // Success Dialog
+                'success.emailSent': 'Đã gửi email!',
+                'success.resetMessage': 'Liên kết đặt lại mật khẩu đã được gửi đến hộp thư của bạn<br>Vui lòng kiểm tra email và nhấp vào liên kết để đặt lại mật khẩu<br><br>Nếu không nhận được, hãy kiểm tra thư mục spam',
+                'success.confirmButton': 'OK'
+            },
+            'es': {
+                'app.title': 'LENSY - Escáner Universal de Precios',
+                'nav.list': 'Lista',
+                'nav.settings': 'Ajustes',
+                'settings.title': 'Ajustes',
+                'settings.general': 'General',
+                'settings.aiMode': 'Modo IA',
+                'settings.batchAnalysis': 'Análisis de múltiples fotos',
+                'settings.theme': 'Tema oscuro',
+                'settings.support': 'Soporte',
+                'settings.language': 'Idioma',
+                'settings.feedback': 'Comentarios',
+                'settings.aboutVersion': 'Acerca de y Versión',
+                'settings.account': 'Cuenta',
+                'settings.logout': 'Cerrar sesión',
+                'language.title': 'Seleccionar idioma',
+                'language.common': 'Común',
+                'language.asia': 'Asia',
+                'language.europe': 'Europa',
+                'language.other': 'Otros',
+                'list.search': 'Buscar fotos',
+                'list.selectMode': 'Seleccionar',
+                'list.cancel': 'Cancelar',
+                'list.selectAll': 'Seleccionar todo',
+                'list.deleteSelected': 'Eliminar seleccionados',
+                'list.empty.title': 'Comenzar a escanear y registrar',
+                'list.empty.desc': 'Escanear artículos y registrar precios',
+                'camera.scanHint': 'Alinear artículo para iniciar escaneo',
+                'ai.title': 'Servicio Inteligente IA',
+                'ai.uploadText': 'Subir foto para iniciar chat IA',
+                'ai.uploadSubtext': 'Haz clic en el ícono para seleccionar foto\nIniciar análisis de diálogo inteligente',
+                'ai.tips.title': '💡 Consejos de uso',
+                'ai.tips.content': '• Elige una foto clara\n• IA analizará el contenido\n• Proporciona información personalizada',
+                'settings.membership': 'Membresía',
+                'settings.memberStatus': 'Estado de Miembro',
+                'settings.memberStatusFree': 'Versión Gratuita',
+                'settings.remainingScans': 'Escaneos Restantes',
+                'settings.restorePurchase': 'Restaurar Compra',
+                'settings.proFeatures': 'Funciones Pro',
+                'settings.aiService': 'Servicio Inteligente IA',
+                'settings.exportExcel': 'Exportar a Informe Excel',
+                'settings.batchRecognition': 'Reconocimiento de Fotos por Lotes',
+                'settings.autoSaveAlbum': 'Guardar Automáticamente en Álbum',
+                'settings.loginRegister': 'Iniciar Sesión/Registrarse',
+                'settings.contactUs': 'Contáctanos',
+                'settings.help': 'Ayuda',
+                'settings.about': 'Acerca de la APP',
+                'settings.appInfo': 'Información de la APP',
+                'settings.rateApp': 'Calificar APP',
+                'settings.shareApp': 'Compartir con Amigos',
+                
+                // Login/Register page
+                'auth.subtitle': 'Escáner Universal de Precios',
+                'auth.emailLabel': 'Dirección de Correo',
+                'auth.emailPlaceholder': 'Ingresa tu correo',
+                'auth.passwordLabel': 'Contraseña',
+                'auth.passwordPlaceholder': 'Ingresa tu contraseña',
+                'auth.forgotPassword': '¿Olvidaste tu contraseña?',
+                'auth.loginButton': 'Iniciar Sesión',
+                'auth.registerButton': 'Registrarse',
+                'auth.noAccount': '¿No tienes cuenta?',
+                'auth.hasAccount': '¿Ya tienes cuenta?',
+                'auth.registerLink': 'Registrarse',
+                'auth.loginLink': 'Iniciar Sesión',
+                'auth.or': 'o',
+                'auth.signInWithApple': 'Iniciar sesión con Apple',
+                'auth.signInWithGoogle': 'Iniciar sesión con Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Actualizar Plan',
+                'pro.subtitle': 'Desbloquea todas las funciones poderosas para escaneo profesional',
+                'pro.trialInfo': 'Prueba gratis 3 días',
+                'pro.feature1Title': 'Servicio Inteligente IA',
+                'pro.feature1Desc': 'Reconocimiento de artículos y análisis de precios más precisos',
+                'pro.feature2Title': '1000 Escaneos por Mes',
+                'pro.feature2Desc': 'Satisface todas tus necesidades de escaneo',
+                'pro.feature3Title': 'Eliminar Anuncios Molestos',
+                'pro.feature3Desc': 'Disfruta una experiencia limpia e ininterrumpida',
+                'pro.feature4Title': 'Exportar Informes Excel',
+                'pro.feature4Desc': 'Organización profesional de datos e informes de análisis',
+                'pro.feature5Title': 'Reconocimiento de Fotos por Lotes',
+                'pro.feature5Desc': 'Procesa múltiples fotos a la vez, ahorra tiempo',
+                'pro.feature6Title': 'Guardar Automáticamente en Álbum',
+                'pro.feature6Desc': 'Resultados de escaneo respaldados automáticamente',
+                'pro.discountBadge': 'Ahorra 34%',
+                'pro.yearlyPlan': 'Plan Anual',
+                'pro.monthlyPlan': 'Plan Mensual',
+                'pro.perMonth': 'por mes',
+                'pro.yearlyTotal': '$1,188/año',
+                'pro.monthlyBilling': 'Facturado mensualmente',
+                'pro.startFreeTrial': 'Comenzar Prueba Gratis',
+                'pro.termsOfUse': 'Términos de Uso',
+                'pro.privacyPolicy': 'Política de Privacidad',
+                'pro.subscriptionTerms': 'Términos de Suscripción',
+                'pro.restorePurchase': 'Restaurar Compra',
+                
+                // Forgot Password page
+                'forgot.title': 'Olvidé mi Contraseña',
+                'forgot.description': 'Ingresa el correo que usaste para registrarte<br>Te enviaremos un enlace para restablecer tu contraseña',
+                'forgot.emailLabel': 'Dirección de Correo',
+                'forgot.emailPlaceholder': 'Ingresa tu correo',
+                'forgot.continueButton': 'Continuar',
+                
+                // Success Dialog
+                'success.emailSent': '¡Correo Enviado!',
+                'success.resetMessage': 'El enlace para restablecer la contraseña ha sido enviado a tu correo<br>Por favor revisa tu correo y haz clic en el enlace para restablecer tu contraseña<br><br>Si no lo recibes, revisa tu carpeta de spam',
+                'success.confirmButton': 'OK'
+            },
+            'fr': {
+                'app.title': 'LENSY - Scanner de Prix Universel',
+                'nav.list': 'Liste',
+                'nav.settings': 'Paramètres',
+                'settings.title': 'Paramètres',
+                'settings.general': 'Général',
+                'settings.aiMode': 'Mode IA',
+                'settings.batchAnalysis': 'Analyse de plusieurs photos',
+                'settings.theme': 'Thème sombre',
+                'settings.support': 'Support',
+                'settings.language': 'Langue',
+                'settings.feedback': 'Commentaires',
+                'settings.aboutVersion': 'À propos et Version',
+                'settings.account': 'Compte',
+                'settings.logout': 'Déconnexion',
+                'language.title': 'Sélectionner la langue',
+                'language.common': 'Commun',
+                'language.asia': 'Asie',
+                'language.europe': 'Europe',
+                'language.other': 'Autres',
+                'list.search': 'Rechercher des photos',
+                'list.selectMode': 'Sélectionner',
+                'list.cancel': 'Annuler',
+                'list.selectAll': 'Tout sélectionner',
+                'list.deleteSelected': 'Supprimer la sélection',
+                'list.empty.title': 'Commencer à scanner et enregistrer',
+                'list.empty.desc': 'Scanner des articles et enregistrer les prix',
+                'camera.scanHint': 'Aligner l\'article pour commencer le scan',
+                'ai.title': 'Service IA Intelligent',
+                'ai.uploadText': 'Télécharger photo pour démarrer chat IA',
+                'ai.uploadSubtext': 'Cliquez sur l\'icône pour sélectionner photo\nDémarrer l\'analyse de dialogue intelligent',
+                'ai.tips.title': '💡 Conseils d\'utilisation',
+                'ai.tips.content': '• Choisir une photo claire\n• L\'IA analysera le contenu\n• Fournit des informations personnalisées',
+                'settings.membership': 'Adhésion',
+                'settings.memberStatus': 'Statut de Membre',
+                'settings.memberStatusFree': 'Version Gratuite',
+                'settings.remainingScans': 'Scans Restants',
+                'settings.restorePurchase': 'Restaurer l\'Achat',
+                'settings.proFeatures': 'Fonctionnalités Pro',
+                'settings.aiService': 'Service IA Intelligent',
+                'settings.exportExcel': 'Exporter vers Rapport Excel',
+                'settings.batchRecognition': 'Reconnaissance de Photos par Lots',
+                'settings.autoSaveAlbum': 'Enregistrement Automatique dans l\'Album',
+                'settings.loginRegister': 'Connexion/Inscription',
+                'settings.contactUs': 'Nous Contacter',
+                'settings.help': 'Aide',
+                'settings.about': 'À propos de l\'APP',
+                'settings.appInfo': 'Infos APP',
+                'settings.rateApp': 'Évaluer l\'APP',
+                'settings.shareApp': 'Partager avec des Amis',
+                
+                // Login/Register page
+                'auth.subtitle': 'Scanner de Prix Universel',
+                'auth.emailLabel': 'Adresse Email',
+                'auth.emailPlaceholder': 'Entrez votre email',
+                'auth.passwordLabel': 'Mot de passe',
+                'auth.passwordPlaceholder': 'Entrez votre mot de passe',
+                'auth.forgotPassword': 'Mot de passe oublié?',
+                'auth.loginButton': 'Se Connecter',
+                'auth.registerButton': 'S\'inscrire',
+                'auth.noAccount': 'Pas de compte?',
+                'auth.hasAccount': 'Déjà un compte?',
+                'auth.registerLink': 'S\'inscrire',
+                'auth.loginLink': 'Se Connecter',
+                'auth.or': 'ou',
+                'auth.signInWithApple': 'Se connecter avec Apple',
+                'auth.signInWithGoogle': 'Se connecter avec Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Mettre à Niveau',
+                'pro.subtitle': 'Débloquez toutes les fonctionnalités puissantes pour un scan professionnel',
+                'pro.trialInfo': 'Essai gratuit 3 jours',
+                'pro.feature1Title': 'Service IA Intelligent',
+                'pro.feature1Desc': 'Reconnaissance d\'articles et analyse de prix plus précises',
+                'pro.feature2Title': '1000 Scans par Mois',
+                'pro.feature2Desc': 'Répond à tous vos besoins de scan',
+                'pro.feature3Title': 'Supprimer les Publicités Gênantes',
+                'pro.feature3Desc': 'Profitez d\'une expérience propre et ininterrompue',
+                'pro.feature4Title': 'Exporter des Rapports Excel',
+                'pro.feature4Desc': 'Organisation professionnelle des données et rapports d\'analyse',
+                'pro.feature5Title': 'Reconnaissance de Photos par Lots',
+                'pro.feature5Desc': 'Traiter plusieurs photos à la fois, économiser du temps',
+                'pro.feature6Title': 'Enregistrement Automatique dans l\'Album',
+                'pro.feature6Desc': 'Résultats de scan sauvegardés automatiquement',
+                'pro.discountBadge': 'Économisez 34%',
+                'pro.yearlyPlan': 'Plan Annuel',
+                'pro.monthlyPlan': 'Plan Mensuel',
+                'pro.perMonth': 'par mois',
+                'pro.yearlyTotal': '$1,188/an',
+                'pro.monthlyBilling': 'Facturé mensuellement',
+                'pro.startFreeTrial': 'Commencer l\'Essai Gratuit',
+                'pro.termsOfUse': 'Conditions d\'Utilisation',
+                'pro.privacyPolicy': 'Politique de Confidentialité',
+                'pro.subscriptionTerms': 'Conditions d\'Abonnement',
+                'pro.restorePurchase': 'Restaurer l\'Achat',
+                
+                // Forgot Password page
+                'forgot.title': 'Mot de Passe Oublié',
+                'forgot.description': 'Entrez l\'adresse email utilisée lors de l\'inscription<br>Nous vous enverrons un lien de réinitialisation',
+                'forgot.emailLabel': 'Adresse Email',
+                'forgot.emailPlaceholder': 'Entrez votre email',
+                'forgot.continueButton': 'Continuer',
+                
+                // Success Dialog
+                'success.emailSent': 'Email Envoyé!',
+                'success.resetMessage': 'Le lien de réinitialisation du mot de passe a été envoyé à votre boîte mail<br>Veuillez vérifier votre email et cliquer sur le lien pour réinitialiser votre mot de passe<br><br>Si vous ne le recevez pas, vérifiez votre dossier spam',
+                'success.confirmButton': 'OK'
+            },
+            'de': {
+                'app.title': 'LENSY - Universeller Preisscanner',
+                'nav.list': 'Liste',
+                'nav.settings': 'Einstellungen',
+                'settings.title': 'Einstellungen',
+                'settings.general': 'Allgemein',
+                'settings.aiMode': 'KI-Modus',
+                'settings.batchAnalysis': 'Stapelanalyse mehrerer Fotos',
+                'settings.theme': 'Dunkles Design',
+                'settings.support': 'Unterstützung',
+                'settings.language': 'Sprache',
+                'settings.feedback': 'Feedback',
+                'settings.aboutVersion': 'Über & Version',
+                'settings.account': 'Konto',
+                'settings.logout': 'Abmelden',
+                'language.title': 'Sprache auswählen',
+                'language.common': 'Häufig',
+                'language.asia': 'Asien',
+                'language.europe': 'Europa',
+                'language.other': 'Andere',
+                'list.search': 'Fotos suchen',
+                'list.selectMode': 'Auswählen',
+                'list.cancel': 'Abbrechen',
+                'list.selectAll': 'Alle auswählen',
+                'list.deleteSelected': 'Ausgewählte löschen',
+                'list.empty.title': 'Scannen und Aufzeichnen beginnen',
+                'list.empty.desc': 'Artikel scannen und Preise aufzeichnen',
+                'camera.scanHint': 'Artikel ausrichten um Scan zu starten',
+                'ai.title': 'KI Intelligenter Service',
+                'ai.uploadText': 'Foto hochladen um KI-Chat zu starten',
+                'ai.uploadSubtext': 'Klicken Sie auf das Symbol um Foto auszuwählen\nIntelligente Dialoganalyse starten',
+                'ai.tips.title': '💡 Nutzungstipps',
+                'ai.tips.content': '• Klares Foto wählen\n• KI analysiert Fotoinhalt\n• Bietet personalisierte Einblicke',
+                'settings.membership': 'Mitgliedschaft',
+                'settings.memberStatus': 'Mitgliedsstatus',
+                'settings.memberStatusFree': 'Kostenlose Version',
+                'settings.remainingScans': 'Verbleibende Scans',
+                'settings.restorePurchase': 'Kauf Wiederherstellen',
+                'settings.proFeatures': 'Pro-Funktionen',
+                'settings.aiService': 'KI Intelligenter Service',
+                'settings.exportExcel': 'Als Excel-Bericht Exportieren',
+                'settings.batchRecognition': 'Stapel-Fotoerkennung',
+                'settings.autoSaveAlbum': 'Automatisch im Album Speichern',
+                'settings.loginRegister': 'Anmelden/Registrieren',
+                'settings.contactUs': 'Kontaktiere Uns',
+                'settings.help': 'Hilfe',
+                'settings.about': 'Über die APP',
+                'settings.appInfo': 'APP-Info',
+                'settings.rateApp': 'APP Bewerten',
+                'settings.shareApp': 'Mit Freunden Teilen',
+                
+                // Login/Register page
+                'auth.subtitle': 'Universeller Preisscanner',
+                'auth.emailLabel': 'E-Mail-Adresse',
+                'auth.emailPlaceholder': 'Geben Sie Ihre E-Mail ein',
+                'auth.passwordLabel': 'Passwort',
+                'auth.passwordPlaceholder': 'Geben Sie Ihr Passwort ein',
+                'auth.forgotPassword': 'Passwort vergessen?',
+                'auth.loginButton': 'Anmelden',
+                'auth.registerButton': 'Registrieren',
+                'auth.noAccount': 'Kein Konto?',
+                'auth.hasAccount': 'Bereits ein Konto?',
+                'auth.registerLink': 'Registrieren',
+                'auth.loginLink': 'Anmelden',
+                'auth.or': 'oder',
+                'auth.signInWithApple': 'Mit Apple anmelden',
+                'auth.signInWithGoogle': 'Mit Google anmelden',
+                
+                // Pro Upgrade page
+                'pro.title': 'Plan Upgraden',
+                'pro.subtitle': 'Alle leistungsstarken Funktionen für professionelles Scannen freischalten',
+                'pro.trialInfo': '3 Tage kostenlose Testversion',
+                'pro.feature1Title': 'KI Intelligenter Service',
+                'pro.feature1Desc': 'Genauere Artikelerkennung und Preisanalyse',
+                'pro.feature2Title': '1000 Scans pro Monat',
+                'pro.feature2Desc': 'Erfüllt alle Ihre Scan-Bedürfnisse',
+                'pro.feature3Title': 'Lästige Werbung Entfernen',
+                'pro.feature3Desc': 'Genießen Sie eine saubere, ununterbrochene Erfahrung',
+                'pro.feature4Title': 'Excel-Berichte Exportieren',
+                'pro.feature4Desc': 'Professionelle Datenorganisation und Analyseberichte',
+                'pro.feature5Title': 'Stapel-Fotoerkennung',
+                'pro.feature5Desc': 'Mehrere Fotos gleichzeitig verarbeiten, Zeit sparen',
+                'pro.feature6Title': 'Automatisch im Album Speichern',
+                'pro.feature6Desc': 'Scan-Ergebnisse automatisch gesichert',
+                'pro.discountBadge': '34% Sparen',
+                'pro.yearlyPlan': 'Jahresplan',
+                'pro.monthlyPlan': 'Monatsplan',
+                'pro.perMonth': 'pro Monat',
+                'pro.yearlyTotal': '$1.188/Jahr',
+                'pro.monthlyBilling': 'Monatlich abgerechnet',
+                'pro.startFreeTrial': 'Kostenlose Testversion Starten',
+                'pro.termsOfUse': 'Nutzungsbedingungen',
+                'pro.privacyPolicy': 'Datenschutzrichtlinie',
+                'pro.subscriptionTerms': 'Abonnementbedingungen',
+                'pro.restorePurchase': 'Kauf Wiederherstellen',
+                
+                // Forgot Password page
+                'forgot.title': 'Passwort Vergessen',
+                'forgot.description': 'Geben Sie die E-Mail-Adresse ein, die Sie bei der Registrierung verwendet haben<br>Wir senden Ihnen einen Link zum Zurücksetzen des Passworts',
+                'forgot.emailLabel': 'E-Mail-Adresse',
+                'forgot.emailPlaceholder': 'Geben Sie Ihre E-Mail ein',
+                'forgot.continueButton': 'Weiter',
+                
+                // Success Dialog
+                'success.emailSent': 'E-Mail Gesendet!',
+                'success.resetMessage': 'Der Link zum Zurücksetzen des Passworts wurde an Ihren Posteingang gesendet<br>Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um Ihr Passwort zurückzusetzen<br><br>Wenn Sie ihn nicht erhalten, überprüfen Sie Ihren Spam-Ordner',
+                'success.confirmButton': 'OK'
+            },
+            'it': {
+                'app.title': 'LENSY - Scanner Universale dei Prezzi',
+                'nav.list': 'Lista',
+                'nav.settings': 'Impostazioni',
+                'settings.title': 'Impostazioni',
+                'settings.general': 'Generale',
+                'settings.aiMode': 'Modalità IA',
+                'settings.batchAnalysis': 'Analisi di più foto',
+                'settings.theme': 'Tema scuro',
+                'settings.support': 'Supporto',
+                'settings.language': 'Lingua',
+                'settings.feedback': 'Feedback',
+                'settings.aboutVersion': 'Info e Versione',
+                'settings.account': 'Account',
+                'settings.logout': 'Esci',
+                'language.title': 'Seleziona lingua',
+                'language.common': 'Comune',
+                'language.asia': 'Asia',
+                'language.europe': 'Europa',
+                'language.other': 'Altri',
+                'list.search': 'Cerca foto',
+                'list.selectMode': 'Seleziona',
+                'list.cancel': 'Annulla',
+                'list.selectAll': 'Seleziona tutto',
+                'list.deleteSelected': 'Elimina selezionati',
+                'list.empty.title': 'Inizia a scansionare e registrare',
+                'list.empty.desc': 'Scansiona articoli e registra prezzi',
+                'camera.scanHint': 'Allinea articolo per iniziare scansione',
+                'ai.title': 'Servizio IA Intelligente',
+                'ai.uploadText': 'Carica foto per iniziare chat IA',
+                'ai.uploadSubtext': 'Clicca sull\'icona per selezionare foto\nInizia analisi dialogo intelligente',
+                'ai.tips.title': '💡 Suggerimenti d\'uso',
+                'ai.tips.content': '• Scegli una foto chiara\n• IA analizzerà il contenuto\n• Fornisce approfondimenti personalizzati',
+                'settings.membership': 'Abbonamento',
+                'settings.memberStatus': 'Stato Membro',
+                'settings.memberStatusFree': 'Versione Gratuita',
+                'settings.remainingScans': 'Scansioni Rimanenti',
+                'settings.restorePurchase': 'Ripristina Acquisto',
+                'settings.proFeatures': 'Funzionalità Pro',
+                'settings.aiService': 'Servizio IA Intelligente',
+                'settings.exportExcel': 'Esporta in Report Excel',
+                'settings.batchRecognition': 'Riconoscimento Foto in Batch',
+                'settings.autoSaveAlbum': 'Salvataggio Automatico nell\'Album',
+                'settings.loginRegister': 'Accedi/Registrati',
+                'settings.contactUs': 'Contattaci',
+                'settings.help': 'Aiuto',
+                'settings.about': 'Info sull\'APP',
+                'settings.appInfo': 'Info APP',
+                'settings.rateApp': 'Valuta APP',
+                'settings.shareApp': 'Condividi con Amici',
+                
+                // Login/Register page
+                'auth.subtitle': 'Scanner Universale dei Prezzi',
+                'auth.emailLabel': 'Indirizzo Email',
+                'auth.emailPlaceholder': 'Inserisci la tua email',
+                'auth.passwordLabel': 'Password',
+                'auth.passwordPlaceholder': 'Inserisci la tua password',
+                'auth.forgotPassword': 'Password dimenticata?',
+                'auth.loginButton': 'Accedi',
+                'auth.registerButton': 'Registrati',
+                'auth.noAccount': 'Non hai un account?',
+                'auth.hasAccount': 'Hai già un account?',
+                'auth.registerLink': 'Registrati',
+                'auth.loginLink': 'Accedi',
+                'auth.or': 'o',
+                'auth.signInWithApple': 'Accedi con Apple',
+                'auth.signInWithGoogle': 'Accedi con Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Aggiorna Piano',
+                'pro.subtitle': 'Sblocca tutte le potenti funzionalità per scansione professionale',
+                'pro.trialInfo': 'Prova gratuita 3 giorni',
+                'pro.feature1Title': 'Servizio IA Intelligente',
+                'pro.feature1Desc': 'Riconoscimento articoli e analisi prezzi più accurati',
+                'pro.feature2Title': '1000 Scansioni al Mese',
+                'pro.feature2Desc': 'Soddisfa tutte le tue esigenze di scansione',
+                'pro.feature3Title': 'Rimuovi Pubblicità Fastidiose',
+                'pro.feature3Desc': 'Goditi un\'esperienza pulita e ininterrotta',
+                'pro.feature4Title': 'Esporta Report Excel',
+                'pro.feature4Desc': 'Organizzazione professionale dei dati e report di analisi',
+                'pro.feature5Title': 'Riconoscimento Foto in Batch',
+                'pro.feature5Desc': 'Elabora più foto contemporaneamente, risparmia tempo',
+                'pro.feature6Title': 'Salvataggio Automatico nell\'Album',
+                'pro.feature6Desc': 'Risultati di scansione salvati automaticamente',
+                'pro.discountBadge': 'Risparmia 34%',
+                'pro.yearlyPlan': 'Piano Annuale',
+                'pro.monthlyPlan': 'Piano Mensile',
+                'pro.perMonth': 'al mese',
+                'pro.yearlyTotal': '€1.188/anno',
+                'pro.monthlyBilling': 'Fatturato mensilmente',
+                'pro.startFreeTrial': 'Inizia Prova Gratuita',
+                'pro.termsOfUse': 'Termini di Utilizzo',
+                'pro.privacyPolicy': 'Politica sulla Privacy',
+                'pro.subscriptionTerms': 'Termini di Abbonamento',
+                'pro.restorePurchase': 'Ripristina Acquisto',
+                
+                // Forgot Password page
+                'forgot.title': 'Password Dimenticata',
+                'forgot.description': 'Inserisci l\'indirizzo email usato per registrarti<br>Ti invieremo un link per reimpostare la password',
+                'forgot.emailLabel': 'Indirizzo Email',
+                'forgot.emailPlaceholder': 'Inserisci la tua email',
+                'forgot.continueButton': 'Continua',
+                
+                // Success Dialog
+                'success.emailSent': 'Email Inviata!',
+                'success.resetMessage': 'Il link per reimpostare la password è stato inviato alla tua casella di posta<br>Controlla la tua email e clicca sul link per reimpostare la password<br><br>Se non lo ricevi, controlla la cartella spam',
+                'success.confirmButton': 'OK'
+            },
+            'pt': {
+                'app.title': 'LENSY - Scanner Universal de Preços',
+                'nav.list': 'Lista',
+                'nav.settings': 'Configurações',
+                'settings.title': 'Configurações',
+                'settings.general': 'Geral',
+                'settings.aiMode': 'Modo IA',
+                'settings.batchAnalysis': 'Análise de várias fotos',
+                'settings.theme': 'Tema escuro',
+                'settings.support': 'Suporte',
+                'settings.language': 'Idioma',
+                'settings.feedback': 'Feedback',
+                'settings.aboutVersion': 'Sobre e Versão',
+                'settings.account': 'Conta',
+                'settings.logout': 'Sair',
+                'language.title': 'Selecionar idioma',
+                'language.common': 'Comum',
+                'language.asia': 'Ásia',
+                'language.europe': 'Europa',
+                'language.other': 'Outros',
+                'list.search': 'Pesquisar fotos',
+                'list.selectMode': 'Selecionar',
+                'list.cancel': 'Cancelar',
+                'list.selectAll': 'Selecionar tudo',
+                'list.deleteSelected': 'Excluir selecionados',
+                'list.empty.title': 'Começar a digitalizar e registrar',
+                'list.empty.desc': 'Digitalize itens e registre preços',
+                'camera.scanHint': 'Alinhe item para iniciar digitalização',
+                'ai.title': 'Serviço IA Inteligente',
+                'ai.uploadText': 'Carregar foto para iniciar chat IA',
+                'ai.uploadSubtext': 'Clique no ícone para selecionar foto\nIniciar análise de diálogo inteligente',
+                'ai.tips.title': '💡 Dicas de uso',
+                'ai.tips.content': '• Escolha uma foto clara\n• IA analisará o conteúdo\n• Fornece insights personalizados',
+                'settings.membership': 'Assinatura',
+                'settings.memberStatus': 'Status de Membro',
+                'settings.memberStatusFree': 'Versão Gratuita',
+                'settings.remainingScans': 'Digitalizações Restantes',
+                'settings.restorePurchase': 'Restaurar Compra',
+                'settings.proFeatures': 'Recursos Pro',
+                'settings.aiService': 'Serviço IA Inteligente',
+                'settings.exportExcel': 'Exportar para Relatório Excel',
+                'settings.batchRecognition': 'Reconhecimento de Fotos em Lote',
+                'settings.autoSaveAlbum': 'Salvar Automaticamente no Álbum',
+                'settings.loginRegister': 'Entrar/Registrar',
+                'settings.contactUs': 'Fale Conosco',
+                'settings.help': 'Ajuda',
+                'settings.about': 'Sobre o APP',
+                'settings.appInfo': 'Informações do APP',
+                'settings.rateApp': 'Avaliar APP',
+                'settings.shareApp': 'Compartilhar com Amigos',
+                
+                // Login/Register page
+                'auth.subtitle': 'Scanner Universal de Preços',
+                'auth.emailLabel': 'Endereço de Email',
+                'auth.emailPlaceholder': 'Digite seu email',
+                'auth.passwordLabel': 'Senha',
+                'auth.passwordPlaceholder': 'Digite sua senha',
+                'auth.forgotPassword': 'Esqueceu a senha?',
+                'auth.loginButton': 'Entrar',
+                'auth.registerButton': 'Registrar',
+                'auth.noAccount': 'Não tem conta?',
+                'auth.hasAccount': 'Já tem conta?',
+                'auth.registerLink': 'Registrar',
+                'auth.loginLink': 'Entrar',
+                'auth.or': 'ou',
+                'auth.signInWithApple': 'Entrar com Apple',
+                'auth.signInWithGoogle': 'Entrar com Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Atualizar Plano',
+                'pro.subtitle': 'Desbloqueie todos os recursos poderosos para digitalização profissional',
+                'pro.trialInfo': 'Teste grátis por 3 dias',
+                'pro.feature1Title': 'Serviço IA Inteligente',
+                'pro.feature1Desc': 'Reconhecimento de itens e análise de preços mais precisos',
+                'pro.feature2Title': '1000 Digitalizações por Mês',
+                'pro.feature2Desc': 'Atende todas as suas necessidades de digitalização',
+                'pro.feature3Title': 'Remover Anúncios Irritantes',
+                'pro.feature3Desc': 'Desfrute de uma experiência limpa e ininterrupta',
+                'pro.feature4Title': 'Exportar Relatórios Excel',
+                'pro.feature4Desc': 'Organização profissional de dados e relatórios de análise',
+                'pro.feature5Title': 'Reconhecimento de Fotos em Lote',
+                'pro.feature5Desc': 'Processe várias fotos de uma vez, economize tempo',
+                'pro.feature6Title': 'Salvar Automaticamente no Álbum',
+                'pro.feature6Desc': 'Resultados de digitalização salvos automaticamente',
+                'pro.discountBadge': 'Economize 34%',
+                'pro.yearlyPlan': 'Plano Anual',
+                'pro.monthlyPlan': 'Plano Mensal',
+                'pro.perMonth': 'por mês',
+                'pro.yearlyTotal': 'R$1.188/ano',
+                'pro.monthlyBilling': 'Cobrado mensalmente',
+                'pro.startFreeTrial': 'Iniciar Teste Gratuito',
+                'pro.termsOfUse': 'Termos de Uso',
+                'pro.privacyPolicy': 'Política de Privacidade',
+                'pro.subscriptionTerms': 'Termos de Assinatura',
+                'pro.restorePurchase': 'Restaurar Compra',
+                
+                // Forgot Password page
+                'forgot.title': 'Esqueci a Senha',
+                'forgot.description': 'Digite o endereço de email usado no registro<br>Enviaremos um link para redefinir sua senha',
+                'forgot.emailLabel': 'Endereço de Email',
+                'forgot.emailPlaceholder': 'Digite seu email',
+                'forgot.continueButton': 'Continuar',
+                
+                // Success Dialog
+                'success.emailSent': 'Email Enviado!',
+                'success.resetMessage': 'O link para redefinir a senha foi enviado para sua caixa de entrada<br>Verifique seu email e clique no link para redefinir sua senha<br><br>Se não receber, verifique a pasta de spam',
+                'success.confirmButton': 'OK'
+            },
+            'ar': {
+                'app.title': 'LENSY - ماسح الأسعار العالمي',
+                'nav.list': 'القائمة',
+                'nav.settings': 'الإعدادات',
+                'settings.title': 'الإعدادات',
+                'settings.general': 'عام',
+                'settings.aiMode': 'وضع الذكاء الاصطناعي',
+                'settings.batchAnalysis': 'تحليل عدة صور',
+                'settings.theme': 'المظهر الداكن',
+                'settings.support': 'الدعم',
+                'settings.language': 'اللغة',
+                'settings.feedback': 'التعليقات',
+                'settings.aboutVersion': 'حول والإصدار',
+                'settings.account': 'الحساب',
+                'settings.logout': 'تسجيل الخروج',
+                'language.title': 'اختر اللغة',
+                'language.common': 'شائع',
+                'language.asia': 'آسيا',
+                'language.europe': 'أوروبا',
+                'language.other': 'أخرى',
+                'list.search': 'البحث عن الصور',
+                'list.selectMode': 'تحديد',
+                'list.cancel': 'إلغاء',
+                'list.selectAll': 'تحديد الكل',
+                'list.deleteSelected': 'حذف المحدد',
+                'list.empty.title': 'ابدأ المسح والتسجيل',
+                'list.empty.desc': 'امسح العناصر وسجل الأسعار',
+                'camera.scanHint': 'وجه العنصر لبدء المسح',
+                'ai.title': 'خدمة الذكاء الاصطناعي',
+                'ai.uploadText': 'ارفع صورة لبدء دردشة الذكاء الاصطناعي',
+                'ai.uploadSubtext': 'انقر على الأيقونة لاختيار صورة\nابدأ تحليل الحوار الذكي',
+                'ai.tips.title': '💡 نصائح الاستخدام',
+                'ai.tips.content': '• اختر صورة واضحة\n• سيحلل الذكاء الاصطناعي المحتوى\n• يوفر رؤى مخصصة',
+                'settings.membership': 'العضوية',
+                'settings.memberStatus': 'حالة العضو',
+                'settings.memberStatusFree': 'الإصدار المجاني',
+                'settings.remainingScans': 'عدد المسحات المتبقية',
+                'settings.restorePurchase': 'استعادة الشراء',
+                'settings.proFeatures': 'مميزات Pro',
+                'settings.aiService': 'خدمة الذكاء الاصطناعي الذكية',
+                'settings.exportExcel': 'تصدير إلى تقرير Excel',
+                'settings.batchRecognition': 'التعرف على الصور بالدفعة',
+                'settings.autoSaveAlbum': 'الحفظ التلقائي في الألبوم',
+                'settings.loginRegister': 'تسجيل الدخول/التسجيل',
+                'settings.contactUs': 'اتصل بنا',
+                'settings.help': 'مساعدة',
+                'settings.about': 'حول التطبيق',
+                'settings.appInfo': 'معلومات التطبيق',
+                'settings.rateApp': 'تقييم التطبيق',
+                'settings.shareApp': 'مشاركة مع الأصدقاء',
+                
+                // Login/Register page
+                'auth.subtitle': 'ماسح الأسعار العالمي',
+                'auth.emailLabel': 'عنوان البريد الإلكتروني',
+                'auth.emailPlaceholder': 'أدخل بريدك الإلكتروني',
+                'auth.passwordLabel': 'كلمة المرور',
+                'auth.passwordPlaceholder': 'أدخل كلمة المرور',
+                'auth.forgotPassword': 'نسيت كلمة المرور؟',
+                'auth.loginButton': 'تسجيل الدخول',
+                'auth.registerButton': 'إنشاء حساب',
+                'auth.noAccount': 'ليس لديك حساب؟',
+                'auth.hasAccount': 'لديك حساب بالفعل؟',
+                'auth.registerLink': 'إنشاء حساب',
+                'auth.loginLink': 'تسجيل الدخول',
+                'auth.or': 'أو',
+                'auth.signInWithApple': 'تسجيل الدخول بواسطة Apple',
+                'auth.signInWithGoogle': 'تسجيل الدخول بواسطة Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'ترقية الخطة',
+                'pro.subtitle': 'فتح جميع المزايا القوية للمسح الاحترافي',
+                'pro.trialInfo': 'تجربة مجانية لمدة 3 أيام',
+                'pro.feature1Title': 'خدمة الذكاء الاصطناعي الذكية',
+                'pro.feature1Desc': 'تعرف أكثر دقة على العناصر وتحليل الأسعار',
+                'pro.feature2Title': '1000 مسح شهرياً',
+                'pro.feature2Desc': 'يلبي جميع احتياجاتك في المسح',
+                'pro.feature3Title': 'إزالة الإعلانات المزعجة',
+                'pro.feature3Desc': 'استمتع بتجربة نظيفة وغير منقطعة',
+                'pro.feature4Title': 'تصدير تقارير Excel',
+                'pro.feature4Desc': 'تنظيم البيانات المهني وتقارير التحليل',
+                'pro.feature5Title': 'التعرف على الصور بالدفعة',
+                'pro.feature5Desc': 'معالجة عدة صور في وقت واحد، توفير الوقت',
+                'pro.feature6Title': 'الحفظ التلقائي في الألبوم',
+                'pro.feature6Desc': 'حفظ نتائج المسح تلقائياً',
+                'pro.discountBadge': 'وفر 34%',
+                'pro.yearlyPlan': 'الخطة السنوية',
+                'pro.monthlyPlan': 'الخطة الشهرية',
+                'pro.perMonth': 'شهرياً',
+                'pro.yearlyTotal': '$1,188/سنة',
+                'pro.monthlyBilling': 'فوترة شهرية',
+                'pro.startFreeTrial': 'بدء التجربة المجانية',
+                'pro.termsOfUse': 'شروط الاستخدام',
+                'pro.privacyPolicy': 'سياسة الخصوصية',
+                'pro.subscriptionTerms': 'شروط الاشتراك',
+                'pro.restorePurchase': 'استعادة الشراء',
+                
+                // Forgot Password page
+                'forgot.title': 'نسيت كلمة المرور',
+                'forgot.description': 'أدخل عنوان البريد الإلكتروني الذي استخدمته للتسجيل<br>سنرسل لك رابط إعادة تعيين كلمة المرور',
+                'forgot.emailLabel': 'عنوان البريد الإلكتروني',
+                'forgot.emailPlaceholder': 'أدخل بريدك الإلكتروني',
+                'forgot.continueButton': 'متابعة',
+                
+                // Success Dialog
+                'success.emailSent': 'تم إرسال البريد الإلكتروني!',
+                'success.resetMessage': 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الوارد<br>يرجى التحقق من بريدك الإلكتروني والنقر على الرابط لإعادة تعيين كلمة المرور<br><br>إذا لم تستلمه، تحقق من مجلد البريد العشوائي',
+                'success.confirmButton': 'موافق'
+            },
+            'tr': {
+                'app.title': 'LENSY - Evrensel Fiyat Tarayıcı',
+                'nav.list': 'Liste',
+                'nav.settings': 'Ayarlar',
+                'settings.title': 'Ayarlar',
+                'settings.general': 'Genel',
+                'settings.aiMode': 'AI Modu',
+                'settings.batchAnalysis': 'Çoklu fotoğraf analizi',
+                'settings.theme': 'Koyu tema',
+                'settings.support': 'Destek',
+                'settings.language': 'Dil',
+                'settings.feedback': 'Geri bildirim',
+                'settings.aboutVersion': 'Hakkında ve Sürüm',
+                'settings.account': 'Hesap',
+                'settings.logout': 'Çıkış yap',
+                'language.title': 'Dil seçin',
+                'language.common': 'Yaygın',
+                'language.asia': 'Asya',
+                'language.europe': 'Avrupa',
+                'language.other': 'Diğer',
+                'list.search': 'Fotoğraf ara',
+                'list.selectMode': 'Seç',
+                'list.cancel': 'İptal',
+                'list.selectAll': 'Tümünü seç',
+                'list.deleteSelected': 'Seçilenleri sil',
+                'list.empty.title': 'Taramaya ve kaydetmeye başla',
+                'list.empty.desc': 'Ürünleri tara ve fiyatları kaydet',
+                'camera.scanHint': 'Taramayı başlatmak için ürünü hizala',
+                'ai.title': 'AI Akıllı Hizmet',
+                'ai.uploadText': 'AI sohbeti başlatmak için fotoğraf yükle',
+                'ai.uploadSubtext': 'Fotoğraf seçmek için simgeye tıkla\nAkıllı diyalog analizini başlat',
+                'ai.tips.title': '💡 Kullanım ipuçları',
+                'ai.tips.content': '• Net bir fotoğraf seç\n• AI içeriği analiz edecek\n• Kişiselleştirilmiş içgörüler sağlar',
+                'settings.membership': 'Üyelik',
+                'settings.memberStatus': 'Üye Durumu',
+                'settings.memberStatusFree': 'Ücretsiz Sürüm',
+                'settings.remainingScans': 'Kalan Tarama Sayısı',
+                'settings.restorePurchase': 'Satın Alımı Geri Yükle',
+                'settings.proFeatures': 'Pro Özellikleri',
+                'settings.aiService': 'AI Akıllı Hizmet',
+                'settings.exportExcel': 'Excel Raporuna Aktar',
+                'settings.batchRecognition': 'Toplu Fotoğraf Tanıma',
+                'settings.autoSaveAlbum': 'Albüme Otomatik Kaydet',
+                'settings.loginRegister': 'Giriş Yap/Kayıt Ol',
+                'settings.contactUs': 'Bize Ulaşın',
+                'settings.help': 'Yardım',
+                'settings.about': 'Uygulama Hakkında',
+                'settings.appInfo': 'Uygulama Bilgisi',
+                'settings.rateApp': 'Uygulamayı Değerlendir',
+                'settings.shareApp': 'Arkadaşlarla Paylaş',
+                
+                // Login/Register page
+                'auth.subtitle': 'Evrensel Fiyat Tarayıcı',
+                'auth.emailLabel': 'E-posta Adresi',
+                'auth.emailPlaceholder': 'E-postanızı girin',
+                'auth.passwordLabel': 'Şifre',
+                'auth.passwordPlaceholder': 'Şifrenizi girin',
+                'auth.forgotPassword': 'Şifremi unuttum?',
+                'auth.loginButton': 'Giriş Yap',
+                'auth.registerButton': 'Kayıt Ol',
+                'auth.noAccount': 'Hesabınız yok mu?',
+                'auth.hasAccount': 'Zaten hesabınız var mı?',
+                'auth.registerLink': 'Kayıt Ol',
+                'auth.loginLink': 'Giriş Yap',
+                'auth.or': 'veya',
+                'auth.signInWithApple': 'Apple ile giriş yap',
+                'auth.signInWithGoogle': 'Google ile giriş yap',
+                
+                // Pro Upgrade page
+                'pro.title': 'Planı Yükselt',
+                'pro.subtitle': 'Profesyonel tarama için tüm güçlü özellikleri aç',
+                'pro.trialInfo': '3 gün ücretsiz deneme',
+                'pro.feature1Title': 'AI Akıllı Hizmet',
+                'pro.feature1Desc': 'Daha doğru ürün tanıma ve fiyat analizi',
+                'pro.feature2Title': 'Ayda 1000 Tarama',
+                'pro.feature2Desc': 'Tüm tarama ihtiyaçlarınızı karşılar',
+                'pro.feature3Title': 'Rahatsız Edici Reklamları Kaldır',
+                'pro.feature3Desc': 'Temiz, kesintisiz bir deneyimin tadını çıkarın',
+                'pro.feature4Title': 'Excel Raporlarını Dışa Aktar',
+                'pro.feature4Desc': 'Profesyonel veri organizasyonu ve analiz raporları',
+                'pro.feature5Title': 'Toplu Fotoğraf Tanıma',
+                'pro.feature5Desc': 'Birden fazla fotoğrafı aynı anda işleyin, zaman kazanın',
+                'pro.feature6Title': 'Albüme Otomatik Kaydet',
+                'pro.feature6Desc': 'Tarama sonuçları otomatik olarak yedeklenir',
+                'pro.discountBadge': '%34 Tasarruf',
+                'pro.yearlyPlan': 'Yıllık Plan',
+                'pro.monthlyPlan': 'Aylık Plan',
+                'pro.perMonth': 'aylık',
+                'pro.yearlyTotal': '$1,188/yıl',
+                'pro.monthlyBilling': 'Aylık faturalandırılır',
+                'pro.startFreeTrial': 'Ücretsiz Denemeyi Başlat',
+                'pro.termsOfUse': 'Kullanım Şartları',
+                'pro.privacyPolicy': 'Gizlilik Politikası',
+                'pro.subscriptionTerms': 'Abonelik Şartları',
+                'pro.restorePurchase': 'Satın Alımı Geri Yükle',
+                
+                // Forgot Password page
+                'forgot.title': 'Şifremi Unuttum',
+                'forgot.description': 'Kayıt olurken kullandığınız e-posta adresini girin<br>Size şifre sıfırlama bağlantısı göndereceğiz',
+                'forgot.emailLabel': 'E-posta Adresi',
+                'forgot.emailPlaceholder': 'E-postanızı girin',
+                'forgot.continueButton': 'Devam Et',
+                
+                // Success Dialog
+                'success.emailSent': 'E-posta Gönderildi!',
+                'success.resetMessage': 'Şifre sıfırlama bağlantısı gelen kutunuza gönderildi<br>Lütfen e-postanızı kontrol edin ve şifrenizi sıfırlamak için bağlantıya tıklayın<br><br>Almazsanız, spam klasörünüzü kontrol edin',
+                'success.confirmButton': 'Tamam'
+            },
+            'ru': {
+                'app.title': 'LENSY - Универсальный сканер цен',
+                'nav.list': 'Список',
+                'nav.settings': 'Настройки',
+                'settings.title': 'Настройки',
+                'settings.general': 'Общие',
+                'settings.aiMode': 'Режим ИИ',
+                'settings.batchAnalysis': 'Анализ нескольких фотографий',
+                'settings.theme': 'Темная тема',
+                'settings.support': 'Поддержка',
+                'settings.language': 'Язык',
+                'settings.feedback': 'Обратная связь',
+                'settings.aboutVersion': 'О программе и версия',
+                'settings.account': 'Аккаунт',
+                'settings.logout': 'Выйти',
+                'language.title': 'Выберите язык',
+                'language.common': 'Часто используемые',
+                'language.asia': 'Азия',
+                'language.europe': 'Европа',
+                'language.other': 'Другие',
+                'list.search': 'Поиск фотографий',
+                'list.selectMode': 'Выбрать',
+                'list.cancel': 'Отмена',
+                'list.selectAll': 'Выбрать все',
+                'list.deleteSelected': 'Удалить выбранные',
+                'list.empty.title': 'Начать сканирование и запись',
+                'list.empty.desc': 'Сканируйте товары и записывайте цены',
+                'camera.scanHint': 'Наведите на товар для начала сканирования',
+                'ai.title': 'ИИ Умный сервис',
+                'ai.uploadText': 'Загрузите фото для начала ИИ-чата',
+                'ai.uploadSubtext': 'Нажмите на значок, чтобы выбрать фото\nНачать интеллектуальный анализ диалога',
+                'ai.tips.title': '💡 Советы по использованию',
+                'ai.tips.content': '• Выберите четкое фото\n• ИИ проанализирует содержимое\n• Предоставит персонализированные данные',
+                'settings.membership': 'Членство',
+                'settings.memberStatus': 'Статус участника',
+                'settings.memberStatusFree': 'Бесплатная версия',
+                'settings.remainingScans': 'Оставшиеся сканирования',
+                'settings.restorePurchase': 'Восстановить покупку',
+                'settings.proFeatures': 'Функции Pro',
+                'settings.aiService': 'ИИ Умный сервис',
+                'settings.exportExcel': 'Экспорт в Excel отчет',
+                'settings.batchRecognition': 'Пакетное распознавание фото',
+                'settings.autoSaveAlbum': 'Автосохранение в альбом',
+                'settings.loginRegister': 'Войти/Регистрация',
+                'settings.contactUs': 'Связаться с нами',
+                'settings.help': 'Помощь',
+                'settings.about': 'О приложении',
+                'settings.appInfo': 'Информация о приложении',
+                'settings.rateApp': 'Оценить приложение',
+                'settings.shareApp': 'Поделиться с друзьями',
+                
+                // Login/Register page
+                'auth.subtitle': 'Универсальный сканер цен',
+                'auth.emailLabel': 'Адрес электронной почты',
+                'auth.emailPlaceholder': 'Введите ваш email',
+                'auth.passwordLabel': 'Пароль',
+                'auth.passwordPlaceholder': 'Введите ваш пароль',
+                'auth.forgotPassword': 'Забыли пароль?',
+                'auth.loginButton': 'Войти',
+                'auth.registerButton': 'Зарегистрироваться',
+                'auth.noAccount': 'Нет аккаунта?',
+                'auth.hasAccount': 'Уже есть аккаунт?',
+                'auth.registerLink': 'Зарегистрироваться',
+                'auth.loginLink': 'Войти',
+                'auth.or': 'или',
+                'auth.signInWithApple': 'Войти через Apple',
+                'auth.signInWithGoogle': 'Войти через Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Обновить план',
+                'pro.subtitle': 'Разблокируйте все мощные функции для профессионального сканирования',
+                'pro.trialInfo': '3 дня бесплатной пробной версии',
+                'pro.feature1Title': 'ИИ Умный сервис',
+                'pro.feature1Desc': 'Более точное распознавание товаров и анализ цен',
+                'pro.feature2Title': '1000 сканирований в месяц',
+                'pro.feature2Desc': 'Удовлетворяет все ваши потребности в сканировании',
+                'pro.feature3Title': 'Удалить надоедливую рекламу',
+                'pro.feature3Desc': 'Наслаждайтесь чистым, непрерывным опытом',
+                'pro.feature4Title': 'Экспорт Excel отчетов',
+                'pro.feature4Desc': 'Профессиональная организация данных и аналитические отчеты',
+                'pro.feature5Title': 'Пакетное распознавание фото',
+                'pro.feature5Desc': 'Обрабатывайте несколько фото сразу, экономьте время',
+                'pro.feature6Title': 'Автосохранение в альбом',
+                'pro.feature6Desc': 'Результаты сканирования автоматически сохраняются',
+                'pro.discountBadge': 'Скидка 34%',
+                'pro.yearlyPlan': 'Годовой план',
+                'pro.monthlyPlan': 'Месячный план',
+                'pro.perMonth': 'в месяц',
+                'pro.yearlyTotal': '$1,188/год',
+                'pro.monthlyBilling': 'Ежемесячная оплата',
+                'pro.startFreeTrial': 'Начать бесплатную пробную версию',
+                'pro.termsOfUse': 'Условия использования',
+                'pro.privacyPolicy': 'Политика конфиденциальности',
+                'pro.subscriptionTerms': 'Условия подписки',
+                'pro.restorePurchase': 'Восстановить покупку',
+                
+                // Forgot Password page
+                'forgot.title': 'Забыли пароль',
+                'forgot.description': 'Введите адрес электронной почты, использованный при регистрации<br>Мы отправим вам ссылку для сброса пароля',
+                'forgot.emailLabel': 'Адрес электронной почты',
+                'forgot.emailPlaceholder': 'Введите ваш email',
+                'forgot.continueButton': 'Продолжить',
+                
+                // Success Dialog
+                'success.emailSent': 'Письмо отправлено!',
+                'success.resetMessage': 'Ссылка для сброса пароля отправлена на вашу почту<br>Пожалуйста, проверьте вашу электронную почту и нажмите на ссылку для сброса пароля<br><br>Если вы не получили письмо, проверьте папку со спамом',
+                'success.confirmButton': 'ОК'
+            },
+            'id': {
+                'app.title': 'LENSY - Pemindai Harga Universal',
+                'nav.list': 'Daftar',
+                'nav.settings': 'Pengaturan',
+                'settings.title': 'Pengaturan',
+                'settings.general': 'Umum',
+                'settings.aiMode': 'Mode AI',
+                'settings.batchAnalysis': 'Analisis banyak foto',
+                'settings.theme': 'Tema gelap',
+                'settings.support': 'Dukungan',
+                'settings.language': 'Bahasa',
+                'settings.feedback': 'Masukan',
+                'settings.aboutVersion': 'Tentang & Versi',
+                'settings.account': 'Akun',
+                'settings.logout': 'Keluar',
+                'language.title': 'Pilih bahasa',
+                'language.common': 'Umum',
+                'language.asia': 'Asia',
+                'language.europe': 'Eropa',
+                'language.other': 'Lainnya',
+                'list.search': 'Cari foto',
+                'list.selectMode': 'Pilih',
+                'list.cancel': 'Batal',
+                'list.selectAll': 'Pilih semua',
+                'list.deleteSelected': 'Hapus yang dipilih',
+                'list.empty.title': 'Mulai memindai dan merekam',
+                'list.empty.desc': 'Pindai barang dan catat harga',
+                'camera.scanHint': 'Arahkan ke barang untuk mulai memindai',
+                'ai.title': 'Layanan AI Cerdas',
+                'ai.uploadText': 'Unggah foto untuk mulai obrolan AI',
+                'ai.uploadSubtext': 'Klik ikon untuk memilih foto\nMulai analisis dialog cerdas',
+                'ai.tips.title': '💡 Tips penggunaan',
+                'ai.tips.content': '• Pilih foto yang jelas\n• AI akan menganalisis konten\n• Memberikan wawasan personal',
+                'settings.membership': 'Keanggotaan',
+                'settings.memberStatus': 'Status Anggota',
+                'settings.memberStatusFree': 'Versi Gratis',
+                'settings.remainingScans': 'Sisa Pemindaian',
+                'settings.restorePurchase': 'Pulihkan Pembelian',
+                'settings.proFeatures': 'Fitur Pro',
+                'settings.aiService': 'Layanan AI Cerdas',
+                'settings.exportExcel': 'Ekspor ke Laporan Excel',
+                'settings.batchRecognition': 'Pengenalan Foto Batch',
+                'settings.autoSaveAlbum': 'Simpan Otomatis ke Album',
+                'settings.loginRegister': 'Masuk/Daftar',
+                'settings.contactUs': 'Hubungi Kami',
+                'settings.help': 'Bantuan',
+                'settings.about': 'Tentang APP',
+                'settings.appInfo': 'Info APP',
+                'settings.rateApp': 'Nilai APP',
+                'settings.shareApp': 'Bagikan ke Teman',
+                
+                // Login/Register page
+                'auth.subtitle': 'Pemindai Harga Universal',
+                'auth.emailLabel': 'Alamat Email',
+                'auth.emailPlaceholder': 'Masukkan email Anda',
+                'auth.passwordLabel': 'Kata Sandi',
+                'auth.passwordPlaceholder': 'Masukkan kata sandi Anda',
+                'auth.forgotPassword': 'Lupa kata sandi?',
+                'auth.loginButton': 'Masuk',
+                'auth.registerButton': 'Daftar',
+                'auth.noAccount': 'Belum punya akun?',
+                'auth.hasAccount': 'Sudah punya akun?',
+                'auth.registerLink': 'Daftar',
+                'auth.loginLink': 'Masuk',
+                'auth.or': 'atau',
+                'auth.signInWithApple': 'Masuk dengan Apple',
+                'auth.signInWithGoogle': 'Masuk dengan Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'Tingkatkan Paket',
+                'pro.subtitle': 'Buka semua fitur canggih untuk pemindaian profesional',
+                'pro.trialInfo': 'Uji coba gratis 3 hari',
+                'pro.feature1Title': 'Layanan AI Cerdas',
+                'pro.feature1Desc': 'Pengenalan barang dan analisis harga yang lebih akurat',
+                'pro.feature2Title': '1000 Pemindaian per Bulan',
+                'pro.feature2Desc': 'Memenuhi semua kebutuhan pemindaian Anda',
+                'pro.feature3Title': 'Hapus Iklan Mengganggu',
+                'pro.feature3Desc': 'Nikmati pengalaman bersih dan tanpa gangguan',
+                'pro.feature4Title': 'Ekspor Laporan Excel',
+                'pro.feature4Desc': 'Organisasi data profesional dan laporan analisis',
+                'pro.feature5Title': 'Pengenalan Foto Batch',
+                'pro.feature5Desc': 'Proses beberapa foto sekaligus, hemat waktu',
+                'pro.feature6Title': 'Simpan Otomatis ke Album',
+                'pro.feature6Desc': 'Hasil pemindaian dicadangkan otomatis',
+                'pro.discountBadge': 'Hemat 34%',
+                'pro.yearlyPlan': 'Paket Tahunan',
+                'pro.monthlyPlan': 'Paket Bulanan',
+                'pro.perMonth': 'per bulan',
+                'pro.yearlyTotal': 'Rp1.188.000/tahun',
+                'pro.monthlyBilling': 'Ditagih bulanan',
+                'pro.startFreeTrial': 'Mulai Uji Coba Gratis',
+                'pro.termsOfUse': 'Syarat Penggunaan',
+                'pro.privacyPolicy': 'Kebijakan Privasi',
+                'pro.subscriptionTerms': 'Ketentuan Berlangganan',
+                'pro.restorePurchase': 'Pulihkan Pembelian',
+                
+                // Forgot Password page
+                'forgot.title': 'Lupa Kata Sandi',
+                'forgot.description': 'Masukkan alamat email yang Anda gunakan untuk mendaftar<br>Kami akan mengirimkan tautan reset kata sandi',
+                'forgot.emailLabel': 'Alamat Email',
+                'forgot.emailPlaceholder': 'Masukkan email Anda',
+                'forgot.continueButton': 'Lanjutkan',
+                
+                // Success Dialog
+                'success.emailSent': 'Email Terkirim!',
+                'success.resetMessage': 'Tautan reset kata sandi telah dikirim ke kotak masuk Anda<br>Silakan periksa email Anda dan klik tautan untuk mereset kata sandi<br><br>Jika tidak menerima, periksa folder spam Anda',
+                'success.confirmButton': 'OK'
+            },
+            'tl': {
+                'app.title': 'LENSY - Universal na Scanner ng Presyo',
+                'nav.list': 'Listahan',
+                'nav.settings': 'Mga Setting',
+                'settings.title': 'Mga Setting',
+                'settings.general': 'Pangkalahatan',
+                'settings.aiMode': 'AI Mode',
+                'settings.batchAnalysis': 'Pagsusuri ng maraming larawan',
+                'settings.theme': 'Madilim na tema',
+                'settings.support': 'Suporta',
+                'settings.language': 'Wika',
+                'settings.feedback': 'Feedback',
+                'settings.aboutVersion': 'Tungkol at Bersyon',
+                'settings.account': 'Account',
+                'settings.logout': 'Mag-logout',
+                'language.title': 'Piliin ang wika',
+                'language.common': 'Karaniwan',
+                'language.asia': 'Asya',
+                'language.europe': 'Europa',
+                'language.other': 'Iba pa',
+                'list.search': 'Maghanap ng mga larawan',
+                'list.selectMode': 'Piliin',
+                'list.cancel': 'Kanselahin',
+                'list.selectAll': 'Piliin lahat',
+                'list.deleteSelected': 'Burahin ang napili',
+                'list.empty.title': 'Simulan ang pag-scan at pagtala',
+                'list.empty.desc': 'I-scan ang mga item at itala ang presyo',
+                'camera.scanHint': 'Itutok sa item para simulan ang pag-scan',
+                'ai.title': 'AI Matalinong Serbisyo',
+                'ai.uploadText': 'Mag-upload ng larawan para simulan AI chat',
+                'ai.uploadSubtext': 'I-click ang icon para pumili ng larawan\nSimulan ang matalinong pagsusuri ng diyalogo',
+                'ai.tips.title': '💡 Mga tip sa paggamit',
+                'ai.tips.content': '• Pumili ng malinaw na larawan\n• Susuriin ng AI ang nilalaman\n• Magbibigay ng personal na insight',
+                'settings.membership': 'Membership',
+                'settings.memberStatus': 'Katayuan ng Miyembro',
+                'settings.memberStatusFree': 'Libreng Bersyon',
+                'settings.remainingScans': 'Natitirang Pag-scan',
+                'settings.restorePurchase': 'Ibalik ang Pagbili',
+                'settings.proFeatures': 'Mga Feature ng Pro',
+                'settings.aiService': 'AI Matalinong Serbisyo',
+                'settings.exportExcel': 'I-export sa Excel Report',
+                'settings.batchRecognition': 'Batch na Pagkilala ng Larawan',
+                'settings.autoSaveAlbum': 'Awtomatikong I-save sa Album',
+                'settings.loginRegister': 'Mag-login/Mag-rehistro',
+                'settings.contactUs': 'Makipag-ugnayan sa Amin',
+                'settings.help': 'Tulong',
+                'settings.about': 'Tungkol sa APP',
+                'settings.appInfo': 'Impormasyon ng APP',
+                'settings.rateApp': 'I-rate ang APP',
+                'settings.shareApp': 'Ibahagi sa mga Kaibigan',
+                
+                // Login/Register page
+                'auth.subtitle': 'Universal na Scanner ng Presyo',
+                'auth.emailLabel': 'Email Address',
+                'auth.emailPlaceholder': 'Ilagay ang iyong email',
+                'auth.passwordLabel': 'Password',
+                'auth.passwordPlaceholder': 'Ilagay ang iyong password',
+                'auth.forgotPassword': 'Nakalimutan ang password?',
+                'auth.loginButton': 'Mag-sign In',
+                'auth.registerButton': 'Mag-sign Up',
+                'auth.noAccount': 'Wala pang account?',
+                'auth.hasAccount': 'May account na?',
+                'auth.registerLink': 'Mag-sign Up',
+                'auth.loginLink': 'Mag-sign In',
+                'auth.or': 'o',
+                'auth.signInWithApple': 'Mag-sign in gamit ang Apple',
+                'auth.signInWithGoogle': 'Mag-sign in gamit ang Google',
+                
+                // Pro Upgrade page
+                'pro.title': 'I-upgrade ang Plano',
+                'pro.subtitle': 'I-unlock ang lahat ng makapangyarihang features para sa propesyonal na pag-scan',
+                'pro.trialInfo': '3 araw na libreng pagsubok',
+                'pro.feature1Title': 'AI Matalinong Serbisyo',
+                'pro.feature1Desc': 'Mas tumpak na pagkilala ng item at pagsusuri ng presyo',
+                'pro.feature2Title': '1000 Pag-scan bawat Buwan',
+                'pro.feature2Desc': 'Nakakatugon sa lahat ng iyong pangangailangan sa pag-scan',
+                'pro.feature3Title': 'Alisin ang Nakakaistorbong Ads',
+                'pro.feature3Desc': 'Mag-enjoy ng malinis at walang sagabal na karanasan',
+                'pro.feature4Title': 'I-export ang Excel Reports',
+                'pro.feature4Desc': 'Propesyonal na organisasyon ng data at ulat ng pagsusuri',
+                'pro.feature5Title': 'Batch na Pagkilala ng Larawan',
+                'pro.feature5Desc': 'Iproseso ang maraming larawan nang sabay-sabay, makatipid ng oras',
+                'pro.feature6Title': 'Awtomatikong I-save sa Album',
+                'pro.feature6Desc': 'Ang mga resulta ng pag-scan ay awtomatikong naka-backup',
+                'pro.discountBadge': 'Makatipid ng 34%',
+                'pro.yearlyPlan': 'Taunang Plano',
+                'pro.monthlyPlan': 'Buwanang Plano',
+                'pro.perMonth': 'bawat buwan',
+                'pro.yearlyTotal': '₱1,188/taon',
+                'pro.monthlyBilling': 'Sinisingil buwan-buwan',
+                'pro.startFreeTrial': 'Simulan ang Libreng Pagsubok',
+                'pro.termsOfUse': 'Mga Tuntunin ng Paggamit',
+                'pro.privacyPolicy': 'Patakaran sa Privacy',
+                'pro.subscriptionTerms': 'Mga Tuntunin ng Subscription',
+                'pro.restorePurchase': 'Ibalik ang Pagbili',
+                
+                // Forgot Password page
+                'forgot.title': 'Nakalimutan ang Password',
+                'forgot.description': 'Ilagay ang email address na ginamit mo sa pag-register<br>Padadalhan ka namin ng link para i-reset ang password',
+                'forgot.emailLabel': 'Email Address',
+                'forgot.emailPlaceholder': 'Ilagay ang iyong email',
+                'forgot.continueButton': 'Magpatuloy',
+                
+                // Success Dialog
+                'success.emailSent': 'Naipadala na ang Email!',
+                'success.resetMessage': 'Naipadala na ang password reset link sa iyong inbox<br>Pakicheck ang iyong email at i-click ang link para i-reset ang password<br><br>Kung hindi mo natanggap, tingnan ang spam folder',
+                'success.confirmButton': 'OK'
+            }
+        };
+        
+        // 獲取當前語言
+        function getCurrentLanguage() {
+            return localStorage.getItem('appLanguage') || 'zh-TW';
+        }
+        
+        // 翻譯函數
+        function t(key) {
+            const lang = getCurrentLanguage();
+            return i18n[lang]?.[key] || i18n['zh-TW'][key] || key;
+        }
+        
+        // 更新頁面所有文字
+        function updatePageTexts() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = t(key);
+                
+                // 檢查是否包含換行符，如果有則使用 innerHTML
+                if (text.includes('\n')) {
+                    el.innerHTML = text.replace(/\n/g, '<br>');
+                } else {
+                    el.textContent = text;
+                }
+            });
+            
+            // 更新特殊元素
+            document.title = t('app.title');
+            
+            // 更新 placeholder
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.placeholder = t('list.search');
+            }
+            
+            // 更新所有 data-i18n-placeholder 屬性
+            const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+            placeholderElements.forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = t(key);
+            });
+            
+            // 更新選擇按鈕文字
+            const selectBtn = document.getElementById('selectBtn');
+            if (selectBtn && !isSelectMode) {
+                selectBtn.textContent = t('list.selectMode');
+            }
+        }
+        
+        // 顯示語言選擇器
+        function showLanguageSelector() {
+            const languagePage = document.getElementById('languageSelectorPage');
+            languagePage.classList.add('active');
+            
+            // 更新當前語言的勾選狀態
+            const currentLang = getCurrentLanguage();
+            document.querySelectorAll('.language-check').forEach(check => {
+                check.classList.remove('active');
+            });
+            const currentCheck = document.querySelector(`.language-check[data-lang="${currentLang}"]`);
+            if (currentCheck) {
+                currentCheck.classList.add('active');
+            }
+        }
+        
+        // 關閉語言選擇器
+        function closeLanguageSelector() {
+            const languagePage = document.getElementById('languageSelectorPage');
+            languagePage.classList.remove('active');
+        }
+        
+        // 改變語言
+        function changeLanguage(lang) {
+            // 保存語言設置
+            localStorage.setItem('appLanguage', lang);
+            
+            // 更新勾選狀態
+            document.querySelectorAll('.language-check').forEach(check => {
+                check.classList.remove('active');
+            });
+            const newCheck = document.querySelector(`.language-check[data-lang="${lang}"]`);
+            if (newCheck) {
+                newCheck.classList.add('active');
+            }
+            
+            // 更新頁面文字
+            updatePageTexts();
+            
+            // 更新價格顯示（如果 PRO 頁面開啟）
+            if (proUpgradePage.classList.contains('active')) {
+                updatePricingDisplay();
+            }
+            
+            // 關閉語言選擇器
+            setTimeout(() => {
+                closeLanguageSelector();
+            }, 300);
+        }
+        
+        // 頁面載入時初始化語言
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePageTexts();
+        });
     </script>
 </body>
 </html>
