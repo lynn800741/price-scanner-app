@@ -3911,7 +3911,7 @@
             // 逐一分析圖片
             for (let i = 0; i < imageFiles.length; i++) {
                 const file = imageFiles[i];
-                loadingText.textContent = `正在分析第 ${i + 1} / ${imageFiles.length} 張圖片...`;
+                loadingText.textContent = t('common.batchAnalyzing').replace('{current}', i + 1).replace('{total}', imageFiles.length);
                 
                 try {
                     // 讀取圖片
@@ -5509,7 +5509,8 @@
                 // AI 分析
                 'common.aiAnalyzing': 'AI 正在分析中...',
                 'common.aiAnalyzingTitle': 'AI 正在分析中',
-                'common.aiAnalyzingDesc': '正在深度理解圖片內容...'
+                'common.aiAnalyzingDesc': '正在深度理解圖片內容...',
+                'common.batchAnalyzing': '正在分析第 {current} / {total} 張圖片...'
             },
             'zh-CN': {
                 'app.title': 'LENSY - 万物价格扫描器',
@@ -5622,7 +5623,8 @@
                 // AI 分析
                 'common.aiAnalyzing': 'AI 正在分析中...',
                 'common.aiAnalyzingTitle': 'AI 正在分析中',
-                'common.aiAnalyzingDesc': '正在深度理解图片内容...'
+                'common.aiAnalyzingDesc': '正在深度理解图片内容...',
+                'common.batchAnalyzing': '正在分析第 {current} / {total} 张图片...'
             },
             'en': {
                 'app.title': 'LENSY - Universal Price Scanner',
@@ -5735,7 +5737,8 @@
                 // AI Analysis
                 'common.aiAnalyzing': 'AI is analyzing...',
                 'common.aiAnalyzingTitle': 'AI is analyzing',
-                'common.aiAnalyzingDesc': 'Understanding image content...'
+                'common.aiAnalyzingDesc': 'Understanding image content...',
+                'common.batchAnalyzing': 'Analyzing image {current} of {total}...'
             },
             'ja': {
                 'app.title': 'LENSY - 万物価格スキャナー',
@@ -5848,7 +5851,8 @@
                 // AI 分析
                 'common.aiAnalyzing': 'AI分析中...',
                 'common.aiAnalyzingTitle': 'AI分析中',
-                'common.aiAnalyzingDesc': '画像内容を深く理解しています...'
+                'common.aiAnalyzingDesc': '画像内容を深く理解しています...',
+                'common.batchAnalyzing': '{current} / {total} 枚目の画像を分析中...'
             },
             'ko': {
                 'app.title': 'LENSY - 만물 가격 스캐너',
@@ -5961,7 +5965,8 @@
                 // AI 분석
                 'common.aiAnalyzing': 'AI가 분석 중입니다...',
                 'common.aiAnalyzingTitle': 'AI가 분석 중입니다',
-                'common.aiAnalyzingDesc': '이미지 내용을 이해하고 있습니다...'
+                'common.aiAnalyzingDesc': '이미지 내용을 이해하고 있습니다...',
+                'common.batchAnalyzing': '{current} / {total} 번째 이미지 분석 중...'
             },
             'th': {
                 'app.title': 'LENSY - เครื่องสแกนราคาสินค้า',
@@ -6074,7 +6079,8 @@
                 // การวิเคราะห์ AI
                 'common.aiAnalyzing': 'AI กำลังวิเคราะห์...',
                 'common.aiAnalyzingTitle': 'AI กำลังวิเคราะห์',
-                'common.aiAnalyzingDesc': 'กำลังทำความเข้าใจเนื้อหารูปภาพ...'
+                'common.aiAnalyzingDesc': 'กำลังทำความเข้าใจเนื้อหารูปภาพ...',
+                'common.batchAnalyzing': 'กำลังวิเคราะห์รูปภาพที่ {current} จาก {total}...'
             },
             'vi': {
                 'app.title': 'LENSY - Máy quét giá vạn vật',
@@ -6187,7 +6193,8 @@
                 // Phân tích AI
                 'common.aiAnalyzing': 'AI đang phân tích...',
                 'common.aiAnalyzingTitle': 'AI đang phân tích',
-                'common.aiAnalyzingDesc': 'Đang hiểu nội dung hình ảnh...'
+                'common.aiAnalyzingDesc': 'Đang hiểu nội dung hình ảnh...',
+                'common.batchAnalyzing': 'Đang phân tích hình ảnh {current} / {total}...'
             },
             'es': {
                 'app.title': 'LENSY - Escáner Universal de Precios',
@@ -6300,7 +6307,8 @@
                 // Análisis de IA
                 'common.aiAnalyzing': 'IA analizando...',
                 'common.aiAnalyzingTitle': 'IA analizando',
-                'common.aiAnalyzingDesc': 'Comprendiendo el contenido de la imagen...'
+                'common.aiAnalyzingDesc': 'Comprendiendo el contenido de la imagen...',
+                'common.batchAnalyzing': 'Analizando imagen {current} de {total}...'
             },
             'fr': {
                 'app.title': 'LENSY - Scanner de Prix Universel',
@@ -6413,7 +6421,8 @@
                 // Analyse IA
                 'common.aiAnalyzing': 'L\'IA analyse...',
                 'common.aiAnalyzingTitle': 'L\'IA analyse',
-                'common.aiAnalyzingDesc': 'Comprendre le contenu de l\'image...'
+                'common.aiAnalyzingDesc': 'Comprendre le contenu de l\'image...',
+                'common.batchAnalyzing': 'Analyse de l\'image {current} sur {total}...'
             },
             'de': {
                 'app.title': 'LENSY - Universeller Preisscanner',
@@ -6526,7 +6535,8 @@
                 // KI-Analyse
                 'common.aiAnalyzing': 'KI analysiert...',
                 'common.aiAnalyzingTitle': 'KI analysiert',
-                'common.aiAnalyzingDesc': 'Bildinhalt verstehen...'
+                'common.aiAnalyzingDesc': 'Bildinhalt verstehen...',
+                'common.batchAnalyzing': 'Analysiere Bild {current} von {total}...'
             },
             'it': {
                 'app.title': 'LENSY - Scanner Universale dei Prezzi',
@@ -6639,7 +6649,8 @@
                 // Analisi AI
                 'common.aiAnalyzing': 'L\'IA sta analizzando...',
                 'common.aiAnalyzingTitle': 'L\'IA sta analizzando',
-                'common.aiAnalyzingDesc': 'Comprensione del contenuto dell\'immagine...'
+                'common.aiAnalyzingDesc': 'Comprensione del contenuto dell\'immagine...',
+                'common.batchAnalyzing': 'Analizzando immagine {current} di {total}...'
             },
             'pt': {
                 'app.title': 'LENSY - Scanner Universal de Preços',
@@ -6752,7 +6763,8 @@
                 // Análise de IA
                 'common.aiAnalyzing': 'IA analisando...',
                 'common.aiAnalyzingTitle': 'IA analisando',
-                'common.aiAnalyzingDesc': 'Compreendendo o conteúdo da imagem...'
+                'common.aiAnalyzingDesc': 'Compreendendo o conteúdo da imagem...',
+                'common.batchAnalyzing': 'Analisando imagem {current} de {total}...'
             },
             'ar': {
                 'app.title': 'LENSY - ماسح الأسعار العالمي',
@@ -6865,7 +6877,8 @@
                 // تحليل الذكاء الاصطناعي
                 'common.aiAnalyzing': 'جارٍ التحليل بواسطة الذكاء الاصطناعي...',
                 'common.aiAnalyzingTitle': 'جارٍ التحليل بواسطة الذكاء الاصطناعي',
-                'common.aiAnalyzingDesc': 'فهم محتوى الصورة...'
+                'common.aiAnalyzingDesc': 'فهم محتوى الصورة...',
+                'common.batchAnalyzing': 'تحليل الصورة {current} من {total}...'
             },
             'tr': {
                 'app.title': 'LENSY - Evrensel Fiyat Tarayıcı',
@@ -6978,7 +6991,8 @@
                 // AI Analizi
                 'common.aiAnalyzing': 'AI analiz ediyor...',
                 'common.aiAnalyzingTitle': 'AI analiz ediyor',
-                'common.aiAnalyzingDesc': 'Görüntü içeriğini anlıyor...'
+                'common.aiAnalyzingDesc': 'Görüntü içeriğini anlıyor...',
+                'common.batchAnalyzing': '{current} / {total} görüntü analiz ediliyor...'
             },
             'ru': {
                 'app.title': 'LENSY - Универсальный сканер цен',
@@ -7091,7 +7105,8 @@
                 // Анализ ИИ
                 'common.aiAnalyzing': 'ИИ анализирует...',
                 'common.aiAnalyzingTitle': 'ИИ анализирует',
-                'common.aiAnalyzingDesc': 'Понимание содержания изображения...'
+                'common.aiAnalyzingDesc': 'Понимание содержания изображения...',
+                'common.batchAnalyzing': 'Анализ изображения {current} из {total}...'
             },
             'id': {
                 'app.title': 'LENSY - Pemindai Harga Universal',
@@ -7204,7 +7219,8 @@
                 // Analisis AI
                 'common.aiAnalyzing': 'AI sedang menganalisis...',
                 'common.aiAnalyzingTitle': 'AI sedang menganalisis',
-                'common.aiAnalyzingDesc': 'Memahami konten gambar...'
+                'common.aiAnalyzingDesc': 'Memahami konten gambar...',
+                'common.batchAnalyzing': 'Menganalisis gambar {current} dari {total}...'
             },
             'tl': {
                 'app.title': 'LENSY - Universal na Scanner ng Presyo',
@@ -7317,7 +7333,8 @@
                 // Pagsusuri ng AI
                 'common.aiAnalyzing': 'Sinusuri ng AI...',
                 'common.aiAnalyzingTitle': 'Sinusuri ng AI',
-                'common.aiAnalyzingDesc': 'Nauunawaan ang nilalaman ng larawan...'
+                'common.aiAnalyzingDesc': 'Nauunawaan ang nilalaman ng larawan...',
+                'common.batchAnalyzing': 'Sinusuri ang larawan {current} ng {total}...'
             }
         };
         
