@@ -2818,7 +2818,7 @@
         <!-- 聊天頁面 -->
         <div class="chat-page" id="chatPage">
             <div class="chat-header">
-                <h1 class="chat-title">AI 助手</h1>
+                <h1 class="chat-title" data-i18n="chat.title">AI 助手</h1>
                 <button class="chat-close-btn" onclick="closeChat()">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -2845,7 +2845,7 @@
                     <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
                 </div>
                 <div class="chat-input-container">
-                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." rows="1"></textarea>
+                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." data-i18n-placeholder="chat.placeholder" rows="1"></textarea>
                     <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
                         <svg viewBox="0 0 24 24">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -4945,6 +4945,9 @@
                 loadChatHistory();
                 chatPage.classList.add('active');
                 
+                // 更新聊天頁面的翻譯
+                updatePageTexts();
+                
                 // 如果沒有歷史對話，顯示歡迎訊息
                 const chatHistory = getChatHistory();
                 if (chatHistory.length === 0) {
@@ -5657,6 +5660,10 @@
                 'ai.tips.title': '💡 使用提示',
                 'ai.tips.content': '• 選擇一張清晰的照片\n• AI會深度分析照片內容\n• 提供個性化的見解與建議',
                 
+                // 聊天頁面
+                'chat.title': 'AI 助手',
+                'chat.placeholder': '詢問關於這個物品...',
+                
                 // 登入/註冊頁面
                 'auth.subtitle': '萬物價格掃描器',
                 'auth.emailLabel': '電子郵件地址',
@@ -5801,6 +5808,10 @@
                 'ai.uploadSubtext': '点击上方图标选择照片\n开始智能对话分析',
                 'ai.tips.title': '💡 使用提示',
                 'ai.tips.content': '• 选择一张清晰的照片\n• AI会深度分析照片内容\n• 提供个性化的见解与建议',
+                
+                // 聊天页面
+                'chat.title': 'AI 助手',
+                'chat.placeholder': '询问关于这个物品...',
                 
                 // 登录/注册页面
                 'auth.subtitle': '万物价格扫描器',
@@ -5947,6 +5958,10 @@
                 'ai.tips.title': '💡 Usage Tips',
                 'ai.tips.content': '• Choose a clear photo\n• AI will analyze photo content\n• Provide personalized insights',
                 
+                // Chat page
+                'chat.title': 'AI Assistant',
+                'chat.placeholder': 'Ask about this item...',
+                
                 // Login/Register page
                 'auth.subtitle': 'Universal Price Scanner',
                 'auth.emailLabel': 'Email Address',
@@ -6090,6 +6105,10 @@
                 'ai.uploadSubtext': '上のアイコンをクリックして写真を選択\nインテリジェント対話分析を開始',
                 'ai.tips.title': '💡 使用のヒント',
                 'ai.tips.content': '• 鮮明な写真を選択\n• AIが写真内容を分析\n• パーソナライズされた洞察を提供',
+                
+                // チャットページ
+                'chat.title': 'AIアシスタント',
+                'chat.placeholder': 'このアイテムについて質問する...',
                 
                 // Login/Register page
                 'auth.subtitle': '万物価格スキャナー',
@@ -6235,6 +6254,10 @@
                 'ai.tips.title': '💡 사용 팁',
                 'ai.tips.content': '• 선명한 사진 선택\n• AI가 사진 내용 분석\n• 맞춤형 통찰력 제공',
                 
+                // 채팅 페이지
+                'chat.title': 'AI 어시스턴트',
+                'chat.placeholder': '이 항목에 대해 물어보세요...',
+                
                 // Login/Register page
                 'auth.subtitle': '만물 가격 스캐너',
                 'auth.emailLabel': '이메일 주소',
@@ -6355,6 +6378,11 @@
                 'ai.uploadSubtext': 'คลิกไอคอนด้านบนเพื่อเลือกรูป\nเริ่มการวิเคราะห์การสนทนาอัจฉริยะ',
                 'ai.tips.title': '💡 เคล็ดลับการใช้งาน',
                 'ai.tips.content': '• เลือกรูปที่ชัดเจน\n• AI จะวิเคราะห์เนื้อหารูป\n• ให้ข้อมูลเชิงลึกส่วนบุคคล',
+                
+                // หน้าแชท
+                'chat.title': 'ผู้ช่วย AI',
+                'chat.placeholder': 'ถามเกี่ยวกับสินค้านี้...',
+                
                 'settings.membership': 'บริการสมาชิก',
                 'settings.memberStatus': 'สถานะสมาชิก',
                 'settings.memberStatusFree': 'เวอร์ชันฟรี',
@@ -6499,6 +6527,11 @@
                 'ai.uploadSubtext': 'Nhấp vào biểu tượng trên để chọn ảnh\nBắt đầu phân tích hội thoại thông minh',
                 'ai.tips.title': '💡 Mẹo sử dụng',
                 'ai.tips.content': '• Chọn ảnh rõ nét\n• AI sẽ phân tích nội dung ảnh\n• Cung cấp thông tin chi tiết cá nhân hóa',
+                
+                // Trang trò chuyện
+                'chat.title': 'Trợ lý AI',
+                'chat.placeholder': 'Hỏi về mặt hàng này...',
+                
                 'settings.membership': 'Dịch vụ hội viên',
                 'settings.memberStatus': 'Trạng thái hội viên',
                 'settings.memberStatusFree': 'Phiên bản miễn phí',
@@ -6643,6 +6676,11 @@
                 'ai.uploadSubtext': 'Haz clic en el ícono para seleccionar foto\nIniciar análisis de diálogo inteligente',
                 'ai.tips.title': '💡 Consejos de uso',
                 'ai.tips.content': '• Elige una foto clara\n• IA analizará el contenido\n• Proporciona información personalizada',
+                
+                // Página de chat
+                'chat.title': 'Asistente IA',
+                'chat.placeholder': 'Pregunta sobre este artículo...',
+                
                 'settings.membership': 'Membresía',
                 'settings.memberStatus': 'Estado de Miembro',
                 'settings.memberStatusFree': 'Versión Gratuita',
@@ -6787,6 +6825,11 @@
                 'ai.uploadSubtext': 'Cliquez sur l\'icône pour sélectionner photo\nDémarrer l\'analyse de dialogue intelligent',
                 'ai.tips.title': '💡 Conseils d\'utilisation',
                 'ai.tips.content': '• Choisir une photo claire\n• L\'IA analysera le contenu\n• Fournit des informations personnalisées',
+                
+                // Page de chat
+                'chat.title': 'Assistant IA',
+                'chat.placeholder': 'Posez une question sur cet article...',
+                
                 'settings.membership': 'Adhésion',
                 'settings.memberStatus': 'Statut de Membre',
                 'settings.memberStatusFree': 'Version Gratuite',
@@ -6931,6 +6974,11 @@
                 'ai.uploadSubtext': 'Klicken Sie auf das Symbol um Foto auszuwählen\nIntelligente Dialoganalyse starten',
                 'ai.tips.title': '💡 Nutzungstipps',
                 'ai.tips.content': '• Klares Foto wählen\n• KI analysiert Fotoinhalt\n• Bietet personalisierte Einblicke',
+                
+                // Chat-Seite
+                'chat.title': 'KI-Assistent',
+                'chat.placeholder': 'Fragen Sie zu diesem Artikel...',
+                
                 'settings.membership': 'Mitgliedschaft',
                 'settings.memberStatus': 'Mitgliedsstatus',
                 'settings.memberStatusFree': 'Kostenlose Version',
@@ -7075,6 +7123,11 @@
                 'ai.uploadSubtext': 'Clicca sull\'icona per selezionare foto\nInizia analisi dialogo intelligente',
                 'ai.tips.title': '💡 Suggerimenti d\'uso',
                 'ai.tips.content': '• Scegli una foto chiara\n• IA analizzerà il contenuto\n• Fornisce approfondimenti personalizzati',
+                
+                // Pagina di chat
+                'chat.title': 'Assistente IA',
+                'chat.placeholder': 'Chiedi informazioni su questo articolo...',
+                
                 'settings.membership': 'Abbonamento',
                 'settings.memberStatus': 'Stato Membro',
                 'settings.memberStatusFree': 'Versione Gratuita',
@@ -7219,6 +7272,11 @@
                 'ai.uploadSubtext': 'Clique no ícone para selecionar foto\nIniciar análise de diálogo inteligente',
                 'ai.tips.title': '💡 Dicas de uso',
                 'ai.tips.content': '• Escolha uma foto clara\n• IA analisará o conteúdo\n• Fornece insights personalizados',
+                
+                // Página de chat
+                'chat.title': 'Assistente IA',
+                'chat.placeholder': 'Pergunte sobre este item...',
+                
                 'settings.membership': 'Assinatura',
                 'settings.memberStatus': 'Status de Membro',
                 'settings.memberStatusFree': 'Versão Gratuita',
@@ -7363,6 +7421,11 @@
                 'ai.uploadSubtext': 'انقر على الأيقونة لاختيار صورة\nابدأ تحليل الحوار الذكي',
                 'ai.tips.title': '💡 نصائح الاستخدام',
                 'ai.tips.content': '• اختر صورة واضحة\n• سيحلل الذكاء الاصطناعي المحتوى\n• يوفر رؤى مخصصة',
+                
+                // صفحة المحادثة
+                'chat.title': 'مساعد الذكاء الاصطناعي',
+                'chat.placeholder': 'اسأل عن هذا العنصر...',
+                
                 'settings.membership': 'العضوية',
                 'settings.memberStatus': 'حالة العضو',
                 'settings.memberStatusFree': 'الإصدار المجاني',
@@ -7507,6 +7570,11 @@
                 'ai.uploadSubtext': 'Fotoğraf seçmek için simgeye tıkla\nAkıllı diyalog analizini başlat',
                 'ai.tips.title': '💡 Kullanım ipuçları',
                 'ai.tips.content': '• Net bir fotoğraf seç\n• AI içeriği analiz edecek\n• Kişiselleştirilmiş içgörüler sağlar',
+                
+                // Sohbet sayfası
+                'chat.title': 'AI Asistanı',
+                'chat.placeholder': 'Bu öğe hakkında soru sorun...',
+                
                 'settings.membership': 'Üyelik',
                 'settings.memberStatus': 'Üye Durumu',
                 'settings.memberStatusFree': 'Ücretsiz Sürüm',
@@ -7651,6 +7719,11 @@
                 'ai.uploadSubtext': 'Нажмите на значок, чтобы выбрать фото\nНачать интеллектуальный анализ диалога',
                 'ai.tips.title': '💡 Советы по использованию',
                 'ai.tips.content': '• Выберите четкое фото\n• ИИ проанализирует содержимое\n• Предоставит персонализированные данные',
+                
+                // Страница чата
+                'chat.title': 'ИИ-помощник',
+                'chat.placeholder': 'Спросить об этом товаре...',
+                
                 'settings.membership': 'Членство',
                 'settings.memberStatus': 'Статус участника',
                 'settings.memberStatusFree': 'Бесплатная версия',
@@ -7795,6 +7868,11 @@
                 'ai.uploadSubtext': 'Klik ikon untuk memilih foto\nMulai analisis dialog cerdas',
                 'ai.tips.title': '💡 Tips penggunaan',
                 'ai.tips.content': '• Pilih foto yang jelas\n• AI akan menganalisis konten\n• Memberikan wawasan personal',
+                
+                // Halaman obrolan
+                'chat.title': 'Asisten AI',
+                'chat.placeholder': 'Tanyakan tentang item ini...',
+                
                 'settings.membership': 'Keanggotaan',
                 'settings.memberStatus': 'Status Anggota',
                 'settings.memberStatusFree': 'Versi Gratis',
@@ -7939,6 +8017,11 @@
                 'ai.uploadSubtext': 'I-click ang icon para pumili ng larawan\nSimulan ang matalinong pagsusuri ng diyalogo',
                 'ai.tips.title': '💡 Mga tip sa paggamit',
                 'ai.tips.content': '• Pumili ng malinaw na larawan\n• Susuriin ng AI ang nilalaman\n• Magbibigay ng personal na insight',
+                
+                // Pahina ng chat
+                'chat.title': 'AI Assistant',
+                'chat.placeholder': 'Magtanong tungkol sa item na ito...',
+                
                 'settings.membership': 'Membership',
                 'settings.memberStatus': 'Katayuan ng Miyembro',
                 'settings.memberStatusFree': 'Libreng Bersyon',
