@@ -4945,8 +4945,31 @@
                 loadChatHistory();
                 chatPage.classList.add('active');
                 
-                // 更新聊天頁面的翻譯
-                updatePageTexts();
+                // 延遲一下確保 DOM 更新完成
+                setTimeout(() => {
+                    // 更新聊天頁面的翻譯
+                    updatePageTexts();
+                    
+                    // 特別確保聊天頁面的元素被更新
+                    const chatTitle = document.querySelector('.chat-title[data-i18n="chat.title"]');
+                    if (chatTitle) {
+                        chatTitle.textContent = t('chat.title');
+                    }
+                    
+                    const chatInput = document.querySelector('#chatInput[data-i18n-placeholder="chat.placeholder"]');
+                    if (chatInput) {
+                        chatInput.placeholder = t('chat.placeholder');
+                    }
+                    
+                    // 更新快速提示按鈕
+                    const quickPrompts = document.querySelectorAll('#quickPrompts .prompt-chip[data-i18n]');
+                    quickPrompts.forEach((el, index) => {
+                        const key = el.getAttribute('data-i18n');
+                        if (key) {
+                            el.textContent = t(key);
+                        }
+                    });
+                }, 100);
                 
                 // 如果沒有歷史對話，顯示歡迎訊息
                 const chatHistory = getChatHistory();
@@ -5019,125 +5042,9 @@
         
         // 更新快速提示詞
         function updateQuickPrompts() {
-            const quickPrompts = document.getElementById('quickPrompts');
-            const lang = getCurrentLanguage();
-            let prompts = [];
-            
-            // 根據語言設定提示詞
-            if (lang === 'zh-TW') {
-                prompts = [
-                    '深度分析這個產品的優缺點',
-                    '和其他同類產品比較如何？',
-                    '有什麼隱藏的使用技巧嗎？',
-                    '這個價格在市場上算合理嗎？',
-                    '長期使用需要注意什麼？'
-                ];
-                
-                // 根據物品類型動態調整提示詞
-                if (currentAnalysisData.category) {
-                    if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
-                        prompts = [
-                            '詳細分析營養價值和健康影響',
-                            '有什麼特別的料理方式嗎？',
-                            '如何判斷品質好壞？',
-                            '保存方法和期限建議',
-                            '搭配什麼食材最合適？'
-                        ];
-                } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
-                    prompts = [
-                        '詳細規格分析和性能評估',
-                        '這個世代的技術有何突破？',
-                        '未來會不會很快被淘汰？',
-                        '有什麼隱藏功能或彩蛋？',
-                        '如何發揮最大性能？'
-                    ];
-                } else if (currentAnalysisData.category.includes('服飾') || currentAnalysisData.category.includes('衣')) {
-                    prompts = [
-                        '材質特性和穿著體驗如何？',
-                        '適合什麼場合和搭配？',
-                        '如何辨別真偽和品質？',
-                        '保養和清洗的專業建議',
-                        '這個設計的流行趨勢分析'
-                    ];
-                } else if (currentAnalysisData.category.includes('玩具') || currentAnalysisData.category.includes('模型')) {
-                    prompts = [
-                        '收藏價值和未來升值潛力',
-                        '有什麼特別的設計巧思？',
-                        '如何保養維持最佳狀態？',
-                        '這個系列的歷史和文化意義',
-                        '適合什麼年齡層？安全嗎？'
-                    ];
-                }
-            }
-            
-                // 如果有品牌資訊，加入品牌相關提示
-                if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
-                    prompts.splice(2, 0, `${currentAnalysisData.brand}這個品牌的故事和特色`);
-                }
-            } else if (lang === 'en') {
-                prompts = [
-                    'Deep analysis of pros and cons',
-                    'How does it compare to similar products?',
-                    'Any hidden tips or features?',
-                    'Is this price reasonable?',
-                    'What to watch out for long-term use?'
-                ];
-                
-                // 根據物品類型動態調整提示詞
-                if (currentAnalysisData.category) {
-                    if (currentAnalysisData.category.toLowerCase().includes('food')) {
-                        prompts = [
-                            'Detailed nutritional analysis',
-                            'Any special cooking methods?',
-                            'How to judge quality?',
-                            'Storage and shelf life tips',
-                            'What pairs well with this?'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('electronic')) {
-                        prompts = [
-                            'Detailed specs and performance',
-                            'What\'s new in this generation?',
-                            'Will it become obsolete soon?',
-                            'Any hidden features?',
-                            'How to maximize performance?'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('cloth')) {
-                        prompts = [
-                            'Material quality and comfort?',
-                            'Best occasions and styling?',
-                            'How to verify authenticity?',
-                            'Care and washing tips',
-                            'Fashion trend analysis'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('toy')) {
-                        prompts = [
-                            'Collectible value and potential',
-                            'Special design features?',
-                            'How to maintain condition?',
-                            'Series history and significance',
-                            'Age suitability and safety?'
-                        ];
-                    }
-                }
-                
-                // 如果有品牌資訊，加入品牌相關提示
-                if (currentAnalysisData.brand && currentAnalysisData.brand !== 'Unknown') {
-                    prompts.splice(2, 0, `Tell me about ${currentAnalysisData.brand} brand`);
-                }
-            } else {
-                // 預設使用英文
-                prompts = [
-                    'Tell me more about this item',
-                    'Is it worth the price?',
-                    'Any tips for using it?',
-                    'Compare with alternatives',
-                    'What should I know?'
-                ];
-            }
-            
-            quickPrompts.innerHTML = prompts.slice(0, 5).map(prompt => 
-                `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
-            ).join('');
+            // 簡單地確保元素存在，不需要重新生成 HTML
+            // 翻譯會由 updatePageTexts 處理
+            return;
         }
         
         // 發送快速提示
@@ -8211,6 +8118,7 @@
         
         // 更新頁面所有文字
         function updatePageTexts() {
+            // 更新所有 data-i18n 屬性的元素
             const elements = document.querySelectorAll('[data-i18n]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
