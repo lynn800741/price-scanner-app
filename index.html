@@ -55,7 +55,7 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             border-bottom: 1px solid #eee;
         }
 
@@ -2714,7 +2714,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="app-title">分析結果</h1>
+                <h1 class="app-title" data-i18n="result.title">分析結果</h1>
                 <button class="result-menu-btn" onclick="toggleResultMenu()">
                     <svg viewBox="0 0 24 24">
                         <circle cx="12" cy="5" r="2"/>
@@ -2729,19 +2729,19 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
                     </svg>
-                    更正物品識別
+                    <span data-i18n="result.reanalyze">更正物品識別</span>
                 </div>
                 <div class="dropdown-item" onclick="editItemName()">
                     <svg viewBox="0 0 24 24">
                         <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                     </svg>
-                    編輯名稱
+                    <span data-i18n="result.editName">編輯名稱</span>
                 </div>
                 <div class="dropdown-item delete" onclick="deleteCurrentItem()">
                     <svg viewBox="0 0 24 24">
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                     </svg>
-                    刪除
+                    <span data-i18n="result.delete">刪除</span>
                 </div>
             </div>
             
@@ -4664,7 +4664,7 @@
             document.getElementById('resultDropdown').classList.remove('active');
             
             // 確認重新分析
-            if (!confirm('確定要重新識別這個物品嗎？')) {
+            if (!confirm(t('result.confirmReanalyze'))) {
                 return;
             }
             
@@ -4729,7 +4729,7 @@
             } catch (error) {
                 console.error('重新分析錯誤:', error);
                 loadingOverlay.classList.remove('active');
-                alert('重新分析失敗：' + error.message);
+                alert(t('result.reanalyzeFailed') + '：' + error.message);
             }
         }
         
@@ -4789,7 +4789,7 @@
             // 關閉選單
             document.getElementById('resultDropdown').classList.remove('active');
             
-            if (!confirm('確定要刪除這個項目嗎？')) {
+            if (!confirm(t('result.confirmDelete'))) {
                 return;
             }
             
@@ -5370,7 +5370,7 @@
         // 分享結果
         async function shareResult() {
             if (!currentAnalysisData) {
-                alert('沒有可分享的資料');
+                alert(t('result.noDataToShare'));
                 return;
             }
             
@@ -5520,6 +5520,18 @@
                 'list.empty.title': '開始掃描與記錄',
                 'list.empty.desc': '掃描物品並記錄價格',
                 
+                // 結果頁面
+                'result.title': '分析結果',
+                'result.reanalyze': '更正物品識別',
+                'result.editName': '編輯名稱',
+                'result.viewChat': '查看對話',
+                'result.shareResult': '分享結果',
+                'result.delete': '刪除',
+                'result.confirmReanalyze': '確定要重新識別這個物品嗎？',
+                'result.confirmDelete': '確定要刪除這個項目嗎？',
+                'result.reanalyzeFailed': '重新分析失敗',
+                'result.noDataToShare': '沒有可分享的資料',
+                
                 // 相機頁面
                 'camera.scanHint': '對準物品開始掃描',
                 
@@ -5647,6 +5659,19 @@
                 'list.selectedCount': '已选取 {count} 个',
                 'list.empty.title': '开始扫描与记录',
                 'list.empty.desc': '扫描物品并记录价格',
+                
+                // 结果页面
+                'result.title': '分析结果',
+                'result.reanalyze': '更正物品识别',
+                'result.editName': '编辑名称',
+                'result.viewChat': '查看对话',
+                'result.shareResult': '分享结果',
+                'result.delete': '删除',
+                'result.confirmReanalyze': '确定要重新识别这个物品吗？',
+                'result.confirmDelete': '确定要删除这个项目吗？',
+                'result.reanalyzeFailed': '重新分析失败',
+                'result.noDataToShare': '没有可分享的资料',
+                
                 'camera.scanHint': '对准物品开始扫描',
                 'ai.title': 'AI智能服务',
                 'ai.uploadText': '上传照片与AI开始对话',
@@ -5771,6 +5796,19 @@
                 'list.selectedCount': '{count} selected',
                 'list.empty.title': 'Start Scanning & Recording',
                 'list.empty.desc': 'Scan items and record prices',
+                
+                // Result page
+                'result.title': 'Analysis Result',
+                'result.reanalyze': 'Correct Item Recognition',
+                'result.editName': 'Edit Name',
+                'result.viewChat': 'View Conversation',
+                'result.shareResult': 'Share Result',
+                'result.delete': 'Delete',
+                'result.confirmReanalyze': 'Are you sure you want to re-identify this item?',
+                'result.confirmDelete': 'Are you sure you want to delete this item?',
+                'result.reanalyzeFailed': 'Re-analysis failed',
+                'result.noDataToShare': 'No data to share',
+                
                 'camera.scanHint': 'Align item to start scanning',
                 'ai.title': 'AI Smart Service',
                 'ai.uploadText': 'Upload Photo to Start AI Chat',
@@ -5895,6 +5933,18 @@
                 'list.selectedCount': '{count}個選択済み',
                 'list.empty.title': 'スキャンと記録を開始',
                 'list.empty.desc': 'アイテムをスキャンして価格を記録',
+                
+                // 結果ページ
+                'result.title': '分析結果',
+                'result.reanalyze': 'アイテム認識を修正',
+                'result.editName': '名前を編集',
+                'result.viewChat': '会話を表示',
+                'result.shareResult': '結果を共有',
+                'result.delete': '削除',
+                'result.confirmReanalyze': 'このアイテムを再識別してもよろしいですか？',
+                'result.confirmDelete': 'このアイテムを削除してもよろしいですか？',
+                'result.reanalyzeFailed': '再分析に失敗しました',
+                'result.noDataToShare': '共有するデータがありません',
                 'camera.scanHint': 'アイテムに合わせてスキャン開始',
                 'ai.title': 'AIスマートサービス',
                 'ai.uploadText': '写真をアップロードしてAIチャット開始',
@@ -6019,6 +6069,18 @@
                 'list.selectedCount': '{count}개 선택됨',
                 'list.empty.title': '스캔 및 기록 시작',
                 'list.empty.desc': '아이템을 스캔하고 가격을 기록',
+                
+                // 결과 페이지
+                'result.title': '분석 결과',
+                'result.reanalyze': '아이템 인식 수정',
+                'result.editName': '이름 편집',
+                'result.viewChat': '대화 보기',
+                'result.shareResult': '결과 공유',
+                'result.delete': '삭제',
+                'result.confirmReanalyze': '이 아이템을 다시 식별하시겠습니까?',
+                'result.confirmDelete': '이 아이템을 삭제하시겠습니까?',
+                'result.reanalyzeFailed': '재분석 실패',
+                'result.noDataToShare': '공유할 데이터가 없습니다',
                 'camera.scanHint': '아이템에 맞춰 스캔 시작',
                 'ai.title': 'AI 스마트 서비스',
                 'ai.uploadText': '사진 업로드로 AI 채팅 시작',
@@ -6120,6 +6182,18 @@
                 'list.selectedCount': 'เลือกแล้ว {count} รายการ',
                 'list.empty.title': 'เริ่มสแกนและบันทึก',
                 'list.empty.desc': 'สแกนสินค้าและบันทึกราคา',
+                
+                // หน้าผลลัพธ์
+                'result.title': 'ผลการวิเคราะห์',
+                'result.reanalyze': 'แก้ไขการจดจำสินค้า',
+                'result.editName': 'แก้ไขชื่อ',
+                'result.viewChat': 'ดูการสนทนา',
+                'result.shareResult': 'แชร์ผลลัพธ์',
+                'result.delete': 'ลบ',
+                'result.confirmReanalyze': 'คุณแน่ใจหรือไม่ที่จะระบุสินค้านี้ใหม่?',
+                'result.confirmDelete': 'คุณแน่ใจหรือไม่ที่จะลบรายการนี้?',
+                'result.reanalyzeFailed': 'การวิเคราะห์ใหม่ล้มเหลว',
+                'result.noDataToShare': 'ไม่มีข้อมูลที่จะแชร์',
                 'camera.scanHint': 'เล็งไปที่สินค้าเพื่อเริ่มสแกน',
                 'ai.title': 'บริการ AI อัจฉริยะ',
                 'ai.uploadText': 'อัพโหลดรูปเพื่อเริ่มแชท AI',
@@ -6244,6 +6318,18 @@
                 'list.selectedCount': 'Đã chọn {count} mục',
                 'list.empty.title': 'Bắt đầu quét và ghi lại',
                 'list.empty.desc': 'Quét sản phẩm và ghi lại giá cả',
+                
+                // Trang kết quả
+                'result.title': 'Kết quả phân tích',
+                'result.reanalyze': 'Sửa nhận dạng sản phẩm',
+                'result.editName': 'Chỉnh sửa tên',
+                'result.viewChat': 'Xem cuộc trò chuyện',
+                'result.shareResult': 'Chia sẻ kết quả',
+                'result.delete': 'Xóa',
+                'result.confirmReanalyze': 'Bạn có chắc muốn nhận dạng lại sản phẩm này?',
+                'result.confirmDelete': 'Bạn có chắc muốn xóa mục này?',
+                'result.reanalyzeFailed': 'Phân tích lại thất bại',
+                'result.noDataToShare': 'Không có dữ liệu để chia sẻ',
                 'camera.scanHint': 'Hướng vào sản phẩm để bắt đầu quét',
                 'ai.title': 'Dịch vụ AI thông minh',
                 'ai.uploadText': 'Tải ảnh lên để bắt đầu trò chuyện AI',
@@ -6368,6 +6454,18 @@
                 'list.selectedCount': '{count} seleccionados',
                 'list.empty.title': 'Comenzar a escanear y registrar',
                 'list.empty.desc': 'Escanear artículos y registrar precios',
+                
+                // Página de resultados
+                'result.title': 'Resultado del análisis',
+                'result.reanalyze': 'Corregir reconocimiento del artículo',
+                'result.editName': 'Editar nombre',
+                'result.viewChat': 'Ver conversación',
+                'result.shareResult': 'Compartir resultado',
+                'result.delete': 'Eliminar',
+                'result.confirmReanalyze': '¿Estás seguro de que quieres volver a identificar este artículo?',
+                'result.confirmDelete': '¿Estás seguro de que quieres eliminar este elemento?',
+                'result.reanalyzeFailed': 'Error al volver a analizar',
+                'result.noDataToShare': 'No hay datos para compartir',
                 'camera.scanHint': 'Alinear artículo para iniciar escaneo',
                 'ai.title': 'Servicio Inteligente IA',
                 'ai.uploadText': 'Subir foto para iniciar chat IA',
@@ -6492,6 +6590,18 @@
                 'list.selectedCount': '{count} sélectionnés',
                 'list.empty.title': 'Commencer à scanner et enregistrer',
                 'list.empty.desc': 'Scanner des articles et enregistrer les prix',
+                
+                // Page de résultats
+                'result.title': 'Résultat de l\'analyse',
+                'result.reanalyze': 'Corriger la reconnaissance de l\'article',
+                'result.editName': 'Modifier le nom',
+                'result.viewChat': 'Voir la conversation',
+                'result.shareResult': 'Partager le résultat',
+                'result.delete': 'Supprimer',
+                'result.confirmReanalyze': 'Êtes-vous sûr de vouloir ré-identifier cet article ?',
+                'result.confirmDelete': 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+                'result.reanalyzeFailed': 'Échec de la ré-analyse',
+                'result.noDataToShare': 'Aucune donnée à partager',
                 'camera.scanHint': 'Aligner l\'article pour commencer le scan',
                 'ai.title': 'Service IA Intelligent',
                 'ai.uploadText': 'Télécharger photo pour démarrer chat IA',
@@ -6616,6 +6726,18 @@
                 'list.selectedCount': '{count} ausgewählt',
                 'list.empty.title': 'Scannen und Aufzeichnen beginnen',
                 'list.empty.desc': 'Artikel scannen und Preise aufzeichnen',
+                
+                // Ergebnisseite
+                'result.title': 'Analyseergebnis',
+                'result.reanalyze': 'Artikelerkennung korrigieren',
+                'result.editName': 'Name bearbeiten',
+                'result.viewChat': 'Konversation anzeigen',
+                'result.shareResult': 'Ergebnis teilen',
+                'result.delete': 'Löschen',
+                'result.confirmReanalyze': 'Sind Sie sicher, dass Sie diesen Artikel neu identifizieren möchten?',
+                'result.confirmDelete': 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
+                'result.reanalyzeFailed': 'Neuanalyse fehlgeschlagen',
+                'result.noDataToShare': 'Keine Daten zum Teilen vorhanden',
                 'camera.scanHint': 'Artikel ausrichten um Scan zu starten',
                 'ai.title': 'KI Intelligenter Service',
                 'ai.uploadText': 'Foto hochladen um KI-Chat zu starten',
@@ -6740,6 +6862,18 @@
                 'list.selectedCount': '{count} selezionati',
                 'list.empty.title': 'Inizia a scansionare e registrare',
                 'list.empty.desc': 'Scansiona articoli e registra prezzi',
+                
+                // Pagina risultati
+                'result.title': 'Risultato dell\'analisi',
+                'result.reanalyze': 'Correggi riconoscimento articolo',
+                'result.editName': 'Modifica nome',
+                'result.viewChat': 'Visualizza conversazione',
+                'result.shareResult': 'Condividi risultato',
+                'result.delete': 'Elimina',
+                'result.confirmReanalyze': 'Sei sicuro di voler ri-identificare questo articolo?',
+                'result.confirmDelete': 'Sei sicuro di voler eliminare questo elemento?',
+                'result.reanalyzeFailed': 'Ri-analisi fallita',
+                'result.noDataToShare': 'Nessun dato da condividere',
                 'camera.scanHint': 'Allinea articolo per iniziare scansione',
                 'ai.title': 'Servizio IA Intelligente',
                 'ai.uploadText': 'Carica foto per iniziare chat IA',
@@ -6864,6 +6998,18 @@
                 'list.selectedCount': '{count} selecionados',
                 'list.empty.title': 'Começar a digitalizar e registrar',
                 'list.empty.desc': 'Digitalize itens e registre preços',
+                
+                // Página de resultados
+                'result.title': 'Resultado da análise',
+                'result.reanalyze': 'Corrigir reconhecimento do item',
+                'result.editName': 'Editar nome',
+                'result.viewChat': 'Ver conversa',
+                'result.shareResult': 'Compartilhar resultado',
+                'result.delete': 'Excluir',
+                'result.confirmReanalyze': 'Tem certeza de que deseja re-identificar este item?',
+                'result.confirmDelete': 'Tem certeza de que deseja excluir este item?',
+                'result.reanalyzeFailed': 'Falha ao re-analisar',
+                'result.noDataToShare': 'Nenhum dado para compartilhar',
                 'camera.scanHint': 'Alinhe item para iniciar digitalização',
                 'ai.title': 'Serviço IA Inteligente',
                 'ai.uploadText': 'Carregar foto para iniciar chat IA',
@@ -6988,6 +7134,18 @@
                 'list.selectedCount': 'تم تحديد {count}',
                 'list.empty.title': 'ابدأ المسح والتسجيل',
                 'list.empty.desc': 'امسح العناصر وسجل الأسعار',
+                
+                // صفحة النتائج
+                'result.title': 'نتيجة التحليل',
+                'result.reanalyze': 'تصحيح التعرف على العنصر',
+                'result.editName': 'تعديل الاسم',
+                'result.viewChat': 'عرض المحادثة',
+                'result.shareResult': 'مشاركة النتيجة',
+                'result.delete': 'حذف',
+                'result.confirmReanalyze': 'هل أنت متأكد من أنك تريد إعادة تحديد هذا العنصر؟',
+                'result.confirmDelete': 'هل أنت متأكد من أنك تريد حذف هذا العنصر؟',
+                'result.reanalyzeFailed': 'فشلت إعادة التحليل',
+                'result.noDataToShare': 'لا توجد بيانات للمشاركة',
                 'camera.scanHint': 'وجه العنصر لبدء المسح',
                 'ai.title': 'خدمة الذكاء الاصطناعي',
                 'ai.uploadText': 'ارفع صورة لبدء دردشة الذكاء الاصطناعي',
@@ -7112,6 +7270,18 @@
                 'list.selectedCount': '{count} seçildi',
                 'list.empty.title': 'Taramaya ve kaydetmeye başla',
                 'list.empty.desc': 'Ürünleri tara ve fiyatları kaydet',
+                
+                // Sonuç sayfası
+                'result.title': 'Analiz Sonucu',
+                'result.reanalyze': 'Ürün Tanımayı Düzelt',
+                'result.editName': 'İsmi Düzenle',
+                'result.viewChat': 'Sohbeti Görüntüle',
+                'result.shareResult': 'Sonucu Paylaş',
+                'result.delete': 'Sil',
+                'result.confirmReanalyze': 'Bu ürünü yeniden tanımlamak istediğinizden emin misiniz?',
+                'result.confirmDelete': 'Bu öğeyi silmek istediğinizden emin misiniz?',
+                'result.reanalyzeFailed': 'Yeniden analiz başarısız oldu',
+                'result.noDataToShare': 'Paylaşılacak veri yok',
                 'camera.scanHint': 'Taramayı başlatmak için ürünü hizala',
                 'ai.title': 'AI Akıllı Hizmet',
                 'ai.uploadText': 'AI sohbeti başlatmak için fotoğraf yükle',
@@ -7236,6 +7406,18 @@
                 'list.selectedCount': 'Выбрано: {count}',
                 'list.empty.title': 'Начать сканирование и запись',
                 'list.empty.desc': 'Сканируйте товары и записывайте цены',
+                
+                // Страница результатов
+                'result.title': 'Результат анализа',
+                'result.reanalyze': 'Исправить распознавание товара',
+                'result.editName': 'Редактировать название',
+                'result.viewChat': 'Просмотреть диалог',
+                'result.shareResult': 'Поделиться результатом',
+                'result.delete': 'Удалить',
+                'result.confirmReanalyze': 'Вы уверены, что хотите повторно идентифицировать этот товар?',
+                'result.confirmDelete': 'Вы уверены, что хотите удалить этот элемент?',
+                'result.reanalyzeFailed': 'Повторный анализ не удался',
+                'result.noDataToShare': 'Нет данных для обмена',
                 'camera.scanHint': 'Наведите на товар для начала сканирования',
                 'ai.title': 'ИИ Умный сервис',
                 'ai.uploadText': 'Загрузите фото для начала ИИ-чата',
@@ -7360,6 +7542,18 @@
                 'list.selectedCount': '{count} dipilih',
                 'list.empty.title': 'Mulai memindai dan merekam',
                 'list.empty.desc': 'Pindai barang dan catat harga',
+                
+                // Halaman hasil
+                'result.title': 'Hasil Analisis',
+                'result.reanalyze': 'Perbaiki Pengenalan Barang',
+                'result.editName': 'Edit Nama',
+                'result.viewChat': 'Lihat Percakapan',
+                'result.shareResult': 'Bagikan Hasil',
+                'result.delete': 'Hapus',
+                'result.confirmReanalyze': 'Apakah Anda yakin ingin mengidentifikasi ulang barang ini?',
+                'result.confirmDelete': 'Apakah Anda yakin ingin menghapus item ini?',
+                'result.reanalyzeFailed': 'Analisis ulang gagal',
+                'result.noDataToShare': 'Tidak ada data untuk dibagikan',
                 'camera.scanHint': 'Arahkan ke barang untuk mulai memindai',
                 'ai.title': 'Layanan AI Cerdas',
                 'ai.uploadText': 'Unggah foto untuk mulai obrolan AI',
@@ -7484,6 +7678,18 @@
                 'list.selectedCount': '{count} napili',
                 'list.empty.title': 'Simulan ang pag-scan at pagtala',
                 'list.empty.desc': 'I-scan ang mga item at itala ang presyo',
+                
+                // Pahina ng resulta
+                'result.title': 'Resulta ng Pagsusuri',
+                'result.reanalyze': 'Itama ang Pagkilala sa Item',
+                'result.editName': 'I-edit ang Pangalan',
+                'result.viewChat': 'Tingnan ang Pag-uusap',
+                'result.shareResult': 'Ibahagi ang Resulta',
+                'result.delete': 'Burahin',
+                'result.confirmReanalyze': 'Sigurado ka bang gusto mong muling kilalanin ang item na ito?',
+                'result.confirmDelete': 'Sigurado ka bang gusto mong burahin ang item na ito?',
+                'result.reanalyzeFailed': 'Nabigo ang muling pagsusuri',
+                'result.noDataToShare': 'Walang data na maibabahagi',
                 'camera.scanHint': 'Itutok sa item para simulan ang pag-scan',
                 'ai.title': 'AI Matalinong Serbisyo',
                 'ai.uploadText': 'Mag-upload ng larawan para simulan AI chat',
