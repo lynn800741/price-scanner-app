@@ -4952,14 +4952,7 @@
                     document.getElementById('viewImageSection').style.display = 'none';
                     
                     // 使用 AI 生成歡迎訊息，支援所有語言
-                    const welcomePrompt = `請為我生成一個友善的歡迎訊息。我剛剛分析了這個物品：${currentAnalysisData.name}。請用markdown格式，包含：
-1. 熱情的問候
-2. 提到你已經仔細分析了這個物品
-3. 根據物品類別(${currentAnalysisData.category || '一般物品'})或品牌(${currentAnalysisData.brand || '未知'})說一些相關的有趣觀點
-4. 列出你可以提供的幫助（如產品分析、使用建議、市場資訊等）
-5. 友善地詢問用戶有什麼想了解的
-
-請保持專業但親切的語氣。`;
+                    const welcomePrompt = `向用戶打個招呼，告訴他們你已經分析了這個 ${currentAnalysisData.name}，並且很樂意回答任何問題。請友善且專業。`;
                     
                     // 自動發送歡迎訊息請求
                     sendMessageInternal(welcomePrompt, false, true);
