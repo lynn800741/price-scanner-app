@@ -4931,6 +4931,66 @@
             return urls[platform] || '#';
         }
         
+        // 顯示預設歡迎訊息
+        function showDefaultWelcomeMessage() {
+            const defaultWelcomes = {
+                'zh-TW': {
+                    greeting: '您好！我是您的智能購物助手 🛍️',
+                    intro: `我已經分析了您掃描的「${currentAnalysisData.name}」`,
+                    capabilities: [
+                        '💰 幫您比較價格，找到最優惠的購買管道',
+                        '🔍 分析產品特點，提供專業的購買建議',
+                        '🏪 推薦可靠的購買平台和商家',
+                        '💡 解答關於這個產品的任何疑問'
+                    ],
+                    footer: '請問有什麼我可以幫您的嗎？'
+                },
+                'en': {
+                    greeting: 'Hello! I\'m your intelligent shopping assistant 🛍️',
+                    intro: `I've analyzed the "${currentAnalysisData.name}" you scanned`,
+                    capabilities: [
+                        '💰 Compare prices to find the best deals',
+                        '🔍 Analyze product features and provide professional advice',
+                        '🏪 Recommend reliable purchase platforms',
+                        '💡 Answer any questions about this product'
+                    ],
+                    footer: 'How can I help you today?'
+                },
+                'ja': {
+                    greeting: 'こんにちは！私はあなたのスマートショッピングアシスタントです 🛍️',
+                    intro: `スキャンされた「${currentAnalysisData.name}」を分析しました`,
+                    capabilities: [
+                        '💰 価格を比較し、最もお得な購入方法を見つけます',
+                        '🔍 製品の特徴を分析し、専門的なアドバイスを提供します',
+                        '🏪 信頼できる購入プラットフォームをお勧めします',
+                        '💡 この製品に関するご質問にお答えします'
+                    ],
+                    footer: '何かお手伝いできることはありますか？'
+                }
+            };
+            
+            const lang = currentLang || 'zh-TW';
+            const welcomeData = defaultWelcomes[lang] || defaultWelcomes['zh-TW'];
+            
+            // 建立歡迎訊息 HTML
+            const capabilitiesList = welcomeData.capabilities.map(cap => `<div style="margin: 8px 0;">${cap}</div>`).join('');
+            
+            const welcomeHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong style="font-size: 18px;">${welcomeData.greeting}</strong>
+                </div>
+                <div style="margin-bottom: 15px;">${welcomeData.intro}</div>
+                <div style="margin-bottom: 15px;">
+                    <div style="margin-bottom: 10px;">${lang === 'zh-TW' ? '我可以為您：' : lang === 'en' ? 'I can help you:' : '私ができること：'}</div>
+                    ${capabilitiesList}
+                </div>
+                <div style="margin-top: 20px; font-style: italic;">${welcomeData.footer}</div>
+            `;
+            
+            // 添加預設歡迎訊息到聊天介面
+            addMessage('assistant', welcomeHTML, true);
+        }
+        
         // 打開聊天頁面
         function openChat() {
             // 設定當前聊天項目 ID
@@ -4951,10 +5011,13 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 使用 AI 生成歡迎訊息，支援所有語言
+                    // 立即顯示預設歡迎詞
+                    showDefaultWelcomeMessage();
+                    
+                    // 使用 AI 生成更詳細的歡迎訊息，支援所有語言
                     const welcomePrompt = `向用戶打個招呼，告訴他們你已經分析了這個 ${currentAnalysisData.name}，並且很樂意回答任何問題。請友善且專業。`;
                     
-                    // 自動發送歡迎訊息請求
+                    // 自動發送歡迎訊息請求（不會立即顯示在聊天中）
                     sendMessageInternal(welcomePrompt, false, true);
                     
                     // 第一次對話，記錄已經看過圖片
@@ -5034,7 +5097,7 @@
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
                     // 載入歷史訊息時不使用打字動畫
-                    addMessageToUI(msg.role, msg.content, false);
+                    addMessageToUI(msg.role, msg.content, false, msg.isHtml || false);
                 }
             });
             
@@ -5137,7 +5200,7 @@
         }
         
         // 添加訊息到 UI（修改版，支援打字動畫）
-        async function addMessageToUI(role, content, useTypewriter = false) {
+        async function addMessageToUI(role, content, useTypewriter = false, isHtml = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -5151,7 +5214,10 @@
                 messageContent.className = 'message-content';
                 messageDiv.appendChild(messageContent);
                 
-                if (useTypewriter) {
+                if (isHtml) {
+                    // 直接使用 HTML 內容
+                    messageContent.innerHTML = content;
+                } else if (useTypewriter) {
                     // 使用打字動畫
                     chatMessages.appendChild(messageDiv);
                     await typewriterEffect(messageContent, content);
@@ -5168,11 +5234,11 @@
         }
         
         // 添加訊息並保存（修改版，支援打字動畫）
-        async function addMessage(role, content, useTypewriter = true) {
+        async function addMessage(role, content, useTypewriter = true, isHtml = false) {
             const messages = getChatHistory();
-            messages.push({ role, content, timestamp: new Date().toISOString() });
+            messages.push({ role, content, timestamp: new Date().toISOString(), isHtml });
             saveChatHistory(messages);
-            await addMessageToUI(role, content, useTypewriter);
+            await addMessageToUI(role, content, useTypewriter, isHtml);
         }
         
         // 發送帶圖片的訊息
@@ -5287,6 +5353,15 @@
                 loadingDiv.remove();
                 
                 if (result.success) {
+                    // 如果是歡迎訊息，先移除預設的歡迎訊息
+                    if (isWelcomeMessage) {
+                        const chatMessages = document.getElementById('chatMessages');
+                        const firstMessage = chatMessages.querySelector('.message.assistant');
+                        if (firstMessage) {
+                            firstMessage.remove();
+                        }
+                    }
+                    
                     // 添加 AI 回覆
                     addMessage('assistant', result.data.reply);
                 } else {
