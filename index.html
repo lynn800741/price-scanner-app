@@ -2818,7 +2818,7 @@
         <!-- 聊天頁面 -->
         <div class="chat-page" id="chatPage">
             <div class="chat-header">
-                <h1 class="chat-title" data-i18n="chat.title">AI 助手</h1>
+                <h1 class="chat-title">AI 助手</h1>
                 <button class="chat-close-btn" onclick="closeChat()">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -2826,11 +2826,11 @@
                 </button>
             </div>
             <div class="view-image-section" id="viewImageSection" style="display: none;">
-                <button class="view-image-btn" onclick="sendMessageWithImage(t('chat.viewImagePrompt'))">
+                <button class="view-image-btn" onclick="sendMessageWithImage('請重新查看這張圖片並告訴我你看到了什麼。')">
                     <svg viewBox="0 0 24 24">
                         <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                     </svg>
-                    <span data-i18n="chat.viewImage">重新查看圖片</span>
+                    重新查看圖片
                 </button>
             </div>
             <div class="chat-messages" id="chatMessages">
@@ -2838,14 +2838,14 @@
             </div>
             <div class="chat-input-area">
                 <div class="quick-prompts" id="quickPrompts">
-                    <span class="prompt-chip" onclick="sendQuickPrompt(this.textContent)" data-i18n="chat.quickPrompt1">這個值得買嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt(this.textContent)" data-i18n="chat.quickPrompt2">有更便宜的替代品嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt(this.textContent)" data-i18n="chat.quickPrompt3">如何保養這個物品？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt(this.textContent)" data-i18n="chat.quickPrompt4">優缺點分析</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt(this.textContent)" data-i18n="chat.quickPrompt5">使用注意事項</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
+                    <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
                 </div>
                 <div class="chat-input-container">
-                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." data-i18n-placeholder="chat.inputPlaceholder" rows="1"></textarea>
+                    <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." rows="1"></textarea>
                     <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
                         <svg viewBox="0 0 24 24">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -4931,66 +4931,6 @@
             return urls[platform] || '#';
         }
         
-        // 顯示預設歡迎訊息
-        function showDefaultWelcomeMessage() {
-            const defaultWelcomes = {
-                'zh-TW': {
-                    greeting: '您好！我是您的智能購物助手 🛍️',
-                    intro: `我已經分析了您掃描的「${currentAnalysisData.name}」`,
-                    capabilities: [
-                        '💰 幫您比較價格，找到最優惠的購買管道',
-                        '🔍 分析產品特點，提供專業的購買建議',
-                        '🏪 推薦可靠的購買平台和商家',
-                        '💡 解答關於這個產品的任何疑問'
-                    ],
-                    footer: '請問有什麼我可以幫您的嗎？'
-                },
-                'en': {
-                    greeting: 'Hello! I\'m your intelligent shopping assistant 🛍️',
-                    intro: `I've analyzed the "${currentAnalysisData.name}" you scanned`,
-                    capabilities: [
-                        '💰 Compare prices to find the best deals',
-                        '🔍 Analyze product features and provide professional advice',
-                        '🏪 Recommend reliable purchase platforms',
-                        '💡 Answer any questions about this product'
-                    ],
-                    footer: 'How can I help you today?'
-                },
-                'ja': {
-                    greeting: 'こんにちは！私はあなたのスマートショッピングアシスタントです 🛍️',
-                    intro: `スキャンされた「${currentAnalysisData.name}」を分析しました`,
-                    capabilities: [
-                        '💰 価格を比較し、最もお得な購入方法を見つけます',
-                        '🔍 製品の特徴を分析し、専門的なアドバイスを提供します',
-                        '🏪 信頼できる購入プラットフォームをお勧めします',
-                        '💡 この製品に関するご質問にお答えします'
-                    ],
-                    footer: '何かお手伝いできることはありますか？'
-                }
-            };
-            
-            const lang = currentLang || 'zh-TW';
-            const welcomeData = defaultWelcomes[lang] || defaultWelcomes['zh-TW'];
-            
-            // 建立歡迎訊息 HTML
-            const capabilitiesList = welcomeData.capabilities.map(cap => `<div style="margin: 8px 0;">${cap}</div>`).join('');
-            
-            const welcomeHTML = `
-                <div style="margin-bottom: 15px;">
-                    <strong style="font-size: 18px;">${welcomeData.greeting}</strong>
-                </div>
-                <div style="margin-bottom: 15px;">${welcomeData.intro}</div>
-                <div style="margin-bottom: 15px;">
-                    <div style="margin-bottom: 10px;">${lang === 'zh-TW' ? '我可以為您：' : lang === 'en' ? 'I can help you:' : '私ができること：'}</div>
-                    ${capabilitiesList}
-                </div>
-                <div style="margin-top: 20px; font-style: italic;">${welcomeData.footer}</div>
-            `;
-            
-            // 添加預設歡迎訊息到聊天介面
-            addMessage('assistant', welcomeHTML, true);
-        }
-        
         // 打開聊天頁面
         function openChat() {
             // 設定當前聊天項目 ID
@@ -5011,14 +4951,54 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 立即顯示預設歡迎詞
-                    showDefaultWelcomeMessage();
+                    // 根據當前語言和物品類型生成個性化的歡迎訊息
+                    const lang = getCurrentLanguage();
+                    let welcomeMessage = '';
                     
-                    // 使用 AI 生成更詳細的歡迎訊息，支援所有語言
-                    const welcomePrompt = `向用戶打個招呼，告訴他們你已經分析了這個 ${currentAnalysisData.name}，並且很樂意回答任何問題。請友善且專業。`;
+                    if (lang === 'zh-TW') {
+                        welcomeMessage = `## 你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」\n\n發現了一些有趣的資訊想與你分享！\n\n`;
+                        if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
+                            welcomeMessage += `📱 **作為一個科技產品**，它代表著現代生活的便利性。`;
+                        } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
+                            welcomeMessage += `🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。`;
+                        } else if (currentAnalysisData.brand) {
+                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** 這個品牌有著獨特的市場定位。`;
+                        } else {
+                            welcomeMessage += `✨ **每個物品都有它獨特的故事和價值**。`;
+                        }
+                        welcomeMessage += `\n\n### 我可以為你提供：\n\n`;
+                        welcomeMessage += `• **深入的產品分析**——從各個角度剖析優缺點\n`;
+                        welcomeMessage += `• **使用技巧和保養建議**——讓物品發揮最大價值\n`;
+                        welcomeMessage += `• **市場趨勢和價格走向**——掌握最佳購買時機\n`;
+                        welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
+                        welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
+                    } else if (lang === 'en') {
+                        welcomeMessage = `## Hello! I've just carefully analyzed this "${currentAnalysisData.name}"\n\nI've discovered some interesting information to share with you!\n\n`;
+                        if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('electronic')) {
+                            welcomeMessage += `📱 **As a tech product**, it represents the convenience of modern life.`;
+                        } else if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('food')) {
+                            welcomeMessage += `🍽️ **Food is essential**, let's explore this delicious choice in detail.`;
+                        } else if (currentAnalysisData.brand) {
+                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** has a unique market position.`;
+                        } else {
+                            welcomeMessage += `✨ **Every item has its unique story and value**.`;
+                        }
+                        welcomeMessage += `\n\n### I can provide you with:\n\n`;
+                        welcomeMessage += `• **In-depth product analysis** — examining pros and cons from all angles\n`;
+                        welcomeMessage += `• **Usage tips and maintenance advice** — maximize item value\n`;
+                        welcomeMessage += `• **Market trends and price insights** — find the best time to buy\n`;
+                        welcomeMessage += `• **Related interesting knowledge** — expand your horizons\n\n`;
+                        welcomeMessage += `What would you like to know? Or shall I share some information you might find interesting?`;
+                    } else {
+                        // 預設使用英文
+                        welcomeMessage = `## Hello! I've analyzed this "${currentAnalysisData.name}"\n\nI have some insights to share!\n\n`;
+                        welcomeMessage += `✨ **Every item has its unique story and value**.\n\n`;
+                        welcomeMessage += `### I can help you with:\n\n`;
+                        welcomeMessage += `• Product analysis\n• Usage tips\n• Market insights\n• Interesting facts\n\n`;
+                        welcomeMessage += `What would you like to know?`;
+                    }
                     
-                    // 自動發送歡迎訊息請求（不會立即顯示在聊天中）
-                    sendMessageInternal(welcomePrompt, false, true);
+                    addMessage('assistant', welcomeMessage);
                     
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
@@ -5036,9 +5016,125 @@
         
         // 更新快速提示詞
         function updateQuickPrompts() {
-            // 快速提示現在使用固定的翻譯鍵，會自動根據語言切換
-            // HTML 中已經設定好 data-i18n 屬性，所以這裡只需要更新翻譯
-            updateTranslations();
+            const quickPrompts = document.getElementById('quickPrompts');
+            const lang = getCurrentLanguage();
+            let prompts = [];
+            
+            // 根據語言設定提示詞
+            if (lang === 'zh-TW') {
+                prompts = [
+                    '深度分析這個產品的優缺點',
+                    '和其他同類產品比較如何？',
+                    '有什麼隱藏的使用技巧嗎？',
+                    '這個價格在市場上算合理嗎？',
+                    '長期使用需要注意什麼？'
+                ];
+                
+                // 根據物品類型動態調整提示詞
+                if (currentAnalysisData.category) {
+                    if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
+                        prompts = [
+                            '詳細分析營養價值和健康影響',
+                            '有什麼特別的料理方式嗎？',
+                            '如何判斷品質好壞？',
+                            '保存方法和期限建議',
+                            '搭配什麼食材最合適？'
+                        ];
+                } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
+                    prompts = [
+                        '詳細規格分析和性能評估',
+                        '這個世代的技術有何突破？',
+                        '未來會不會很快被淘汰？',
+                        '有什麼隱藏功能或彩蛋？',
+                        '如何發揮最大性能？'
+                    ];
+                } else if (currentAnalysisData.category.includes('服飾') || currentAnalysisData.category.includes('衣')) {
+                    prompts = [
+                        '材質特性和穿著體驗如何？',
+                        '適合什麼場合和搭配？',
+                        '如何辨別真偽和品質？',
+                        '保養和清洗的專業建議',
+                        '這個設計的流行趨勢分析'
+                    ];
+                } else if (currentAnalysisData.category.includes('玩具') || currentAnalysisData.category.includes('模型')) {
+                    prompts = [
+                        '收藏價值和未來升值潛力',
+                        '有什麼特別的設計巧思？',
+                        '如何保養維持最佳狀態？',
+                        '這個系列的歷史和文化意義',
+                        '適合什麼年齡層？安全嗎？'
+                    ];
+                }
+            }
+            
+                // 如果有品牌資訊，加入品牌相關提示
+                if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
+                    prompts.splice(2, 0, `${currentAnalysisData.brand}這個品牌的故事和特色`);
+                }
+            } else if (lang === 'en') {
+                prompts = [
+                    'Deep analysis of pros and cons',
+                    'How does it compare to similar products?',
+                    'Any hidden tips or features?',
+                    'Is this price reasonable?',
+                    'What to watch out for long-term use?'
+                ];
+                
+                // 根據物品類型動態調整提示詞
+                if (currentAnalysisData.category) {
+                    if (currentAnalysisData.category.toLowerCase().includes('food')) {
+                        prompts = [
+                            'Detailed nutritional analysis',
+                            'Any special cooking methods?',
+                            'How to judge quality?',
+                            'Storage and shelf life tips',
+                            'What pairs well with this?'
+                        ];
+                    } else if (currentAnalysisData.category.toLowerCase().includes('electronic')) {
+                        prompts = [
+                            'Detailed specs and performance',
+                            'What\'s new in this generation?',
+                            'Will it become obsolete soon?',
+                            'Any hidden features?',
+                            'How to maximize performance?'
+                        ];
+                    } else if (currentAnalysisData.category.toLowerCase().includes('cloth')) {
+                        prompts = [
+                            'Material quality and comfort?',
+                            'Best occasions and styling?',
+                            'How to verify authenticity?',
+                            'Care and washing tips',
+                            'Fashion trend analysis'
+                        ];
+                    } else if (currentAnalysisData.category.toLowerCase().includes('toy')) {
+                        prompts = [
+                            'Collectible value and potential',
+                            'Special design features?',
+                            'How to maintain condition?',
+                            'Series history and significance',
+                            'Age suitability and safety?'
+                        ];
+                    }
+                }
+                
+                // 如果有品牌資訊，加入品牌相關提示
+                if (currentAnalysisData.brand && currentAnalysisData.brand !== 'Unknown') {
+                    prompts.splice(2, 0, `Tell me about ${currentAnalysisData.brand} brand`);
+                }
+            } else {
+                // 預設使用英文
+                prompts = [
+                    'Tell me more about this item',
+                    'Is it worth the price?',
+                    'Any tips for using it?',
+                    'Compare with alternatives',
+                    'What should I know?'
+                ];
+            }
+            
+            quickPrompts.innerHTML = prompts.slice(0, 5).map(prompt => 
+                `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
+            ).join('');
         }
         
         // 發送快速提示
@@ -5097,7 +5193,7 @@
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
                     // 載入歷史訊息時不使用打字動畫
-                    addMessageToUI(msg.role, msg.content, false, msg.isHtml || false);
+                    addMessageToUI(msg.role, msg.content, false);
                 }
             });
             
@@ -5200,7 +5296,7 @@
         }
         
         // 添加訊息到 UI（修改版，支援打字動畫）
-        async function addMessageToUI(role, content, useTypewriter = false, isHtml = false) {
+        async function addMessageToUI(role, content, useTypewriter = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
@@ -5214,10 +5310,7 @@
                 messageContent.className = 'message-content';
                 messageDiv.appendChild(messageContent);
                 
-                if (isHtml) {
-                    // 直接使用 HTML 內容
-                    messageContent.innerHTML = content;
-                } else if (useTypewriter) {
+                if (useTypewriter) {
                     // 使用打字動畫
                     chatMessages.appendChild(messageDiv);
                     await typewriterEffect(messageContent, content);
@@ -5234,11 +5327,11 @@
         }
         
         // 添加訊息並保存（修改版，支援打字動畫）
-        async function addMessage(role, content, useTypewriter = true, isHtml = false) {
+        async function addMessage(role, content, useTypewriter = true) {
             const messages = getChatHistory();
-            messages.push({ role, content, timestamp: new Date().toISOString(), isHtml });
+            messages.push({ role, content, timestamp: new Date().toISOString() });
             saveChatHistory(messages);
-            await addMessageToUI(role, content, useTypewriter, isHtml);
+            await addMessageToUI(role, content, useTypewriter);
         }
         
         // 發送帶圖片的訊息
@@ -5273,13 +5366,11 @@
         }
         
         // 內部發送訊息函數
-        async function sendMessageInternal(message, includeImage = false, isWelcomeMessage = false) {
+        async function sendMessageInternal(message, includeImage = false) {
             const chatSendBtn = document.getElementById('chatSendBtn');
             
-            // 添加用戶訊息（歡迎訊息不顯示用戶輸入）
-            if (!isWelcomeMessage) {
-                addMessage('user', message);
-            }
+            // 添加用戶訊息
+            addMessage('user', message);
             
             // 禁用發送按鈕
             chatSendBtn.disabled = true;
@@ -5353,15 +5444,6 @@
                 loadingDiv.remove();
                 
                 if (result.success) {
-                    // 如果是歡迎訊息，先移除預設的歡迎訊息
-                    if (isWelcomeMessage) {
-                        const chatMessages = document.getElementById('chatMessages');
-                        const firstMessage = chatMessages.querySelector('.message.assistant');
-                        if (firstMessage) {
-                            firstMessage.remove();
-                        }
-                    }
-                    
                     // 添加 AI 回覆
                     addMessage('assistant', result.data.reply);
                 } else {
@@ -5565,15 +5647,6 @@
                 'result.brand': '品牌',
                 'result.whereToBuy': '在哪裡買',
                 
-                // AI 助手頁面
-                'chat.title': 'AI 助手',
-                'chat.viewImage': '重新查看圖片',
-                'chat.viewImagePrompt': '請重新查看這張圖片並告訴我你看到了什麼。',
-                'chat.inputPlaceholder': '詢問關於這個物品...',
-                'chat.quickPrompt1': '如何保養這個物品？',
-                'chat.quickPrompt2': '優缺點分析',
-                'chat.quickPrompt3': '使用注意事項',
-                
                 // 相機頁面
                 'camera.scanHint': '對準物品開始掃描',
                 
@@ -5722,15 +5795,6 @@
                 'result.brand': '品牌',
                 'result.whereToBuy': '哪里购买',
                 
-                // AI 助手页面
-                'chat.title': 'AI 助手',
-                'chat.viewImage': '重新查看图片',
-                'chat.viewImagePrompt': '请重新查看这张图片并告诉我你看到了什么。',
-                'chat.inputPlaceholder': '询问关于此物品的问题...',
-                'chat.quickPrompt1': '如何保养此物品？',
-                'chat.quickPrompt2': '优缺点分析',
-                'chat.quickPrompt3': '使用注意事项',
-                
                 'camera.scanHint': '对准物品开始扫描',
                 'ai.title': 'AI智能服务',
                 'ai.uploadText': '上传照片与AI开始对话',
@@ -5876,15 +5940,6 @@
                 'result.brand': 'Brand',
                 'result.whereToBuy': 'Where to Buy',
                 
-                // AI Assistant Page
-                'chat.title': 'AI Assistant',
-                'chat.viewImage': 'View Image Again',
-                'chat.viewImagePrompt': 'Please look at this image again and tell me what you see.',
-                'chat.inputPlaceholder': 'Ask about this item...',
-                'chat.quickPrompt1': 'How to maintain this item?',
-                'chat.quickPrompt2': 'Pros and cons analysis',
-                'chat.quickPrompt3': 'Usage precautions',
-                
                 'camera.scanHint': 'Align item to start scanning',
                 'ai.title': 'AI Smart Service',
                 'ai.uploadText': 'Upload Photo to Start AI Chat',
@@ -6029,16 +6084,6 @@
                 'result.category': 'カテゴリー',
                 'result.brand': 'ブランド',
                 'result.whereToBuy': '購入場所',
-                
-                // AIアシスタントページ
-                'chat.title': 'AIアシスタント',
-                'chat.viewImage': '画像を再度表示',
-                'chat.viewImagePrompt': 'この画像をもう一度見て、何が見えるか教えてください。',
-                'chat.inputPlaceholder': 'このアイテムについて質問...',
-                'chat.quickPrompt1': 'このアイテムのメンテナンス方法は？',
-                'chat.quickPrompt2': '長所と短所の分析',
-                'chat.quickPrompt3': '使用上の注意事項',
-                
                 'camera.scanHint': 'アイテムに合わせてスキャン開始',
                 'ai.title': 'AIスマートサービス',
                 'ai.uploadText': '写真をアップロードしてAIチャット開始',
@@ -6183,16 +6228,6 @@
                 'result.category': '카테고리',
                 'result.brand': '브랜드',
                 'result.whereToBuy': '구매처',
-                
-                // AI 어시스턴트 페이지
-                'chat.title': 'AI 어시스턴트',
-                'chat.viewImage': '이미지 다시 보기',
-                'chat.viewImagePrompt': '이 이미지를 다시 보고 무엇이 보이는지 알려주세요.',
-                'chat.inputPlaceholder': '이 아이템에 대해 질문하세요...',
-                'chat.quickPrompt1': '이 아이템을 어떻게 관리하나요?',
-                'chat.quickPrompt2': '장단점 분석',
-                'chat.quickPrompt3': '사용 시 주의사항',
-                
                 'camera.scanHint': '아이템에 맞춰 스캔 시작',
                 'ai.title': 'AI 스마트 서비스',
                 'ai.uploadText': '사진 업로드로 AI 채팅 시작',
@@ -6314,16 +6349,6 @@
                 'result.category': 'หมวดหมู่',
                 'result.brand': 'แบรนด์',
                 'result.whereToBuy': 'ซื้อได้ที่ไหน',
-                
-                // หน้าผู้ช่วย AI
-                'chat.title': 'ผู้ช่วย AI',
-                'chat.viewImage': 'ดูรูปภาพอีกครั้ง',
-                'chat.viewImagePrompt': 'โปรดดูรูปภาพนี้อีกครั้งและบอกฉันว่าคุณเห็นอะไร',
-                'chat.inputPlaceholder': 'ถามเกี่ยวกับสินค้านี้...',
-                'chat.quickPrompt1': 'วิธีดูแลรักษาสินค้านี้?',
-                'chat.quickPrompt2': 'วิเคราะห์ข้อดีข้อเสีย',
-                'chat.quickPrompt3': 'ข้อควรระวังในการใช้งาน',
-                
                 'camera.scanHint': 'เล็งไปที่สินค้าเพื่อเริ่มสแกน',
                 'ai.title': 'บริการ AI อัจฉริยะ',
                 'ai.uploadText': 'อัพโหลดรูปเพื่อเริ่มแชท AI',
@@ -6468,16 +6493,6 @@
                 'result.category': 'Danh mục',
                 'result.brand': 'Thương hiệu',
                 'result.whereToBuy': 'Mua ở đâu',
-                
-                // Trang Trợ lý AI
-                'chat.title': 'Trợ lý AI',
-                'chat.viewImage': 'Xem lại hình ảnh',
-                'chat.viewImagePrompt': 'Vui lòng xem lại hình ảnh này và cho tôi biết bạn thấy gì.',
-                'chat.inputPlaceholder': 'Hỏi về sản phẩm này...',
-                'chat.quickPrompt1': 'Làm thế nào để bảo quản sản phẩm này?',
-                'chat.quickPrompt2': 'Phân tích ưu nhược điểm',
-                'chat.quickPrompt3': 'Lưu ý khi sử dụng',
-                
                 'camera.scanHint': 'Hướng vào sản phẩm để bắt đầu quét',
                 'ai.title': 'Dịch vụ AI thông minh',
                 'ai.uploadText': 'Tải ảnh lên để bắt đầu trò chuyện AI',
@@ -6622,16 +6637,6 @@
                 'result.category': 'Categoría',
                 'result.brand': 'Marca',
                 'result.whereToBuy': 'Dónde comprar',
-                
-                // Página del Asistente IA
-                'chat.title': 'Asistente IA',
-                'chat.viewImage': 'Ver imagen nuevamente',
-                'chat.viewImagePrompt': 'Por favor, mira esta imagen nuevamente y dime qué ves.',
-                'chat.inputPlaceholder': 'Pregunta sobre este artículo...',
-                'chat.quickPrompt1': '¿Cómo mantener este artículo?',
-                'chat.quickPrompt2': 'Análisis de pros y contras',
-                'chat.quickPrompt3': 'Precauciones de uso',
-                
                 'camera.scanHint': 'Alinear artículo para iniciar escaneo',
                 'ai.title': 'Servicio Inteligente IA',
                 'ai.uploadText': 'Subir foto para iniciar chat IA',
@@ -6776,16 +6781,6 @@
                 'result.category': 'Catégorie',
                 'result.brand': 'Marque',
                 'result.whereToBuy': 'Où acheter',
-                
-                // Page Assistant IA
-                'chat.title': 'Assistant IA',
-                'chat.viewImage': 'Revoir l\'image',
-                'chat.viewImagePrompt': 'Veuillez regarder à nouveau cette image et me dire ce que vous voyez.',
-                'chat.inputPlaceholder': 'Poser une question sur cet article...',
-                'chat.quickPrompt1': 'Comment entretenir cet article ?',
-                'chat.quickPrompt2': 'Analyse des avantages et inconvénients',
-                'chat.quickPrompt3': 'Précautions d\'utilisation',
-                
                 'camera.scanHint': 'Aligner l\'article pour commencer le scan',
                 'ai.title': 'Service IA Intelligent',
                 'ai.uploadText': 'Télécharger photo pour démarrer chat IA',
@@ -6930,16 +6925,6 @@
                 'result.category': 'Kategorie',
                 'result.brand': 'Marke',
                 'result.whereToBuy': 'Wo kaufen',
-                
-                // KI-Assistent Seite
-                'chat.title': 'KI-Assistent',
-                'chat.viewImage': 'Bild erneut anzeigen',
-                'chat.viewImagePrompt': 'Bitte schauen Sie sich dieses Bild noch einmal an und sagen Sie mir, was Sie sehen.',
-                'chat.inputPlaceholder': 'Fragen zu diesem Artikel...',
-                'chat.quickPrompt1': 'Wie pflegt man diesen Artikel?',
-                'chat.quickPrompt2': 'Vor- und Nachteile Analyse',
-                'chat.quickPrompt3': 'Vorsichtsmaßnahmen bei der Verwendung',
-                
                 'camera.scanHint': 'Artikel ausrichten um Scan zu starten',
                 'ai.title': 'KI Intelligenter Service',
                 'ai.uploadText': 'Foto hochladen um KI-Chat zu starten',
@@ -7084,16 +7069,6 @@
                 'result.category': 'Categoria',
                 'result.brand': 'Marca',
                 'result.whereToBuy': 'Dove acquistare',
-                
-                // Pagina Assistente IA
-                'chat.title': 'Assistente IA',
-                'chat.viewImage': 'Visualizza nuovamente l\'immagine',
-                'chat.viewImagePrompt': 'Per favore, guarda di nuovo questa immagine e dimmi cosa vedi.',
-                'chat.inputPlaceholder': 'Chiedi informazioni su questo articolo...',
-                'chat.quickPrompt1': 'Come mantenere questo articolo?',
-                'chat.quickPrompt2': 'Analisi pro e contro',
-                'chat.quickPrompt3': 'Precauzioni d\'uso',
-                
                 'camera.scanHint': 'Allinea articolo per iniziare scansione',
                 'ai.title': 'Servizio IA Intelligente',
                 'ai.uploadText': 'Carica foto per iniziare chat IA',
@@ -7238,16 +7213,6 @@
                 'result.category': 'Categoria',
                 'result.brand': 'Marca',
                 'result.whereToBuy': 'Onde comprar',
-                
-                // Página do Assistente IA
-                'chat.title': 'Assistente IA',
-                'chat.viewImage': 'Ver imagem novamente',
-                'chat.viewImagePrompt': 'Por favor, olhe para esta imagem novamente e me diga o que você vê.',
-                'chat.inputPlaceholder': 'Pergunte sobre este item...',
-                'chat.quickPrompt1': 'Como manter este item?',
-                'chat.quickPrompt2': 'Análise de prós e contras',
-                'chat.quickPrompt3': 'Precauções de uso',
-                
                 'camera.scanHint': 'Alinhe item para iniciar digitalização',
                 'ai.title': 'Serviço IA Inteligente',
                 'ai.uploadText': 'Carregar foto para iniciar chat IA',
@@ -7392,16 +7357,6 @@
                 'result.category': 'الفئة',
                 'result.brand': 'العلامة التجارية',
                 'result.whereToBuy': 'أين تشتري',
-                
-                // صفحة مساعد الذكاء الاصطناعي
-                'chat.title': 'مساعد الذكاء الاصطناعي',
-                'chat.viewImage': 'عرض الصورة مرة أخرى',
-                'chat.viewImagePrompt': 'يرجى النظر إلى هذه الصورة مرة أخرى وأخبرني بما تراه.',
-                'chat.inputPlaceholder': 'اسأل عن هذا العنصر...',
-                'chat.quickPrompt1': 'كيفية صيانة هذا العنصر؟',
-                'chat.quickPrompt2': 'تحليل الإيجابيات والسلبيات',
-                'chat.quickPrompt3': 'احتياطات الاستخدام',
-                
                 'camera.scanHint': 'وجه العنصر لبدء المسح',
                 'ai.title': 'خدمة الذكاء الاصطناعي',
                 'ai.uploadText': 'ارفع صورة لبدء دردشة الذكاء الاصطناعي',
@@ -7546,16 +7501,6 @@
                 'result.category': 'Kategori',
                 'result.brand': 'Marka',
                 'result.whereToBuy': 'Nereden Alınır',
-                
-                // AI Asistan Sayfası
-                'chat.title': 'AI Asistan',
-                'chat.viewImage': 'Resmi Tekrar Görüntüle',
-                'chat.viewImagePrompt': 'Lütfen bu resme tekrar bakın ve ne gördüğünüzü söyleyin.',
-                'chat.inputPlaceholder': 'Bu ürün hakkında soru sorun...',
-                'chat.quickPrompt1': 'Bu ürün nasıl bakım yapılır?',
-                'chat.quickPrompt2': 'Artı ve eksi analizi',
-                'chat.quickPrompt3': 'Kullanım önlemleri',
-                
                 'camera.scanHint': 'Taramayı başlatmak için ürünü hizala',
                 'ai.title': 'AI Akıllı Hizmet',
                 'ai.uploadText': 'AI sohbeti başlatmak için fotoğraf yükle',
@@ -7700,16 +7645,6 @@
                 'result.category': 'Категория',
                 'result.brand': 'Бренд',
                 'result.whereToBuy': 'Где купить',
-                
-                // Страница ИИ-помощника
-                'chat.title': 'ИИ-помощник',
-                'chat.viewImage': 'Просмотреть изображение снова',
-                'chat.viewImagePrompt': 'Пожалуйста, посмотрите на это изображение еще раз и скажите, что вы видите.',
-                'chat.inputPlaceholder': 'Спросите об этом товаре...',
-                'chat.quickPrompt1': 'Как ухаживать за этим товаром?',
-                'chat.quickPrompt2': 'Анализ плюсов и минусов',
-                'chat.quickPrompt3': 'Меры предосторожности при использовании',
-                
                 'camera.scanHint': 'Наведите на товар для начала сканирования',
                 'ai.title': 'ИИ Умный сервис',
                 'ai.uploadText': 'Загрузите фото для начала ИИ-чата',
@@ -7854,16 +7789,6 @@
                 'result.category': 'Kategori',
                 'result.brand': 'Merek',
                 'result.whereToBuy': 'Tempat Membeli',
-                
-                // Halaman Asisten AI
-                'chat.title': 'Asisten AI',
-                'chat.viewImage': 'Lihat Gambar Lagi',
-                'chat.viewImagePrompt': 'Silakan lihat gambar ini lagi dan beri tahu saya apa yang Anda lihat.',
-                'chat.inputPlaceholder': 'Tanyakan tentang barang ini...',
-                'chat.quickPrompt1': 'Bagaimana cara merawat barang ini?',
-                'chat.quickPrompt2': 'Analisis kelebihan dan kekurangan',
-                'chat.quickPrompt3': 'Tindakan pencegahan penggunaan',
-                
                 'camera.scanHint': 'Arahkan ke barang untuk mulai memindai',
                 'ai.title': 'Layanan AI Cerdas',
                 'ai.uploadText': 'Unggah foto untuk mulai obrolan AI',
@@ -8008,16 +7933,6 @@
                 'result.category': 'Kategorya',
                 'result.brand': 'Tatak',
                 'result.whereToBuy': 'Saan Bibili',
-                
-                // Pahina ng AI Assistant
-                'chat.title': 'AI Assistant',
-                'chat.viewImage': 'Tingnan Muli ang Larawan',
-                'chat.viewImagePrompt': 'Pakitingnan muli ang larawang ito at sabihin sa akin kung ano ang nakikita mo.',
-                'chat.inputPlaceholder': 'Magtanong tungkol sa item na ito...',
-                'chat.quickPrompt1': 'Paano alagaan ang item na ito?',
-                'chat.quickPrompt2': 'Pagsusuri ng mga kalamangan at kakulangan',
-                'chat.quickPrompt3': 'Mga pag-iingat sa paggamit',
-                
                 'camera.scanHint': 'Itutok sa item para simulan ang pag-scan',
                 'ai.title': 'AI Matalinong Serbisyo',
                 'ai.uploadText': 'Mag-upload ng larawan para simulan AI chat',
