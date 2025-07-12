@@ -4951,54 +4951,18 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 根據當前語言和物品類型生成個性化的歡迎訊息
-                    const lang = getCurrentLanguage();
-                    let welcomeMessage = '';
+                    // 使用 AI 生成歡迎訊息，支援所有語言
+                    const welcomePrompt = `請為我生成一個友善的歡迎訊息。我剛剛分析了這個物品：${currentAnalysisData.name}。請用markdown格式，包含：
+1. 熱情的問候
+2. 提到你已經仔細分析了這個物品
+3. 根據物品類別(${currentAnalysisData.category || '一般物品'})或品牌(${currentAnalysisData.brand || '未知'})說一些相關的有趣觀點
+4. 列出你可以提供的幫助（如產品分析、使用建議、市場資訊等）
+5. 友善地詢問用戶有什麼想了解的
+
+請保持專業但親切的語氣。`;
                     
-                    if (lang === 'zh-TW') {
-                        welcomeMessage = `## 你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」\n\n發現了一些有趣的資訊想與你分享！\n\n`;
-                        if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
-                            welcomeMessage += `📱 **作為一個科技產品**，它代表著現代生活的便利性。`;
-                        } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
-                            welcomeMessage += `🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。`;
-                        } else if (currentAnalysisData.brand) {
-                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** 這個品牌有著獨特的市場定位。`;
-                        } else {
-                            welcomeMessage += `✨ **每個物品都有它獨特的故事和價值**。`;
-                        }
-                        welcomeMessage += `\n\n### 我可以為你提供：\n\n`;
-                        welcomeMessage += `• **深入的產品分析**——從各個角度剖析優缺點\n`;
-                        welcomeMessage += `• **使用技巧和保養建議**——讓物品發揮最大價值\n`;
-                        welcomeMessage += `• **市場趨勢和價格走向**——掌握最佳購買時機\n`;
-                        welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
-                        welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
-                    } else if (lang === 'en') {
-                        welcomeMessage = `## Hello! I've just carefully analyzed this "${currentAnalysisData.name}"\n\nI've discovered some interesting information to share with you!\n\n`;
-                        if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('electronic')) {
-                            welcomeMessage += `📱 **As a tech product**, it represents the convenience of modern life.`;
-                        } else if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('food')) {
-                            welcomeMessage += `🍽️ **Food is essential**, let's explore this delicious choice in detail.`;
-                        } else if (currentAnalysisData.brand) {
-                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** has a unique market position.`;
-                        } else {
-                            welcomeMessage += `✨ **Every item has its unique story and value**.`;
-                        }
-                        welcomeMessage += `\n\n### I can provide you with:\n\n`;
-                        welcomeMessage += `• **In-depth product analysis** — examining pros and cons from all angles\n`;
-                        welcomeMessage += `• **Usage tips and maintenance advice** — maximize item value\n`;
-                        welcomeMessage += `• **Market trends and price insights** — find the best time to buy\n`;
-                        welcomeMessage += `• **Related interesting knowledge** — expand your horizons\n\n`;
-                        welcomeMessage += `What would you like to know? Or shall I share some information you might find interesting?`;
-                    } else {
-                        // 預設使用英文
-                        welcomeMessage = `## Hello! I've analyzed this "${currentAnalysisData.name}"\n\nI have some insights to share!\n\n`;
-                        welcomeMessage += `✨ **Every item has its unique story and value**.\n\n`;
-                        welcomeMessage += `### I can help you with:\n\n`;
-                        welcomeMessage += `• Product analysis\n• Usage tips\n• Market insights\n• Interesting facts\n\n`;
-                        welcomeMessage += `What would you like to know?`;
-                    }
-                    
-                    addMessage('assistant', welcomeMessage);
+                    // 自動發送歡迎訊息請求
+                    sendMessageInternal(welcomePrompt, false, true);
                     
                     // 第一次對話，記錄已經看過圖片
                     const allChats = JSON.parse(localStorage.getItem('chatHistory') || '{}');
@@ -5016,125 +4980,9 @@
         
         // 更新快速提示詞
         function updateQuickPrompts() {
-            const quickPrompts = document.getElementById('quickPrompts');
-            const lang = getCurrentLanguage();
-            let prompts = [];
-            
-            // 根據語言設定提示詞
-            if (lang === 'zh-TW') {
-                prompts = [
-                    '深度分析這個產品的優缺點',
-                    '和其他同類產品比較如何？',
-                    '有什麼隱藏的使用技巧嗎？',
-                    '這個價格在市場上算合理嗎？',
-                    '長期使用需要注意什麼？'
-                ];
-                
-                // 根據物品類型動態調整提示詞
-                if (currentAnalysisData.category) {
-                    if (currentAnalysisData.category.includes('食') || currentAnalysisData.category.includes('餐')) {
-                        prompts = [
-                            '詳細分析營養價值和健康影響',
-                            '有什麼特別的料理方式嗎？',
-                            '如何判斷品質好壞？',
-                            '保存方法和期限建議',
-                            '搭配什麼食材最合適？'
-                        ];
-                } else if (currentAnalysisData.category.includes('電子') || currentAnalysisData.category.includes('3C')) {
-                    prompts = [
-                        '詳細規格分析和性能評估',
-                        '這個世代的技術有何突破？',
-                        '未來會不會很快被淘汰？',
-                        '有什麼隱藏功能或彩蛋？',
-                        '如何發揮最大性能？'
-                    ];
-                } else if (currentAnalysisData.category.includes('服飾') || currentAnalysisData.category.includes('衣')) {
-                    prompts = [
-                        '材質特性和穿著體驗如何？',
-                        '適合什麼場合和搭配？',
-                        '如何辨別真偽和品質？',
-                        '保養和清洗的專業建議',
-                        '這個設計的流行趨勢分析'
-                    ];
-                } else if (currentAnalysisData.category.includes('玩具') || currentAnalysisData.category.includes('模型')) {
-                    prompts = [
-                        '收藏價值和未來升值潛力',
-                        '有什麼特別的設計巧思？',
-                        '如何保養維持最佳狀態？',
-                        '這個系列的歷史和文化意義',
-                        '適合什麼年齡層？安全嗎？'
-                    ];
-                }
-            }
-            
-                // 如果有品牌資訊，加入品牌相關提示
-                if (currentAnalysisData.brand && currentAnalysisData.brand !== '未知') {
-                    prompts.splice(2, 0, `${currentAnalysisData.brand}這個品牌的故事和特色`);
-                }
-            } else if (lang === 'en') {
-                prompts = [
-                    'Deep analysis of pros and cons',
-                    'How does it compare to similar products?',
-                    'Any hidden tips or features?',
-                    'Is this price reasonable?',
-                    'What to watch out for long-term use?'
-                ];
-                
-                // 根據物品類型動態調整提示詞
-                if (currentAnalysisData.category) {
-                    if (currentAnalysisData.category.toLowerCase().includes('food')) {
-                        prompts = [
-                            'Detailed nutritional analysis',
-                            'Any special cooking methods?',
-                            'How to judge quality?',
-                            'Storage and shelf life tips',
-                            'What pairs well with this?'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('electronic')) {
-                        prompts = [
-                            'Detailed specs and performance',
-                            'What\'s new in this generation?',
-                            'Will it become obsolete soon?',
-                            'Any hidden features?',
-                            'How to maximize performance?'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('cloth')) {
-                        prompts = [
-                            'Material quality and comfort?',
-                            'Best occasions and styling?',
-                            'How to verify authenticity?',
-                            'Care and washing tips',
-                            'Fashion trend analysis'
-                        ];
-                    } else if (currentAnalysisData.category.toLowerCase().includes('toy')) {
-                        prompts = [
-                            'Collectible value and potential',
-                            'Special design features?',
-                            'How to maintain condition?',
-                            'Series history and significance',
-                            'Age suitability and safety?'
-                        ];
-                    }
-                }
-                
-                // 如果有品牌資訊，加入品牌相關提示
-                if (currentAnalysisData.brand && currentAnalysisData.brand !== 'Unknown') {
-                    prompts.splice(2, 0, `Tell me about ${currentAnalysisData.brand} brand`);
-                }
-            } else {
-                // 預設使用英文
-                prompts = [
-                    'Tell me more about this item',
-                    'Is it worth the price?',
-                    'Any tips for using it?',
-                    'Compare with alternatives',
-                    'What should I know?'
-                ];
-            }
-            
-            quickPrompts.innerHTML = prompts.slice(0, 5).map(prompt => 
-                `<span class="prompt-chip" onclick="sendQuickPrompt('${prompt}')">${prompt}</span>`
-            ).join('');
+            // 快速提示現在使用固定的翻譯鍵，會自動根據語言切換
+            // HTML 中已經設定好 data-i18n 屬性，所以這裡只需要更新翻譯
+            updateTranslations();
         }
         
         // 發送快速提示
@@ -5366,11 +5214,13 @@
         }
         
         // 內部發送訊息函數
-        async function sendMessageInternal(message, includeImage = false) {
+        async function sendMessageInternal(message, includeImage = false, isWelcomeMessage = false) {
             const chatSendBtn = document.getElementById('chatSendBtn');
             
-            // 添加用戶訊息
-            addMessage('user', message);
+            // 添加用戶訊息（歡迎訊息不顯示用戶輸入）
+            if (!isWelcomeMessage) {
+                addMessage('user', message);
+            }
             
             // 禁用發送按鈕
             chatSendBtn.disabled = true;
