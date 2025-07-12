@@ -4843,7 +4843,7 @@
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
                 purchaseLinks = `
                     <div class="info-card">
-                        <h3 class="info-card-title">購買管道</h3>
+                        <h3 class="info-card-title">${t('result.purchaseChannels')}</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             ${data.purchaseLinks.online.map(link => `
                                 <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
@@ -4863,43 +4863,43 @@
                 <h2 class="result-name">${data.name}</h2>
                 
                 <div class="price-section">
-                    <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
+                    <div style="font-size: 16px; opacity: 0.9;">${t('result.estimatedPrice')}</div>
                     <div class="price-value">${formatPrice(data.price)}</div>
                     <div style="font-size: 14px; opacity: 0.8;">${data.priceNote}</div>
                 </div>
                 
                 <div class="action-buttons" style="margin-bottom: 20px;">
                     <button class="action-button btn-chat" onclick="openChat()">
-                        詢問 AI
+                        ${t('result.askAI')}
                     </button>
                     <button class="action-button btn-share" onclick="shareResult()">
-                        分享
+                        ${t('result.share')}
                     </button>
                 </div>
                 
                 ${purchaseLinks}
                 
                 <div class="info-card">
-                    <h3 class="info-card-title">基本資訊</h3>
+                    <h3 class="info-card-title">${t('result.basicInfo')}</h3>
                     <p class="info-card-content">${data.description}</p>
                 </div>
                 
                 ${data.category ? `
                 <div class="info-card">
-                    <h3 class="info-card-title">分類</h3>
+                    <h3 class="info-card-title">${t('result.category')}</h3>
                     <p class="info-card-content">${data.category}</p>
                 </div>
                 ` : ''}
                 
                 ${data.brand ? `
                 <div class="info-card">
-                    <h3 class="info-card-title">品牌</h3>
+                    <h3 class="info-card-title">${t('result.brand')}</h3>
                     <p class="info-card-content">${data.brand}</p>
                 </div>
                 ` : ''}
                 
                 <div class="info-card">
-                    <h3 class="info-card-title">在哪裡買</h3>
+                    <h3 class="info-card-title">${t('result.whereToBuy')}</h3>
                     <p class="info-card-content">${data.availability}</p>
                 </div>
                 
@@ -5531,6 +5531,14 @@
                 'result.confirmDelete': '確定要刪除這個項目嗎？',
                 'result.reanalyzeFailed': '重新分析失敗',
                 'result.noDataToShare': '沒有可分享的資料',
+                'result.estimatedPrice': '預估價格',
+                'result.askAI': '詢問 AI',
+                'result.share': '分享',
+                'result.purchaseChannels': '購買管道',
+                'result.basicInfo': '基本資訊',
+                'result.category': '分類',
+                'result.brand': '品牌',
+                'result.whereToBuy': '在哪裡買',
                 
                 // 相機頁面
                 'camera.scanHint': '對準物品開始掃描',
@@ -5671,6 +5679,14 @@
                 'result.confirmDelete': '确定要删除这个项目吗？',
                 'result.reanalyzeFailed': '重新分析失败',
                 'result.noDataToShare': '没有可分享的资料',
+                'result.estimatedPrice': '预估价格',
+                'result.askAI': '询问 AI',
+                'result.share': '分享',
+                'result.purchaseChannels': '购买渠道',
+                'result.basicInfo': '基本信息',
+                'result.category': '类别',
+                'result.brand': '品牌',
+                'result.whereToBuy': '哪里购买',
                 
                 'camera.scanHint': '对准物品开始扫描',
                 'ai.title': 'AI智能服务',
@@ -5808,6 +5824,14 @@
                 'result.confirmDelete': 'Are you sure you want to delete this item?',
                 'result.reanalyzeFailed': 'Re-analysis failed',
                 'result.noDataToShare': 'No data to share',
+                'result.estimatedPrice': 'Estimated Price',
+                'result.askAI': 'Ask AI',
+                'result.share': 'Share',
+                'result.purchaseChannels': 'Purchase Channels',
+                'result.basicInfo': 'Basic Information',
+                'result.category': 'Category',
+                'result.brand': 'Brand',
+                'result.whereToBuy': 'Where to Buy',
                 
                 'camera.scanHint': 'Align item to start scanning',
                 'ai.title': 'AI Smart Service',
@@ -5945,6 +5969,14 @@
                 'result.confirmDelete': 'このアイテムを削除してもよろしいですか？',
                 'result.reanalyzeFailed': '再分析に失敗しました',
                 'result.noDataToShare': '共有するデータがありません',
+                'result.estimatedPrice': '推定価格',
+                'result.askAI': 'AIに質問',
+                'result.share': '共有',
+                'result.purchaseChannels': '購入チャネル',
+                'result.basicInfo': '基本情報',
+                'result.category': 'カテゴリー',
+                'result.brand': 'ブランド',
+                'result.whereToBuy': '購入場所',
                 'camera.scanHint': 'アイテムに合わせてスキャン開始',
                 'ai.title': 'AIスマートサービス',
                 'ai.uploadText': '写真をアップロードしてAIチャット開始',
@@ -6081,6 +6113,14 @@
                 'result.confirmDelete': '이 아이템을 삭제하시겠습니까?',
                 'result.reanalyzeFailed': '재분석 실패',
                 'result.noDataToShare': '공유할 데이터가 없습니다',
+                'result.estimatedPrice': '예상 가격',
+                'result.askAI': 'AI에게 묻기',
+                'result.share': '공유',
+                'result.purchaseChannels': '구매 채널',
+                'result.basicInfo': '기본 정보',
+                'result.category': '카테고리',
+                'result.brand': '브랜드',
+                'result.whereToBuy': '구매처',
                 'camera.scanHint': '아이템에 맞춰 스캔 시작',
                 'ai.title': 'AI 스마트 서비스',
                 'ai.uploadText': '사진 업로드로 AI 채팅 시작',
@@ -6194,6 +6234,14 @@
                 'result.confirmDelete': 'คุณแน่ใจหรือไม่ที่จะลบรายการนี้?',
                 'result.reanalyzeFailed': 'การวิเคราะห์ใหม่ล้มเหลว',
                 'result.noDataToShare': 'ไม่มีข้อมูลที่จะแชร์',
+                'result.estimatedPrice': 'ราคาโดยประมาณ',
+                'result.askAI': 'ถาม AI',
+                'result.share': 'แชร์',
+                'result.purchaseChannels': 'ช่องทางการซื้อ',
+                'result.basicInfo': 'ข้อมูลพื้นฐาน',
+                'result.category': 'หมวดหมู่',
+                'result.brand': 'แบรนด์',
+                'result.whereToBuy': 'ซื้อได้ที่ไหน',
                 'camera.scanHint': 'เล็งไปที่สินค้าเพื่อเริ่มสแกน',
                 'ai.title': 'บริการ AI อัจฉริยะ',
                 'ai.uploadText': 'อัพโหลดรูปเพื่อเริ่มแชท AI',
@@ -6330,6 +6378,14 @@
                 'result.confirmDelete': 'Bạn có chắc muốn xóa mục này?',
                 'result.reanalyzeFailed': 'Phân tích lại thất bại',
                 'result.noDataToShare': 'Không có dữ liệu để chia sẻ',
+                'result.estimatedPrice': 'Giá ước tính',
+                'result.askAI': 'Hỏi AI',
+                'result.share': 'Chia sẻ',
+                'result.purchaseChannels': 'Kênh mua hàng',
+                'result.basicInfo': 'Thông tin cơ bản',
+                'result.category': 'Danh mục',
+                'result.brand': 'Thương hiệu',
+                'result.whereToBuy': 'Mua ở đâu',
                 'camera.scanHint': 'Hướng vào sản phẩm để bắt đầu quét',
                 'ai.title': 'Dịch vụ AI thông minh',
                 'ai.uploadText': 'Tải ảnh lên để bắt đầu trò chuyện AI',
@@ -6466,6 +6522,14 @@
                 'result.confirmDelete': '¿Estás seguro de que quieres eliminar este elemento?',
                 'result.reanalyzeFailed': 'Error al volver a analizar',
                 'result.noDataToShare': 'No hay datos para compartir',
+                'result.estimatedPrice': 'Precio estimado',
+                'result.askAI': 'Preguntar a IA',
+                'result.share': 'Compartir',
+                'result.purchaseChannels': 'Canales de compra',
+                'result.basicInfo': 'Información básica',
+                'result.category': 'Categoría',
+                'result.brand': 'Marca',
+                'result.whereToBuy': 'Dónde comprar',
                 'camera.scanHint': 'Alinear artículo para iniciar escaneo',
                 'ai.title': 'Servicio Inteligente IA',
                 'ai.uploadText': 'Subir foto para iniciar chat IA',
@@ -6602,6 +6666,14 @@
                 'result.confirmDelete': 'Êtes-vous sûr de vouloir supprimer cet élément ?',
                 'result.reanalyzeFailed': 'Échec de la ré-analyse',
                 'result.noDataToShare': 'Aucune donnée à partager',
+                'result.estimatedPrice': 'Prix estimé',
+                'result.askAI': 'Demander à l\'IA',
+                'result.share': 'Partager',
+                'result.purchaseChannels': 'Canaux d\'achat',
+                'result.basicInfo': 'Informations de base',
+                'result.category': 'Catégorie',
+                'result.brand': 'Marque',
+                'result.whereToBuy': 'Où acheter',
                 'camera.scanHint': 'Aligner l\'article pour commencer le scan',
                 'ai.title': 'Service IA Intelligent',
                 'ai.uploadText': 'Télécharger photo pour démarrer chat IA',
@@ -6738,6 +6810,14 @@
                 'result.confirmDelete': 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
                 'result.reanalyzeFailed': 'Neuanalyse fehlgeschlagen',
                 'result.noDataToShare': 'Keine Daten zum Teilen vorhanden',
+                'result.estimatedPrice': 'Geschätzter Preis',
+                'result.askAI': 'KI fragen',
+                'result.share': 'Teilen',
+                'result.purchaseChannels': 'Kaufkanäle',
+                'result.basicInfo': 'Grundinformationen',
+                'result.category': 'Kategorie',
+                'result.brand': 'Marke',
+                'result.whereToBuy': 'Wo kaufen',
                 'camera.scanHint': 'Artikel ausrichten um Scan zu starten',
                 'ai.title': 'KI Intelligenter Service',
                 'ai.uploadText': 'Foto hochladen um KI-Chat zu starten',
@@ -6874,6 +6954,14 @@
                 'result.confirmDelete': 'Sei sicuro di voler eliminare questo elemento?',
                 'result.reanalyzeFailed': 'Ri-analisi fallita',
                 'result.noDataToShare': 'Nessun dato da condividere',
+                'result.estimatedPrice': 'Prezzo stimato',
+                'result.askAI': 'Chiedi all\'IA',
+                'result.share': 'Condividi',
+                'result.purchaseChannels': 'Canali di acquisto',
+                'result.basicInfo': 'Informazioni di base',
+                'result.category': 'Categoria',
+                'result.brand': 'Marca',
+                'result.whereToBuy': 'Dove acquistare',
                 'camera.scanHint': 'Allinea articolo per iniziare scansione',
                 'ai.title': 'Servizio IA Intelligente',
                 'ai.uploadText': 'Carica foto per iniziare chat IA',
@@ -7010,6 +7098,14 @@
                 'result.confirmDelete': 'Tem certeza de que deseja excluir este item?',
                 'result.reanalyzeFailed': 'Falha ao re-analisar',
                 'result.noDataToShare': 'Nenhum dado para compartilhar',
+                'result.estimatedPrice': 'Preço estimado',
+                'result.askAI': 'Perguntar à IA',
+                'result.share': 'Compartilhar',
+                'result.purchaseChannels': 'Canais de compra',
+                'result.basicInfo': 'Informações básicas',
+                'result.category': 'Categoria',
+                'result.brand': 'Marca',
+                'result.whereToBuy': 'Onde comprar',
                 'camera.scanHint': 'Alinhe item para iniciar digitalização',
                 'ai.title': 'Serviço IA Inteligente',
                 'ai.uploadText': 'Carregar foto para iniciar chat IA',
@@ -7146,6 +7242,14 @@
                 'result.confirmDelete': 'هل أنت متأكد من أنك تريد حذف هذا العنصر؟',
                 'result.reanalyzeFailed': 'فشلت إعادة التحليل',
                 'result.noDataToShare': 'لا توجد بيانات للمشاركة',
+                'result.estimatedPrice': 'السعر المقدر',
+                'result.askAI': 'اسأل الذكاء الاصطناعي',
+                'result.share': 'مشاركة',
+                'result.purchaseChannels': 'قنوات الشراء',
+                'result.basicInfo': 'المعلومات الأساسية',
+                'result.category': 'الفئة',
+                'result.brand': 'العلامة التجارية',
+                'result.whereToBuy': 'أين تشتري',
                 'camera.scanHint': 'وجه العنصر لبدء المسح',
                 'ai.title': 'خدمة الذكاء الاصطناعي',
                 'ai.uploadText': 'ارفع صورة لبدء دردشة الذكاء الاصطناعي',
@@ -7282,6 +7386,14 @@
                 'result.confirmDelete': 'Bu öğeyi silmek istediğinizden emin misiniz?',
                 'result.reanalyzeFailed': 'Yeniden analiz başarısız oldu',
                 'result.noDataToShare': 'Paylaşılacak veri yok',
+                'result.estimatedPrice': 'Tahmini Fiyat',
+                'result.askAI': 'AI\'ya Sor',
+                'result.share': 'Paylaş',
+                'result.purchaseChannels': 'Satın Alma Kanalları',
+                'result.basicInfo': 'Temel Bilgiler',
+                'result.category': 'Kategori',
+                'result.brand': 'Marka',
+                'result.whereToBuy': 'Nereden Alınır',
                 'camera.scanHint': 'Taramayı başlatmak için ürünü hizala',
                 'ai.title': 'AI Akıllı Hizmet',
                 'ai.uploadText': 'AI sohbeti başlatmak için fotoğraf yükle',
@@ -7418,6 +7530,14 @@
                 'result.confirmDelete': 'Вы уверены, что хотите удалить этот элемент?',
                 'result.reanalyzeFailed': 'Повторный анализ не удался',
                 'result.noDataToShare': 'Нет данных для обмена',
+                'result.estimatedPrice': 'Ориентировочная цена',
+                'result.askAI': 'Спросить ИИ',
+                'result.share': 'Поделиться',
+                'result.purchaseChannels': 'Каналы покупки',
+                'result.basicInfo': 'Основная информация',
+                'result.category': 'Категория',
+                'result.brand': 'Бренд',
+                'result.whereToBuy': 'Где купить',
                 'camera.scanHint': 'Наведите на товар для начала сканирования',
                 'ai.title': 'ИИ Умный сервис',
                 'ai.uploadText': 'Загрузите фото для начала ИИ-чата',
@@ -7554,6 +7674,14 @@
                 'result.confirmDelete': 'Apakah Anda yakin ingin menghapus item ini?',
                 'result.reanalyzeFailed': 'Analisis ulang gagal',
                 'result.noDataToShare': 'Tidak ada data untuk dibagikan',
+                'result.estimatedPrice': 'Perkiraan Harga',
+                'result.askAI': 'Tanya AI',
+                'result.share': 'Bagikan',
+                'result.purchaseChannels': 'Saluran Pembelian',
+                'result.basicInfo': 'Informasi Dasar',
+                'result.category': 'Kategori',
+                'result.brand': 'Merek',
+                'result.whereToBuy': 'Tempat Membeli',
                 'camera.scanHint': 'Arahkan ke barang untuk mulai memindai',
                 'ai.title': 'Layanan AI Cerdas',
                 'ai.uploadText': 'Unggah foto untuk mulai obrolan AI',
@@ -7690,6 +7818,14 @@
                 'result.confirmDelete': 'Sigurado ka bang gusto mong burahin ang item na ito?',
                 'result.reanalyzeFailed': 'Nabigo ang muling pagsusuri',
                 'result.noDataToShare': 'Walang data na maibabahagi',
+                'result.estimatedPrice': 'Tinatayang Presyo',
+                'result.askAI': 'Tanungin ang AI',
+                'result.share': 'Ibahagi',
+                'result.purchaseChannels': 'Mga Channel ng Pagbili',
+                'result.basicInfo': 'Pangunahing Impormasyon',
+                'result.category': 'Kategorya',
+                'result.brand': 'Tatak',
+                'result.whereToBuy': 'Saan Bibili',
                 'camera.scanHint': 'Itutok sa item para simulan ang pag-scan',
                 'ai.title': 'AI Matalinong Serbisyo',
                 'ai.uploadText': 'Mag-upload ng larawan para simulan AI chat',
