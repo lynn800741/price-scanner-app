@@ -597,6 +597,14 @@
         .batch-delete-btn:hover {
             background: #d32f2f;
         }
+        /* 禁用狀態的按鈕樣式 */
+        .batch-action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .batch-action-btn:disabled:hover {
+            background: inherit;
+        }
 
         .batch-count {
             font-size: 16px;
@@ -2744,23 +2752,23 @@
 
         <!-- 選取模式頂部工具列 -->
         <div class="select-mode-header" id="selectModeHeader">
-            <span class="select-mode-title">選擇項目</span>
+            <span class="select-mode-title" data-i18n="list.selectItems">選擇項目</span>
             <button class="select-mode-cancel" onclick="toggleSelectMode()" data-i18n="list.cancel">取消</button>
         </div>
         <!-- 批量操作工具列 -->
         <div class="batch-toolbar" id="batchToolbar">
-            <button class="batch-action-btn batch-share-btn" onclick="batchShare()">
+            <button class="batch-action-btn batch-share-btn" id="batchShareBtn" onclick="batchShare()" disabled>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
                 </svg>
-                分享
+                <span data-i18n="list.share">分享</span>
             </button>
-            <span class="batch-count">已選取 <span id="selectedCount">0</span> 個</span>
-            <button class="batch-action-btn batch-delete-btn" onclick="batchDelete()">
+            <span class="batch-count" id="batchCountText">已選取 <span id="selectedCount">0</span> 個</span>
+            <button class="batch-action-btn batch-delete-btn" id="batchDeleteBtn" onclick="batchDelete()" disabled>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                 </svg>
-                刪除
+                <span data-i18n="list.delete">刪除</span>
             </button>
         </div>
 
@@ -4469,6 +4477,7 @@
             if (isSelectMode) {
                 selectBtn.style.display = 'none'; // 隱藏原本的選擇按鈕
                 selectModeHeader.classList.add('active'); // 顯示固定的頂部工具列
+                batchToolbar.classList.add('active'); // 立即顯示底部工具列
                 listPage.classList.add('select-mode');
                 selectedItems.clear();
                 updateSelectedCount();
@@ -4521,13 +4530,22 @@
         // 更新選中數量
         function updateSelectedCount() {
             const count = selectedItems.size;
-            document.getElementById('selectedCount').textContent = count;
+            const batchCountText = document.getElementById('batchCountText');
             
-            const batchToolbar = document.getElementById('batchToolbar');
+            // 更新選取數量文字，支援多語言
+            const selectedCountText = t('list.selectedCount').replace('{count}', count);
+            batchCountText.textContent = selectedCountText;
+            
+            // 根據選中數量啟用或禁用按鈕
+            const shareBtn = document.getElementById('batchShareBtn');
+            const deleteBtn = document.getElementById('batchDeleteBtn');
+            
             if (count > 0) {
-                batchToolbar.classList.add('active');
+                shareBtn.disabled = false;
+                deleteBtn.disabled = false;
             } else {
-                batchToolbar.classList.remove('active');
+                shareBtn.disabled = true;
+                deleteBtn.disabled = true;
             }
         }
         
@@ -5495,6 +5513,10 @@
                 'list.cancel': '取消',
                 'list.selectAll': '全選',
                 'list.deleteSelected': '刪除已選',
+                'list.selectItems': '選擇項目',
+                'list.share': '分享',
+                'list.delete': '刪除',
+                'list.selectedCount': '已選取 {count} 個',
                 'list.empty.title': '開始掃描與記錄',
                 'list.empty.desc': '掃描物品並記錄價格',
                 
@@ -5619,6 +5641,10 @@
                 'list.cancel': '取消',
                 'list.selectAll': '全选',
                 'list.deleteSelected': '删除已选',
+                'list.selectItems': '选择项目',
+                'list.share': '分享',
+                'list.delete': '删除',
+                'list.selectedCount': '已选取 {count} 个',
                 'list.empty.title': '开始扫描与记录',
                 'list.empty.desc': '扫描物品并记录价格',
                 'camera.scanHint': '对准物品开始扫描',
@@ -5739,6 +5765,10 @@
                 'list.cancel': 'Cancel',
                 'list.selectAll': 'Select All',
                 'list.deleteSelected': 'Delete Selected',
+                'list.selectItems': 'Select Items',
+                'list.share': 'Share',
+                'list.delete': 'Delete',
+                'list.selectedCount': '{count} selected',
                 'list.empty.title': 'Start Scanning & Recording',
                 'list.empty.desc': 'Scan items and record prices',
                 'camera.scanHint': 'Align item to start scanning',
@@ -5859,6 +5889,10 @@
                 'list.cancel': 'キャンセル',
                 'list.selectAll': 'すべて選択',
                 'list.deleteSelected': '選択項目を削除',
+                'list.selectItems': '項目を選択',
+                'list.share': '共有',
+                'list.delete': '削除',
+                'list.selectedCount': '{count}個選択済み',
                 'list.empty.title': 'スキャンと記録を開始',
                 'list.empty.desc': 'アイテムをスキャンして価格を記録',
                 'camera.scanHint': 'アイテムに合わせてスキャン開始',
@@ -5979,6 +6013,10 @@
                 'list.cancel': '취소',
                 'list.selectAll': '모두 선택',
                 'list.deleteSelected': '선택 항목 삭제',
+                'list.selectItems': '항목 선택',
+                'list.share': '공유',
+                'list.delete': '삭제',
+                'list.selectedCount': '{count}개 선택됨',
                 'list.empty.title': '스캔 및 기록 시작',
                 'list.empty.desc': '아이템을 스캔하고 가격을 기록',
                 'camera.scanHint': '아이템에 맞춰 스캔 시작',
@@ -6076,6 +6114,10 @@
                 'list.cancel': 'ยกเลิก',
                 'list.selectAll': 'เลือกทั้งหมด',
                 'list.deleteSelected': 'ลบที่เลือก',
+                'list.selectItems': 'เลือกรายการ',
+                'list.share': 'แชร์',
+                'list.delete': 'ลบ',
+                'list.selectedCount': 'เลือกแล้ว {count} รายการ',
                 'list.empty.title': 'เริ่มสแกนและบันทึก',
                 'list.empty.desc': 'สแกนสินค้าและบันทึกราคา',
                 'camera.scanHint': 'เล็งไปที่สินค้าเพื่อเริ่มสแกน',
@@ -6196,6 +6238,10 @@
                 'list.cancel': 'Hủy',
                 'list.selectAll': 'Chọn tất cả',
                 'list.deleteSelected': 'Xóa mục đã chọn',
+                'list.selectItems': 'Chọn mục',
+                'list.share': 'Chia sẻ',
+                'list.delete': 'Xóa',
+                'list.selectedCount': 'Đã chọn {count} mục',
                 'list.empty.title': 'Bắt đầu quét và ghi lại',
                 'list.empty.desc': 'Quét sản phẩm và ghi lại giá cả',
                 'camera.scanHint': 'Hướng vào sản phẩm để bắt đầu quét',
@@ -6316,6 +6362,10 @@
                 'list.cancel': 'Cancelar',
                 'list.selectAll': 'Seleccionar todo',
                 'list.deleteSelected': 'Eliminar seleccionados',
+                'list.selectItems': 'Seleccionar elementos',
+                'list.share': 'Compartir',
+                'list.delete': 'Eliminar',
+                'list.selectedCount': '{count} seleccionados',
                 'list.empty.title': 'Comenzar a escanear y registrar',
                 'list.empty.desc': 'Escanear artículos y registrar precios',
                 'camera.scanHint': 'Alinear artículo para iniciar escaneo',
@@ -6436,6 +6486,10 @@
                 'list.cancel': 'Annuler',
                 'list.selectAll': 'Tout sélectionner',
                 'list.deleteSelected': 'Supprimer la sélection',
+                'list.selectItems': 'Sélectionner des éléments',
+                'list.share': 'Partager',
+                'list.delete': 'Supprimer',
+                'list.selectedCount': '{count} sélectionnés',
                 'list.empty.title': 'Commencer à scanner et enregistrer',
                 'list.empty.desc': 'Scanner des articles et enregistrer les prix',
                 'camera.scanHint': 'Aligner l\'article pour commencer le scan',
@@ -6556,6 +6610,10 @@
                 'list.cancel': 'Abbrechen',
                 'list.selectAll': 'Alle auswählen',
                 'list.deleteSelected': 'Ausgewählte löschen',
+                'list.selectItems': 'Elemente auswählen',
+                'list.share': 'Teilen',
+                'list.delete': 'Löschen',
+                'list.selectedCount': '{count} ausgewählt',
                 'list.empty.title': 'Scannen und Aufzeichnen beginnen',
                 'list.empty.desc': 'Artikel scannen und Preise aufzeichnen',
                 'camera.scanHint': 'Artikel ausrichten um Scan zu starten',
@@ -6676,6 +6734,10 @@
                 'list.cancel': 'Annulla',
                 'list.selectAll': 'Seleziona tutto',
                 'list.deleteSelected': 'Elimina selezionati',
+                'list.selectItems': 'Seleziona elementi',
+                'list.share': 'Condividi',
+                'list.delete': 'Elimina',
+                'list.selectedCount': '{count} selezionati',
                 'list.empty.title': 'Inizia a scansionare e registrare',
                 'list.empty.desc': 'Scansiona articoli e registra prezzi',
                 'camera.scanHint': 'Allinea articolo per iniziare scansione',
@@ -6796,6 +6858,10 @@
                 'list.cancel': 'Cancelar',
                 'list.selectAll': 'Selecionar tudo',
                 'list.deleteSelected': 'Excluir selecionados',
+                'list.selectItems': 'Selecionar itens',
+                'list.share': 'Compartilhar',
+                'list.delete': 'Excluir',
+                'list.selectedCount': '{count} selecionados',
                 'list.empty.title': 'Começar a digitalizar e registrar',
                 'list.empty.desc': 'Digitalize itens e registre preços',
                 'camera.scanHint': 'Alinhe item para iniciar digitalização',
@@ -6916,6 +6982,10 @@
                 'list.cancel': 'إلغاء',
                 'list.selectAll': 'تحديد الكل',
                 'list.deleteSelected': 'حذف المحدد',
+                'list.selectItems': 'تحديد عناصر',
+                'list.share': 'مشاركة',
+                'list.delete': 'حذف',
+                'list.selectedCount': 'تم تحديد {count}',
                 'list.empty.title': 'ابدأ المسح والتسجيل',
                 'list.empty.desc': 'امسح العناصر وسجل الأسعار',
                 'camera.scanHint': 'وجه العنصر لبدء المسح',
@@ -7036,6 +7106,10 @@
                 'list.cancel': 'İptal',
                 'list.selectAll': 'Tümünü seç',
                 'list.deleteSelected': 'Seçilenleri sil',
+                'list.selectItems': 'Öğeleri seç',
+                'list.share': 'Paylaş',
+                'list.delete': 'Sil',
+                'list.selectedCount': '{count} seçildi',
                 'list.empty.title': 'Taramaya ve kaydetmeye başla',
                 'list.empty.desc': 'Ürünleri tara ve fiyatları kaydet',
                 'camera.scanHint': 'Taramayı başlatmak için ürünü hizala',
@@ -7156,6 +7230,10 @@
                 'list.cancel': 'Отмена',
                 'list.selectAll': 'Выбрать все',
                 'list.deleteSelected': 'Удалить выбранные',
+                'list.selectItems': 'Выбрать элементы',
+                'list.share': 'Поделиться',
+                'list.delete': 'Удалить',
+                'list.selectedCount': 'Выбрано: {count}',
                 'list.empty.title': 'Начать сканирование и запись',
                 'list.empty.desc': 'Сканируйте товары и записывайте цены',
                 'camera.scanHint': 'Наведите на товар для начала сканирования',
@@ -7276,6 +7354,10 @@
                 'list.cancel': 'Batal',
                 'list.selectAll': 'Pilih semua',
                 'list.deleteSelected': 'Hapus yang dipilih',
+                'list.selectItems': 'Pilih item',
+                'list.share': 'Bagikan',
+                'list.delete': 'Hapus',
+                'list.selectedCount': '{count} dipilih',
                 'list.empty.title': 'Mulai memindai dan merekam',
                 'list.empty.desc': 'Pindai barang dan catat harga',
                 'camera.scanHint': 'Arahkan ke barang untuk mulai memindai',
@@ -7396,6 +7478,10 @@
                 'list.cancel': 'Kanselahin',
                 'list.selectAll': 'Piliin lahat',
                 'list.deleteSelected': 'Burahin ang napili',
+                'list.selectItems': 'Pumili ng mga item',
+                'list.share': 'Ibahagi',
+                'list.delete': 'Burahin',
+                'list.selectedCount': '{count} napili',
                 'list.empty.title': 'Simulan ang pag-scan at pagtala',
                 'list.empty.desc': 'I-scan ang mga item at itala ang presyo',
                 'camera.scanHint': 'Itutok sa item para simulan ang pag-scan',
