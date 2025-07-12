@@ -2838,11 +2838,11 @@
             </div>
             <div class="chat-input-area">
                 <div class="quick-prompts" id="quickPrompts">
-                    <span class="prompt-chip" onclick="sendQuickPrompt('這個值得買嗎？')">這個值得買嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('有更便宜的替代品嗎？')">有更便宜的替代品嗎？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('如何保養這個物品？')">如何保養這個物品？</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('這個物品的優缺點是什麼？')">優缺點分析</span>
-                    <span class="prompt-chip" onclick="sendQuickPrompt('使用時要注意什麼？')">使用注意事項</span>
+                    <span class="prompt-chip" data-i18n="chat.quickPrompt1" onclick="sendQuickPrompt(this)">這個值得買嗎？</span>
+                    <span class="prompt-chip" data-i18n="chat.quickPrompt2" onclick="sendQuickPrompt(this)">有更便宜的替代品嗎？</span>
+                    <span class="prompt-chip" data-i18n="chat.quickPrompt3" onclick="sendQuickPrompt(this)">如何保養這個物品？</span>
+                    <span class="prompt-chip" data-i18n="chat.quickPrompt4" onclick="sendQuickPrompt(this)">優缺點分析</span>
+                    <span class="prompt-chip" data-i18n="chat.quickPrompt5" onclick="sendQuickPrompt(this)">使用注意事項</span>
                 </div>
                 <div class="chat-input-container">
                     <textarea class="chat-input" id="chatInput" placeholder="詢問關於這個物品..." data-i18n-placeholder="chat.placeholder" rows="1"></textarea>
@@ -5141,8 +5141,10 @@
         }
         
         // 發送快速提示
-        function sendQuickPrompt(prompt) {
-            document.getElementById('chatInput').value = prompt;
+        function sendQuickPrompt(element) {
+            // 如果傳入的是元素，獲取其文字內容
+            const promptText = typeof element === 'string' ? element : element.textContent;
+            document.getElementById('chatInput').value = promptText;
             sendMessage();
         }
         
@@ -5663,6 +5665,11 @@
                 // 聊天頁面
                 'chat.title': 'AI 助手',
                 'chat.placeholder': '詢問關於這個物品...',
+                'chat.quickPrompt1': '這個值得買嗎？',
+                'chat.quickPrompt2': '有更便宜的替代品嗎？',
+                'chat.quickPrompt3': '如何保養這個物品？',
+                'chat.quickPrompt4': '優缺點分析',
+                'chat.quickPrompt5': '使用注意事項',
                 
                 // 登入/註冊頁面
                 'auth.subtitle': '萬物價格掃描器',
@@ -5812,6 +5819,11 @@
                 // 聊天页面
                 'chat.title': 'AI 助手',
                 'chat.placeholder': '询问关于这个物品...',
+                'chat.quickPrompt1': '这个值得买吗？',
+                'chat.quickPrompt2': '有更便宜的替代品吗？',
+                'chat.quickPrompt3': '如何保养这个物品？',
+                'chat.quickPrompt4': '优缺点分析',
+                'chat.quickPrompt5': '使用注意事项',
                 
                 // 登录/注册页面
                 'auth.subtitle': '万物价格扫描器',
@@ -5961,6 +5973,11 @@
                 // Chat page
                 'chat.title': 'AI Assistant',
                 'chat.placeholder': 'Ask about this item...',
+                'chat.quickPrompt1': 'Is this worth buying?',
+                'chat.quickPrompt2': 'Are there cheaper alternatives?',
+                'chat.quickPrompt3': 'How to maintain this item?',
+                'chat.quickPrompt4': 'Pros and cons analysis',
+                'chat.quickPrompt5': 'Usage precautions',
                 
                 // Login/Register page
                 'auth.subtitle': 'Universal Price Scanner',
@@ -6109,6 +6126,11 @@
                 // チャットページ
                 'chat.title': 'AIアシスタント',
                 'chat.placeholder': 'このアイテムについて質問する...',
+                'chat.quickPrompt1': 'これは買う価値がありますか？',
+                'chat.quickPrompt2': 'もっと安い代替品はありますか？',
+                'chat.quickPrompt3': 'このアイテムのメンテナンス方法は？',
+                'chat.quickPrompt4': '長所と短所の分析',
+                'chat.quickPrompt5': '使用上の注意事項',
                 
                 // Login/Register page
                 'auth.subtitle': '万物価格スキャナー',
@@ -6257,6 +6279,11 @@
                 // 채팅 페이지
                 'chat.title': 'AI 어시스턴트',
                 'chat.placeholder': '이 항목에 대해 물어보세요...',
+                'chat.quickPrompt1': '이것을 살 가치가 있나요?',
+                'chat.quickPrompt2': '더 저렴한 대안이 있나요?',
+                'chat.quickPrompt3': '이 물건을 어떻게 관리하나요?',
+                'chat.quickPrompt4': '장단점 분석',
+                'chat.quickPrompt5': '사용 시 주의사항',
                 
                 // Login/Register page
                 'auth.subtitle': '만물 가격 스캐너',
@@ -6382,6 +6409,11 @@
                 // หน้าแชท
                 'chat.title': 'ผู้ช่วย AI',
                 'chat.placeholder': 'ถามเกี่ยวกับสินค้านี้...',
+                'chat.quickPrompt1': 'สินค้านี้คุ้มค่าที่จะซื้อไหม?',
+                'chat.quickPrompt2': 'มีทางเลือกที่ถูกกว่าไหม?',
+                'chat.quickPrompt3': 'จะดูแลรักษาสินค้านี้อย่างไร?',
+                'chat.quickPrompt4': 'วิเคราะห์ข้อดีข้อเสีย',
+                'chat.quickPrompt5': 'ข้อควรระวังในการใช้งาน',
                 
                 'settings.membership': 'บริการสมาชิก',
                 'settings.memberStatus': 'สถานะสมาชิก',
@@ -6531,6 +6563,11 @@
                 // Trang trò chuyện
                 'chat.title': 'Trợ lý AI',
                 'chat.placeholder': 'Hỏi về mặt hàng này...',
+                'chat.quickPrompt1': 'Cái này có đáng mua không?',
+                'chat.quickPrompt2': 'Có lựa chọn rẻ hơn không?',
+                'chat.quickPrompt3': 'Làm thế nào để bảo quản mặt hàng này?',
+                'chat.quickPrompt4': 'Phân tích ưu nhược điểm',
+                'chat.quickPrompt5': 'Lưu ý khi sử dụng',
                 
                 'settings.membership': 'Dịch vụ hội viên',
                 'settings.memberStatus': 'Trạng thái hội viên',
@@ -6680,6 +6717,11 @@
                 // Página de chat
                 'chat.title': 'Asistente IA',
                 'chat.placeholder': 'Pregunta sobre este artículo...',
+                'chat.quickPrompt1': '¿Vale la pena comprarlo?',
+                'chat.quickPrompt2': '¿Hay alternativas más baratas?',
+                'chat.quickPrompt3': '¿Cómo mantener este artículo?',
+                'chat.quickPrompt4': 'Análisis de pros y contras',
+                'chat.quickPrompt5': 'Precauciones de uso',
                 
                 'settings.membership': 'Membresía',
                 'settings.memberStatus': 'Estado de Miembro',
@@ -6829,6 +6871,11 @@
                 // Page de chat
                 'chat.title': 'Assistant IA',
                 'chat.placeholder': 'Posez une question sur cet article...',
+                'chat.quickPrompt1': 'Cela vaut-il la peine d\'acheter?',
+                'chat.quickPrompt2': 'Y a-t-il des alternatives moins chères?',
+                'chat.quickPrompt3': 'Comment entretenir cet article?',
+                'chat.quickPrompt4': 'Analyse des avantages et inconvénients',
+                'chat.quickPrompt5': 'Précautions d\'utilisation',
                 
                 'settings.membership': 'Adhésion',
                 'settings.memberStatus': 'Statut de Membre',
@@ -6978,6 +7025,11 @@
                 // Chat-Seite
                 'chat.title': 'KI-Assistent',
                 'chat.placeholder': 'Fragen Sie zu diesem Artikel...',
+                'chat.quickPrompt1': 'Lohnt sich der Kauf?',
+                'chat.quickPrompt2': 'Gibt es günstigere Alternativen?',
+                'chat.quickPrompt3': 'Wie pflegt man diesen Artikel?',
+                'chat.quickPrompt4': 'Vor- und Nachteile Analyse',
+                'chat.quickPrompt5': 'Verwendungshinweise',
                 
                 'settings.membership': 'Mitgliedschaft',
                 'settings.memberStatus': 'Mitgliedsstatus',
@@ -7127,6 +7179,11 @@
                 // Pagina di chat
                 'chat.title': 'Assistente IA',
                 'chat.placeholder': 'Chiedi informazioni su questo articolo...',
+                'chat.quickPrompt1': 'Vale la pena acquistarlo?',
+                'chat.quickPrompt2': 'Ci sono alternative più economiche?',
+                'chat.quickPrompt3': 'Come mantenere questo articolo?',
+                'chat.quickPrompt4': 'Analisi di pro e contro',
+                'chat.quickPrompt5': 'Precauzioni d\'uso',
                 
                 'settings.membership': 'Abbonamento',
                 'settings.memberStatus': 'Stato Membro',
@@ -7276,6 +7333,11 @@
                 // Página de chat
                 'chat.title': 'Assistente IA',
                 'chat.placeholder': 'Pergunte sobre este item...',
+                'chat.quickPrompt1': 'Vale a pena comprar?',
+                'chat.quickPrompt2': 'Existem alternativas mais baratas?',
+                'chat.quickPrompt3': 'Como manter este item?',
+                'chat.quickPrompt4': 'Análise de prós e contras',
+                'chat.quickPrompt5': 'Precauções de uso',
                 
                 'settings.membership': 'Assinatura',
                 'settings.memberStatus': 'Status de Membro',
@@ -7425,6 +7487,11 @@
                 // صفحة المحادثة
                 'chat.title': 'مساعد الذكاء الاصطناعي',
                 'chat.placeholder': 'اسأل عن هذا العنصر...',
+                'chat.quickPrompt1': 'هل يستحق الشراء؟',
+                'chat.quickPrompt2': 'هل توجد بدائل أرخص؟',
+                'chat.quickPrompt3': 'كيفية صيانة هذا العنصر؟',
+                'chat.quickPrompt4': 'تحليل الإيجابيات والسلبيات',
+                'chat.quickPrompt5': 'احتياطات الاستخدام',
                 
                 'settings.membership': 'العضوية',
                 'settings.memberStatus': 'حالة العضو',
@@ -7574,6 +7641,11 @@
                 // Sohbet sayfası
                 'chat.title': 'AI Asistanı',
                 'chat.placeholder': 'Bu öğe hakkında soru sorun...',
+                'chat.quickPrompt1': 'Bunu almaya değer mi?',
+                'chat.quickPrompt2': 'Daha ucuz alternatifler var mı?',
+                'chat.quickPrompt3': 'Bu öğe nasıl bakımı yapılır?',
+                'chat.quickPrompt4': 'Artılar ve eksiler analizi',
+                'chat.quickPrompt5': 'Kullanım önlemleri',
                 
                 'settings.membership': 'Üyelik',
                 'settings.memberStatus': 'Üye Durumu',
@@ -7723,6 +7795,11 @@
                 // Страница чата
                 'chat.title': 'ИИ-помощник',
                 'chat.placeholder': 'Спросить об этом товаре...',
+                'chat.quickPrompt1': 'Стоит ли покупать?',
+                'chat.quickPrompt2': 'Есть ли более дешевые альтернативы?',
+                'chat.quickPrompt3': 'Как ухаживать за этим товаром?',
+                'chat.quickPrompt4': 'Анализ плюсов и минусов',
+                'chat.quickPrompt5': 'Меры предосторожности при использовании',
                 
                 'settings.membership': 'Членство',
                 'settings.memberStatus': 'Статус участника',
@@ -7872,6 +7949,11 @@
                 // Halaman obrolan
                 'chat.title': 'Asisten AI',
                 'chat.placeholder': 'Tanyakan tentang item ini...',
+                'chat.quickPrompt1': 'Apakah ini layak dibeli?',
+                'chat.quickPrompt2': 'Apakah ada alternatif yang lebih murah?',
+                'chat.quickPrompt3': 'Bagaimana cara merawat item ini?',
+                'chat.quickPrompt4': 'Analisis kelebihan dan kekurangan',
+                'chat.quickPrompt5': 'Tindakan pencegahan penggunaan',
                 
                 'settings.membership': 'Keanggotaan',
                 'settings.memberStatus': 'Status Anggota',
@@ -8021,6 +8103,11 @@
                 // Pahina ng chat
                 'chat.title': 'AI Assistant',
                 'chat.placeholder': 'Magtanong tungkol sa item na ito...',
+                'chat.quickPrompt1': 'Sulit ba itong bilhin?',
+                'chat.quickPrompt2': 'May mas murang alternatibo ba?',
+                'chat.quickPrompt3': 'Paano alagaan ang item na ito?',
+                'chat.quickPrompt4': 'Pagsusuri ng mga kalamangan at kahinaan',
+                'chat.quickPrompt5': 'Mga pag-iingat sa paggamit',
                 
                 'settings.membership': 'Membership',
                 'settings.memberStatus': 'Katayuan ng Miyembro',
