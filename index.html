@@ -4977,52 +4977,44 @@
                     // 第一次對話，隱藏重新查看圖片按鈕
                     document.getElementById('viewImageSection').style.display = 'none';
                     
-                    // 根據當前語言和物品類型生成個性化的歡迎訊息
+                    // 使用翻譯系統生成個性化的歡迎訊息
                     const lang = getCurrentLanguage();
-                    let welcomeMessage = '';
                     
-                    if (lang === 'zh-TW') {
-                        welcomeMessage = `## 你好！我剛剛仔細觀察了這個「${currentAnalysisData.name}」\n\n發現了一些有趣的資訊想與你分享！\n\n`;
-                        if (currentAnalysisData.category && currentAnalysisData.category.includes('電子')) {
-                            welcomeMessage += `📱 **作為一個科技產品**，它代表著現代生活的便利性。`;
-                        } else if (currentAnalysisData.category && currentAnalysisData.category.includes('食')) {
-                            welcomeMessage += `🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。`;
-                        } else if (currentAnalysisData.brand) {
-                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** 這個品牌有著獨特的市場定位。`;
+                    // 開頭問候
+                    let welcomeMessage = `## ${t('chat.welcome.greeting').replace('{name}', currentAnalysisData.name)}\n\n`;
+                    welcomeMessage += `${t('chat.welcome.discovered')}\n\n`;
+                    
+                    // 根據物品類型選擇適當的描述
+                    if (currentAnalysisData.category) {
+                        const categoryLower = currentAnalysisData.category.toLowerCase();
+                        if (categoryLower.includes('電子') || categoryLower.includes('electronic') || 
+                            categoryLower.includes('3c') || categoryLower.includes('tech')) {
+                            welcomeMessage += t('chat.welcome.tech');
+                        } else if (categoryLower.includes('食') || categoryLower.includes('food') || 
+                                   categoryLower.includes('餐') || categoryLower.includes('meal')) {
+                            welcomeMessage += t('chat.welcome.food');
+                        } else if (currentAnalysisData.brand && currentAnalysisData.brand !== 'Unknown' && 
+                                   currentAnalysisData.brand !== '未知') {
+                            welcomeMessage += t('chat.welcome.brand').replace('{brand}', currentAnalysisData.brand);
                         } else {
-                            welcomeMessage += `✨ **每個物品都有它獨特的故事和價值**。`;
+                            welcomeMessage += t('chat.welcome.default');
                         }
-                        welcomeMessage += `\n\n### 我可以為你提供：\n\n`;
-                        welcomeMessage += `• **深入的產品分析**——從各個角度剖析優缺點\n`;
-                        welcomeMessage += `• **使用技巧和保養建議**——讓物品發揮最大價值\n`;
-                        welcomeMessage += `• **市場趨勢和價格走向**——掌握最佳購買時機\n`;
-                        welcomeMessage += `• **相關的有趣知識**——拓展視野，增長見識\n\n`;
-                        welcomeMessage += `有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？`;
-                    } else if (lang === 'en') {
-                        welcomeMessage = `## Hello! I've just carefully analyzed this "${currentAnalysisData.name}"\n\nI've discovered some interesting information to share with you!\n\n`;
-                        if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('electronic')) {
-                            welcomeMessage += `📱 **As a tech product**, it represents the convenience of modern life.`;
-                        } else if (currentAnalysisData.category && currentAnalysisData.category.toLowerCase().includes('food')) {
-                            welcomeMessage += `🍽️ **Food is essential**, let's explore this delicious choice in detail.`;
-                        } else if (currentAnalysisData.brand) {
-                            welcomeMessage += `🏷️ **${currentAnalysisData.brand}** has a unique market position.`;
-                        } else {
-                            welcomeMessage += `✨ **Every item has its unique story and value**.`;
-                        }
-                        welcomeMessage += `\n\n### I can provide you with:\n\n`;
-                        welcomeMessage += `• **In-depth product analysis** — examining pros and cons from all angles\n`;
-                        welcomeMessage += `• **Usage tips and maintenance advice** — maximize item value\n`;
-                        welcomeMessage += `• **Market trends and price insights** — find the best time to buy\n`;
-                        welcomeMessage += `• **Related interesting knowledge** — expand your horizons\n\n`;
-                        welcomeMessage += `What would you like to know? Or shall I share some information you might find interesting?`;
+                    } else if (currentAnalysisData.brand && currentAnalysisData.brand !== 'Unknown' && 
+                               currentAnalysisData.brand !== '未知') {
+                        welcomeMessage += t('chat.welcome.brand').replace('{brand}', currentAnalysisData.brand);
                     } else {
-                        // 預設使用英文
-                        welcomeMessage = `## Hello! I've analyzed this "${currentAnalysisData.name}"\n\nI have some insights to share!\n\n`;
-                        welcomeMessage += `✨ **Every item has its unique story and value**.\n\n`;
-                        welcomeMessage += `### I can help you with:\n\n`;
-                        welcomeMessage += `• Product analysis\n• Usage tips\n• Market insights\n• Interesting facts\n\n`;
-                        welcomeMessage += `What would you like to know?`;
+                        welcomeMessage += t('chat.welcome.default');
                     }
+                    
+                    // 服務列表
+                    welcomeMessage += `\n\n${t('chat.welcome.services')}\n\n`;
+                    welcomeMessage += `${t('chat.welcome.service1')}\n`;
+                    welcomeMessage += `${t('chat.welcome.service2')}\n`;
+                    welcomeMessage += `${t('chat.welcome.service3')}\n`;
+                    welcomeMessage += `${t('chat.welcome.service4')}\n\n`;
+                    
+                    // 結尾
+                    welcomeMessage += t('chat.welcome.closing');
                     
                     addMessage('assistant', welcomeMessage);
                     
@@ -5578,6 +5570,20 @@
                 'chat.quickPrompt4': '優缺點分析',
                 'chat.quickPrompt5': '使用注意事項',
                 
+                // 歡迎詞
+                'chat.welcome.greeting': '你好！我剛剛仔細觀察了這個「{name}」',
+                'chat.welcome.discovered': '發現了一些有趣的資訊想與你分享！',
+                'chat.welcome.tech': '📱 **作為一個科技產品**，它代表著現代生活的便利性。',
+                'chat.welcome.food': '🍽️ **民以食為天**，讓我們來深入了解這個美味的選擇。',
+                'chat.welcome.brand': '🏷️ **{brand}** 這個品牌有著獨特的市場定位。',
+                'chat.welcome.default': '✨ **每個物品都有它獨特的故事和價值**。',
+                'chat.welcome.services': '### 我可以為你提供：',
+                'chat.welcome.service1': '• **深入的產品分析**——從各個角度剖析優缺點',
+                'chat.welcome.service2': '• **使用技巧和保養建議**——讓物品發揮最大價值',
+                'chat.welcome.service3': '• **市場趨勢和價格走向**——掌握最佳購買時機',
+                'chat.welcome.service4': '• **相關的有趣知識**——拓展視野，增長見識',
+                'chat.welcome.closing': '有什麼想了解的嗎？或者讓我先分享一些你可能感興趣的資訊？',
+                
                 // 登入/註冊頁面
                 'auth.subtitle': '萬物價格掃描器',
                 'auth.emailLabel': '電子郵件地址',
@@ -5731,6 +5737,20 @@
                 'chat.quickPrompt3': '如何保养这个物品？',
                 'chat.quickPrompt4': '优缺点分析',
                 'chat.quickPrompt5': '使用注意事项',
+                
+                // 欢迎词
+                'chat.welcome.greeting': '你好！我刚刚仔细观察了这个「{name}」',
+                'chat.welcome.discovered': '发现了一些有趣的信息想与你分享！',
+                'chat.welcome.tech': '📱 **作为一个科技产品**，它代表着现代生活的便利性。',
+                'chat.welcome.food': '🍽️ **民以食为天**，让我们来深入了解这个美味的选择。',
+                'chat.welcome.brand': '🏷️ **{brand}** 这个品牌有着独特的市场定位。',
+                'chat.welcome.default': '✨ **每个物品都有它独特的故事和价值**。',
+                'chat.welcome.services': '### 我可以为你提供：',
+                'chat.welcome.service1': '• **深入的产品分析**——从各个角度剖析优缺点',
+                'chat.welcome.service2': '• **使用技巧和保养建议**——让物品发挥最大价值',
+                'chat.welcome.service3': '• **市场趋势和价格走向**——掌握最佳购买时机',
+                'chat.welcome.service4': '• **相关的有趣知识**——拓展视野，增长见识',
+                'chat.welcome.closing': '有什么想了解的吗？或者让我先分享一些你可能感兴趣的信息？',
                 
                 // 登录/注册页面
                 'auth.subtitle': '万物价格扫描器',
@@ -5886,6 +5906,20 @@
                 'chat.quickPrompt4': 'Pros and cons analysis',
                 'chat.quickPrompt5': 'Usage precautions',
                 
+                // Welcome messages
+                'chat.welcome.greeting': 'Hello! I\'ve just carefully analyzed this "{name}"',
+                'chat.welcome.discovered': 'I\'ve discovered some interesting information to share with you!',
+                'chat.welcome.tech': '📱 **As a tech product**, it represents the convenience of modern life.',
+                'chat.welcome.food': '🍽️ **Food is essential**, let\'s explore this delicious choice in detail.',
+                'chat.welcome.brand': '🏷️ **{brand}** has a unique market position.',
+                'chat.welcome.default': '✨ **Every item has its unique story and value**.',
+                'chat.welcome.services': '### I can provide you with:',
+                'chat.welcome.service1': '• **In-depth product analysis** — examining pros and cons from all angles',
+                'chat.welcome.service2': '• **Usage tips and maintenance advice** — maximize item value',
+                'chat.welcome.service3': '• **Market trends and price insights** — find the best time to buy',
+                'chat.welcome.service4': '• **Related interesting knowledge** — expand your horizons',
+                'chat.welcome.closing': 'What would you like to know? Or shall I share some information you might find interesting?',
+                
                 // Login/Register page
                 'auth.subtitle': 'Universal Price Scanner',
                 'auth.emailLabel': 'Email Address',
@@ -6038,6 +6072,20 @@
                 'chat.quickPrompt3': 'このアイテムのメンテナンス方法は？',
                 'chat.quickPrompt4': '長所と短所の分析',
                 'chat.quickPrompt5': '使用上の注意事項',
+                
+                // ようこそメッセージ
+                'chat.welcome.greeting': 'こんにちは！この「{name}」を詳しく観察しました',
+                'chat.welcome.discovered': '興味深い情報を見つけましたので、お伝えしたいと思います！',
+                'chat.welcome.tech': '📱 **テクノロジー製品として**、現代生活の利便性を表しています。',
+                'chat.welcome.food': '🍽️ **食は人生の基本**、この美味しい選択について詳しく見てみましょう。',
+                'chat.welcome.brand': '🏷️ **{brand}** ブランドは独特な市場ポジションを持っています。',
+                'chat.welcome.default': '✨ **すべてのアイテムには独自のストーリーと価値があります**。',
+                'chat.welcome.services': '### 私がご提供できること：',
+                'chat.welcome.service1': '• **詳細な製品分析** — あらゆる角度から長所と短所を分析',
+                'chat.welcome.service2': '• **使用のコツとメンテナンスアドバイス** — アイテムの価値を最大化',
+                'chat.welcome.service3': '• **市場トレンドと価格動向** — 最適な購入タイミングを把握',
+                'chat.welcome.service4': '• **関連する興味深い知識** — 視野を広げる',
+                'chat.welcome.closing': '何か知りたいことはありますか？または、興味を持ちそうな情報をお伝えしましょうか？',
                 
                 // Login/Register page
                 'auth.subtitle': '万物価格スキャナー',
@@ -6192,6 +6240,20 @@
                 'chat.quickPrompt4': '장단점 분석',
                 'chat.quickPrompt5': '사용 시 주의사항',
                 
+                // 환영 메시지
+                'chat.welcome.greeting': '안녕하세요! 이 "{name}"을(를) 자세히 살펴보았습니다',
+                'chat.welcome.discovered': '흥미로운 정보를 발견했으니 공유하고 싶습니다!',
+                'chat.welcome.tech': '📱 **기술 제품으로서**, 현대 생활의 편리함을 대표합니다.',
+                'chat.welcome.food': '🍽️ **먹는 것이 중요합니다**, 이 맛있는 선택에 대해 자세히 알아봅시다.',
+                'chat.welcome.brand': '🏷️ **{brand}** 브랜드는 독특한 시장 포지션을 가지고 있습니다.',
+                'chat.welcome.default': '✨ **모든 아이템에는 고유한 스토리와 가치가 있습니다**.',
+                'chat.welcome.services': '### 제가 제공할 수 있는 것:',
+                'chat.welcome.service1': '• **심층적인 제품 분석** — 모든 각도에서 장단점 분석',
+                'chat.welcome.service2': '• **사용 팁과 관리 조언** — 아이템 가치 극대화',
+                'chat.welcome.service3': '• **시장 트렌드와 가격 동향** — 최적의 구매 시기 파악',
+                'chat.welcome.service4': '• **관련된 흥미로운 지식** — 시야 확장',
+                'chat.welcome.closing': '알고 싶은 것이 있으신가요? 아니면 흥미로울 만한 정보를 먼저 공유해드릴까요?',
+                
                 // Login/Register page
                 'auth.subtitle': '만물 가격 스캐너',
                 'auth.emailLabel': '이메일 주소',
@@ -6321,6 +6383,20 @@
                 'chat.quickPrompt3': 'จะดูแลรักษาสินค้านี้อย่างไร?',
                 'chat.quickPrompt4': 'วิเคราะห์ข้อดีข้อเสีย',
                 'chat.quickPrompt5': 'ข้อควรระวังในการใช้งาน',
+                
+                // ข้อความต้อนรับ
+                'chat.welcome.greeting': 'สวัสดีครับ/ค่ะ! ฉันเพิ่งได้สังเกต "{name}" นี้อย่างละเอียด',
+                'chat.welcome.discovered': 'พบข้อมูลที่น่าสนใจที่อยากแบ่งปันกับคุณ!',
+                'chat.welcome.tech': '📱 **ในฐานะผลิตภัณฑ์เทคโนโลยี** มันแสดงถึงความสะดวกสบายของชีวิตสมัยใหม่',
+                'chat.welcome.food': '🍽️ **อาหารเป็นสิ่งสำคัญ** มาสำรวจตัวเลือกแสนอร่อยนี้กันอย่างละเอียด',
+                'chat.welcome.brand': '🏷️ **{brand}** แบรนด์นี้มีตำแหน่งทางการตลาดที่เป็นเอกลักษณ์',
+                'chat.welcome.default': '✨ **ทุกสิ่งมีเรื่องราวและคุณค่าเฉพาะตัว**',
+                'chat.welcome.services': '### ฉันสามารถให้บริการคุณได้ดังนี้:',
+                'chat.welcome.service1': '• **การวิเคราะห์ผลิตภัณฑ์เชิงลึก** — วิเคราะห์ข้อดีข้อเสียจากทุกมุมมอง',
+                'chat.welcome.service2': '• **เคล็ดลับการใช้งานและคำแนะนำการดูแลรักษา** — ใช้ประโยชน์สูงสุดจากสินค้า',
+                'chat.welcome.service3': '• **แนวโน้มตลาดและข้อมูลราคา** — หาเวลาซื้อที่ดีที่สุด',
+                'chat.welcome.service4': '• **ความรู้ที่น่าสนใจที่เกี่ยวข้อง** — ขยายขอบเขตความรู้',
+                'chat.welcome.closing': 'มีอะไรอยากรู้ไหมครับ/ค่ะ? หรือให้ฉันแบ่งปันข้อมูลที่คุณอาจสนใจก่อนดีไหม?',
                 
                 'settings.membership': 'บริการสมาชิก',
                 'settings.memberStatus': 'สถานะสมาชิก',
@@ -6476,6 +6552,20 @@
                 'chat.quickPrompt4': 'Phân tích ưu nhược điểm',
                 'chat.quickPrompt5': 'Lưu ý khi sử dụng',
                 
+                // Lời chào mừng
+                'chat.welcome.greeting': 'Xin chào! Tôi vừa quan sát kỹ "{name}" này',
+                'chat.welcome.discovered': 'Tôi đã phát hiện một số thông tin thú vị muốn chia sẻ với bạn!',
+                'chat.welcome.tech': '📱 **Là một sản phẩm công nghệ**, nó đại diện cho sự tiện lợi của cuộc sống hiện đại.',
+                'chat.welcome.food': '🍽️ **Ăn uống là điều thiết yếu**, hãy cùng tìm hiểu chi tiết về lựa chọn ngon lành này.',
+                'chat.welcome.brand': '🏷️ **{brand}** có vị trí thị trường độc đáo.',
+                'chat.welcome.default': '✨ **Mọi vật phẩm đều có câu chuyện và giá trị riêng**.',
+                'chat.welcome.services': '### Tôi có thể cung cấp cho bạn:',
+                'chat.welcome.service1': '• **Phân tích sản phẩm chuyên sâu** — xem xét ưu nhược điểm từ mọi góc độ',
+                'chat.welcome.service2': '• **Mẹo sử dụng và lời khuyên bảo dưỡng** — tối đa hóa giá trị vật phẩm',
+                'chat.welcome.service3': '• **Xu hướng thị trường và thông tin giá cả** — tìm thời điểm mua tốt nhất',
+                'chat.welcome.service4': '• **Kiến thức thú vị liên quan** — mở rộng tầm nhìn',
+                'chat.welcome.closing': 'Bạn muốn biết điều gì? Hay để tôi chia sẻ một số thông tin bạn có thể thấy thú vị?',
+                
                 'settings.membership': 'Dịch vụ hội viên',
                 'settings.memberStatus': 'Trạng thái hội viên',
                 'settings.memberStatusFree': 'Phiên bản miễn phí',
@@ -6629,6 +6719,20 @@
                 'chat.quickPrompt3': '¿Cómo mantener este artículo?',
                 'chat.quickPrompt4': 'Análisis de pros y contras',
                 'chat.quickPrompt5': 'Precauciones de uso',
+                
+                // Mensajes de bienvenida
+                'chat.welcome.greeting': '¡Hola! Acabo de analizar cuidadosamente este "{name}"',
+                'chat.welcome.discovered': '¡He descubierto información interesante que quiero compartir contigo!',
+                'chat.welcome.tech': '📱 **Como producto tecnológico**, representa la comodidad de la vida moderna.',
+                'chat.welcome.food': '🍽️ **La comida es esencial**, exploremos en detalle esta deliciosa elección.',
+                'chat.welcome.brand': '🏷️ **{brand}** tiene una posición única en el mercado.',
+                'chat.welcome.default': '✨ **Cada artículo tiene su historia y valor únicos**.',
+                'chat.welcome.services': '### Puedo ofrecerte:',
+                'chat.welcome.service1': '• **Análisis profundo del producto** — examinando pros y contras desde todos los ángulos',
+                'chat.welcome.service2': '• **Consejos de uso y mantenimiento** — maximiza el valor del artículo',
+                'chat.welcome.service3': '• **Tendencias del mercado y precios** — encuentra el mejor momento para comprar',
+                'chat.welcome.service4': '• **Conocimientos interesantes relacionados** — amplía tus horizontes',
+                'chat.welcome.closing': '¿Qué te gustaría saber? ¿O prefieres que comparta información que podría interesarte?',
                 
                 'settings.membership': 'Membresía',
                 'settings.memberStatus': 'Estado de Miembro',
@@ -6784,6 +6888,20 @@
                 'chat.quickPrompt4': 'Analyse des avantages et inconvénients',
                 'chat.quickPrompt5': 'Précautions d\'utilisation',
                 
+                // Messages de bienvenue
+                'chat.welcome.greeting': 'Bonjour ! Je viens d\'analyser attentivement ce "{name}"',
+                'chat.welcome.discovered': 'J\'ai découvert des informations intéressantes à partager avec vous !',
+                'chat.welcome.tech': '📱 **En tant que produit technologique**, il représente la commodité de la vie moderne.',
+                'chat.welcome.food': '🍽️ **La nourriture est essentielle**, explorons en détail ce choix délicieux.',
+                'chat.welcome.brand': '🏷️ **{brand}** a une position unique sur le marché.',
+                'chat.welcome.default': '✨ **Chaque article a son histoire et sa valeur uniques**.',
+                'chat.welcome.services': '### Je peux vous fournir :',
+                'chat.welcome.service1': '• **Analyse approfondie du produit** — examen des avantages et inconvénients sous tous les angles',
+                'chat.welcome.service2': '• **Conseils d\'utilisation et d\'entretien** — maximiser la valeur de l\'article',
+                'chat.welcome.service3': '• **Tendances du marché et informations sur les prix** — trouver le meilleur moment pour acheter',
+                'chat.welcome.service4': '• **Connaissances intéressantes connexes** — élargir vos horizons',
+                'chat.welcome.closing': 'Qu\'aimeriez-vous savoir ? Ou puis-je partager des informations qui pourraient vous intéresser ?',
+                
                 'settings.membership': 'Adhésion',
                 'settings.memberStatus': 'Statut de Membre',
                 'settings.memberStatusFree': 'Version Gratuite',
@@ -6937,6 +7055,20 @@
                 'chat.quickPrompt3': 'Wie pflegt man diesen Artikel?',
                 'chat.quickPrompt4': 'Vor- und Nachteile Analyse',
                 'chat.quickPrompt5': 'Verwendungshinweise',
+                
+                // Willkommensnachrichten
+                'chat.welcome.greeting': 'Hallo! Ich habe gerade dieses "{name}" sorgfältig analysiert',
+                'chat.welcome.discovered': 'Ich habe einige interessante Informationen entdeckt, die ich mit Ihnen teilen möchte!',
+                'chat.welcome.tech': '📱 **Als technisches Produkt** repräsentiert es die Bequemlichkeit des modernen Lebens.',
+                'chat.welcome.food': '🍽️ **Essen ist essentiell**, lassen Sie uns diese köstliche Wahl im Detail erkunden.',
+                'chat.welcome.brand': '🏷️ **{brand}** hat eine einzigartige Marktposition.',
+                'chat.welcome.default': '✨ **Jeder Artikel hat seine eigene Geschichte und seinen Wert**.',
+                'chat.welcome.services': '### Ich kann Ihnen bieten:',
+                'chat.welcome.service1': '• **Tiefgehende Produktanalyse** — Untersuchung von Vor- und Nachteilen aus allen Blickwinkeln',
+                'chat.welcome.service2': '• **Nutzungstipps und Wartungshinweise** — maximieren Sie den Artikelwert',
+                'chat.welcome.service3': '• **Markttrends und Preiseinblicke** — finden Sie den besten Kaufzeitpunkt',
+                'chat.welcome.service4': '• **Verwandtes interessantes Wissen** — erweitern Sie Ihren Horizont',
+                'chat.welcome.closing': 'Was möchten Sie wissen? Oder soll ich Informationen teilen, die Sie interessant finden könnten?',
                 
                 'settings.membership': 'Mitgliedschaft',
                 'settings.memberStatus': 'Mitgliedsstatus',
@@ -7092,6 +7224,20 @@
                 'chat.quickPrompt4': 'Analisi di pro e contro',
                 'chat.quickPrompt5': 'Precauzioni d\'uso',
                 
+                // Messaggi di benvenuto
+                'chat.welcome.greeting': 'Ciao! Ho appena analizzato attentamente questo "{name}"',
+                'chat.welcome.discovered': 'Ho scoperto alcune informazioni interessanti da condividere con te!',
+                'chat.welcome.tech': '📱 **Come prodotto tecnologico**, rappresenta la comodità della vita moderna.',
+                'chat.welcome.food': '🍽️ **Il cibo è essenziale**, esploriamo in dettaglio questa deliziosa scelta.',
+                'chat.welcome.brand': '🏷️ **{brand}** ha una posizione di mercato unica.',
+                'chat.welcome.default': '✨ **Ogni articolo ha la sua storia e il suo valore unici**.',
+                'chat.welcome.services': '### Posso fornirti:',
+                'chat.welcome.service1': '• **Analisi approfondita del prodotto** — esaminando pro e contro da ogni angolazione',
+                'chat.welcome.service2': '• **Consigli d\'uso e manutenzione** — massimizza il valore dell\'articolo',
+                'chat.welcome.service3': '• **Tendenze di mercato e informazioni sui prezzi** — trova il momento migliore per acquistare',
+                'chat.welcome.service4': '• **Conoscenze interessanti correlate** — espandi i tuoi orizzonti',
+                'chat.welcome.closing': 'Cosa vorresti sapere? O posso condividere alcune informazioni che potresti trovare interessanti?',
+                
                 'settings.membership': 'Abbonamento',
                 'settings.memberStatus': 'Stato Membro',
                 'settings.memberStatusFree': 'Versione Gratuita',
@@ -7245,6 +7391,20 @@
                 'chat.quickPrompt3': 'Como manter este item?',
                 'chat.quickPrompt4': 'Análise de prós e contras',
                 'chat.quickPrompt5': 'Precauções de uso',
+                
+                // Mensagens de boas-vindas
+                'chat.welcome.greeting': 'Olá! Acabei de analisar cuidadosamente este "{name}"',
+                'chat.welcome.discovered': 'Descobri algumas informações interessantes para compartilhar com você!',
+                'chat.welcome.tech': '📱 **Como produto tecnológico**, representa a conveniência da vida moderna.',
+                'chat.welcome.food': '🍽️ **A comida é essencial**, vamos explorar em detalhes esta escolha deliciosa.',
+                'chat.welcome.brand': '🏷️ **{brand}** tem uma posição única no mercado.',
+                'chat.welcome.default': '✨ **Cada item tem sua história e valor únicos**.',
+                'chat.welcome.services': '### Posso fornecer a você:',
+                'chat.welcome.service1': '• **Análise profunda do produto** — examinando prós e contras de todos os ângulos',
+                'chat.welcome.service2': '• **Dicas de uso e conselhos de manutenção** — maximize o valor do item',
+                'chat.welcome.service3': '• **Tendências de mercado e informações de preços** — encontre o melhor momento para comprar',
+                'chat.welcome.service4': '• **Conhecimento interessante relacionado** — expanda seus horizontes',
+                'chat.welcome.closing': 'O que você gostaria de saber? Ou posso compartilhar algumas informações que você pode achar interessantes?',
                 
                 'settings.membership': 'Assinatura',
                 'settings.memberStatus': 'Status de Membro',
@@ -7400,6 +7560,20 @@
                 'chat.quickPrompt4': 'تحليل الإيجابيات والسلبيات',
                 'chat.quickPrompt5': 'احتياطات الاستخدام',
                 
+                // رسائل الترحيب
+                'chat.welcome.greeting': 'مرحباً! لقد قمت للتو بتحليل هذا "{name}" بعناية',
+                'chat.welcome.discovered': 'لقد اكتشفت بعض المعلومات المثيرة للاهتمام لمشاركتها معك!',
+                'chat.welcome.tech': '📱 **كمنتج تقني**، يمثل راحة الحياة العصرية.',
+                'chat.welcome.food': '🍽️ **الطعام ضروري**، دعونا نستكشف هذا الاختيار اللذيذ بالتفصيل.',
+                'chat.welcome.brand': '🏷️ **{brand}** لديه موقع فريد في السوق.',
+                'chat.welcome.default': '✨ **كل عنصر له قصته وقيمته الفريدة**.',
+                'chat.welcome.services': '### يمكنني أن أقدم لك:',
+                'chat.welcome.service1': '• **تحليل عميق للمنتج** — فحص الإيجابيات والسلبيات من جميع الزوايا',
+                'chat.welcome.service2': '• **نصائح الاستخدام والصيانة** — زيادة قيمة العنصر إلى أقصى حد',
+                'chat.welcome.service3': '• **اتجاهات السوق ومعلومات الأسعار** — اعثر على أفضل وقت للشراء',
+                'chat.welcome.service4': '• **معرفة مثيرة للاهتمام ذات صلة** — وسع آفاقك',
+                'chat.welcome.closing': 'ما الذي تود معرفته؟ أم هل أشارك بعض المعلومات التي قد تجدها مثيرة للاهتمام؟',
+                
                 'settings.membership': 'العضوية',
                 'settings.memberStatus': 'حالة العضو',
                 'settings.memberStatusFree': 'الإصدار المجاني',
@@ -7553,6 +7727,20 @@
                 'chat.quickPrompt3': 'Bu öğe nasıl bakımı yapılır?',
                 'chat.quickPrompt4': 'Artılar ve eksiler analizi',
                 'chat.quickPrompt5': 'Kullanım önlemleri',
+                
+                // Hoş geldiniz mesajları
+                'chat.welcome.greeting': 'Merhaba! Bu "{name}" ürününü dikkatle inceledim',
+                'chat.welcome.discovered': 'Sizinle paylaşmak istediğim ilginç bilgiler keşfettim!',
+                'chat.welcome.tech': '📱 **Bir teknoloji ürünü olarak**, modern yaşamın kolaylığını temsil ediyor.',
+                'chat.welcome.food': '🍽️ **Yemek esastır**, bu lezzetli seçimi detaylıca inceleyelim.',
+                'chat.welcome.brand': '🏷️ **{brand}** benzersiz bir pazar konumuna sahip.',
+                'chat.welcome.default': '✨ **Her öğenin kendine özgü hikayesi ve değeri vardır**.',
+                'chat.welcome.services': '### Size sunabileceğim hizmetler:',
+                'chat.welcome.service1': '• **Derinlemesine ürün analizi** — her açıdan artıları ve eksileri inceleme',
+                'chat.welcome.service2': '• **Kullanım ipuçları ve bakım önerileri** — ürün değerini maksimize etme',
+                'chat.welcome.service3': '• **Pazar trendleri ve fiyat bilgileri** — en iyi satın alma zamanını bulma',
+                'chat.welcome.service4': '• **İlgili ilginç bilgiler** — ufkunuzu genişletme',
+                'chat.welcome.closing': 'Ne öğrenmek istersiniz? Veya ilginizi çekebilecek bazı bilgileri paylaşayım mı?',
                 
                 'settings.membership': 'Üyelik',
                 'settings.memberStatus': 'Üye Durumu',
@@ -7708,6 +7896,20 @@
                 'chat.quickPrompt4': 'Анализ плюсов и минусов',
                 'chat.quickPrompt5': 'Меры предосторожности при использовании',
                 
+                // Приветственные сообщения
+                'chat.welcome.greeting': 'Здравствуйте! Я только что внимательно изучил этот "{name}"',
+                'chat.welcome.discovered': 'Я обнаружил интересную информацию, которой хочу с вами поделиться!',
+                'chat.welcome.tech': '📱 **Как технологический продукт**, он представляет удобство современной жизни.',
+                'chat.welcome.food': '🍽️ **Еда необходима**, давайте подробно изучим этот вкусный выбор.',
+                'chat.welcome.brand': '🏷️ **{brand}** имеет уникальную рыночную позицию.',
+                'chat.welcome.default': '✨ **У каждого предмета есть своя уникальная история и ценность**.',
+                'chat.welcome.services': '### Я могу предоставить вам:',
+                'chat.welcome.service1': '• **Глубокий анализ продукта** — изучение плюсов и минусов со всех сторон',
+                'chat.welcome.service2': '• **Советы по использованию и обслуживанию** — максимизация ценности предмета',
+                'chat.welcome.service3': '• **Рыночные тенденции и информация о ценах** — найти лучшее время для покупки',
+                'chat.welcome.service4': '• **Связанные интересные знания** — расширить кругозор',
+                'chat.welcome.closing': 'Что бы вы хотели узнать? Или я могу поделиться информацией, которая может вас заинтересовать?',
+                
                 'settings.membership': 'Членство',
                 'settings.memberStatus': 'Статус участника',
                 'settings.memberStatusFree': 'Бесплатная версия',
@@ -7862,6 +8064,20 @@
                 'chat.quickPrompt4': 'Analisis kelebihan dan kekurangan',
                 'chat.quickPrompt5': 'Tindakan pencegahan penggunaan',
                 
+                // Pesan selamat datang
+                'chat.welcome.greeting': 'Halo! Saya baru saja menganalisis "{name}" ini dengan teliti',
+                'chat.welcome.discovered': 'Saya telah menemukan beberapa informasi menarik untuk dibagikan kepada Anda!',
+                'chat.welcome.tech': '📱 **Sebagai produk teknologi**, ini mewakili kenyamanan kehidupan modern.',
+                'chat.welcome.food': '🍽️ **Makanan adalah penting**, mari kita jelajahi pilihan lezat ini secara detail.',
+                'chat.welcome.brand': '🏷️ **{brand}** memiliki posisi pasar yang unik.',
+                'chat.welcome.default': '✨ **Setiap item memiliki cerita dan nilai uniknya sendiri**.',
+                'chat.welcome.services': '### Saya dapat menyediakan untuk Anda:',
+                'chat.welcome.service1': '• **Analisis produk mendalam** — memeriksa kelebihan dan kekurangan dari semua sudut',
+                'chat.welcome.service2': '• **Tips penggunaan dan saran perawatan** — maksimalkan nilai item',
+                'chat.welcome.service3': '• **Tren pasar dan wawasan harga** — temukan waktu terbaik untuk membeli',
+                'chat.welcome.service4': '• **Pengetahuan menarik terkait** — perluas wawasan Anda',
+                'chat.welcome.closing': 'Apa yang ingin Anda ketahui? Atau bolehkah saya membagikan beberapa informasi yang mungkin menarik bagi Anda?',
+                
                 'settings.membership': 'Keanggotaan',
                 'settings.memberStatus': 'Status Anggota',
                 'settings.memberStatusFree': 'Versi Gratis',
@@ -8015,6 +8231,20 @@
                 'chat.quickPrompt3': 'Paano alagaan ang item na ito?',
                 'chat.quickPrompt4': 'Pagsusuri ng mga kalamangan at kahinaan',
                 'chat.quickPrompt5': 'Mga pag-iingat sa paggamit',
+                
+                // Mga mensahe ng pagbati
+                'chat.welcome.greeting': 'Kumusta! Sinuri ko ng mabuti ang "{name}" na ito',
+                'chat.welcome.discovered': 'Nakatuklas ako ng ilang kawili-wiling impormasyon na gusto kong ibahagi sa iyo!',
+                'chat.welcome.tech': '📱 **Bilang isang produktong teknolohiya**, kinakatawan nito ang kaginhawahan ng modernong buhay.',
+                'chat.welcome.food': '🍽️ **Mahalaga ang pagkain**, tuklasin natin nang detalyado ang masarap na pagpipiliang ito.',
+                'chat.welcome.brand': '🏷️ **{brand}** ay may natatanging posisyon sa merkado.',
+                'chat.welcome.default': '✨ **Bawat bagay ay may sariling kuwento at halaga**.',
+                'chat.welcome.services': '### Maaari kong ibigay sa iyo:',
+                'chat.welcome.service1': '• **Malalim na pagsusuri ng produkto** — pagsusuri ng mga kalamangan at kahinaan mula sa lahat ng anggulo',
+                'chat.welcome.service2': '• **Mga tip sa paggamit at payo sa pagpapanatili** — palakasin ang halaga ng item',
+                'chat.welcome.service3': '• **Mga trend sa merkado at kaalaman sa presyo** — hanapin ang pinakamahusay na oras upang bumili',
+                'chat.welcome.service4': '• **Kaugnay na kawili-wiling kaalaman** — palawakin ang iyong kaalaman',
+                'chat.welcome.closing': 'Ano ang gusto mong malaman? O ibahagi ko ba ang ilang impormasyon na maaaring makaengganyo sa iyo?',
                 
                 'settings.membership': 'Membership',
                 'settings.memberStatus': 'Katayuan ng Miyembro',
