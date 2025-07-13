@@ -5087,12 +5087,13 @@
             const viewImageSection = document.getElementById('viewImageSection');
             chatMessages.innerHTML = '';
             
-            // 如果有歷史，顯示重新查看圖片按鈕
-            if (messages.length > 0) {
-                viewImageSection.style.display = 'flex';
-            } else {
-                viewImageSection.style.display = 'none';
-            }
+            // 智能圖片判斷已實作，不再需要手動按鈕
+            // if (messages.length > 0) {
+            //     viewImageSection.style.display = 'flex';
+            // } else {
+            //     viewImageSection.style.display = 'none';
+            // }
+            viewImageSection.style.display = 'none'; // 永遠隱藏
             
             messages.forEach(msg => {
                 if (msg.role && msg.content) {  // 確保訊息格式正確
