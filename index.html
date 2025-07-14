@@ -4082,6 +4082,11 @@
             const loadingText = loadingOverlay.querySelector('.loading-text');
             loadingOverlay.classList.add('active');
             
+            // 在開始批次分析前就固定語言和幣別設定
+            const batchLanguage = getCurrentLanguage();
+            const batchCurrency = getCurrentCurrency();
+            console.log(`批次分析開始 - 統一使用語言: ${batchLanguage}, 幣別: ${batchCurrency}`);
+            
             let successCount = 0;
             const results = [];
             
@@ -4102,14 +4107,12 @@
                     const formData = new FormData();
                     formData.append('image', blob, `image${i}.jpg`);
                     
-                    // 加入當前語言和幣別參數
-                    const currentLang = getCurrentLanguage();
-                    const currentCurrency = getCurrentCurrency();
-                    formData.append('language', currentLang);
-                    formData.append('currency', currentCurrency);
+                    // 使用批次分析開始時鎖定的語言和幣別設定
+                    formData.append('language', batchLanguage);
+                    formData.append('currency', batchCurrency);
                     
                     // Debug: 記錄每張圖片的語言設定
-                    console.log(`圖片 ${i + 1}: 語言=${currentLang}, 幣別=${currentCurrency}`);
+                    console.log(`圖片 ${i + 1}: 使用鎖定的語言=${batchLanguage}, 幣別=${batchCurrency}`);
                     
                     // Debug: 記錄 FormData 內容
                     for (let [key, value] of formData.entries()) {
@@ -4131,10 +4134,16 @@
                             // Debug: 記錄返回的資料
                             console.log(`圖片 ${i + 1} 分析結果:`, result.data);
                             
-                            // 儲存到歷史記錄
-                            capturedImage = resizedImage;
-                            currentAnalysisData = result.data;
-                            saveToHistory(result.data);
+                            // 使用帶圖片參數的函數來保存歷史記錄，避免全域變數衝突
+                            const historyItem = saveToHistoryWithImage(result.data, resizedImage);
+                            
+                            // 只有在批次分析的最後一張圖片時，才更新全域變數
+                            if (i === imageFiles.length - 1) {
+                                capturedImage = resizedImage;
+                                currentAnalysisData = result.data;
+                                currentChatItemId = historyItem.id;
+                                currentHistoryItem = historyItem;
+                            }
                             
                             results.push({
                                 image: resizedImage,
@@ -4147,9 +4156,9 @@
                     console.error(`分析第 ${i + 1} 張圖片失敗:`, error);
                 }
                 
-                // 在請求之間加入小延遲，避免伺服器過載
+                // 在請求之間加入延遲，避免伺服器過載和請求混亂
                 if (i < imageFiles.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // 增加到 1 秒
                 }
             }
             
@@ -4538,6 +4547,31 @@
             // 設定當前聊天項目 ID
             currentChatItemId = historyItem.id;
             currentHistoryItem = historyItem;  // 保存當前歷史項目
+        }
+        
+        // 儲存到歷史記錄（帶圖片參數的版本，用於批次分析）
+        function saveToHistoryWithImage(data, imageData) {
+            let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            
+            // 為避免ID衝突，加入隨機數
+            const historyItem = {
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                name: data.name,
+                price: data.price,
+                image: imageData,
+                data: data,
+                timestamp: new Date().toISOString()
+            };
+            
+            history.unshift(historyItem);
+            
+            // 只保留最新 50 筆
+            history = history.slice(0, 50);
+            
+            localStorage.setItem('scanHistory', JSON.stringify(history));
+            
+            // 批次分析時不更新當前項目
+            return historyItem;
         }
         
         // 搜尋歷史記錄
