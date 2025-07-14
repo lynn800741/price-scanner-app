@@ -3676,7 +3676,8 @@
             settingsPage: document.getElementById('settingsPage'),
             cameraPage: document.getElementById('cameraPage'),
             listPage: document.getElementById('listPage'),
-            resultPage: document.getElementById('resultPage')  // 新增結果頁面
+            resultPage: document.getElementById('resultPage'),  // 新增結果頁面
+            helpPage: document.getElementById('helpPage')  // 新增幫助頁面
         };
         
         const bottomNav = document.getElementById('bottomNav');
@@ -4170,6 +4171,9 @@
                     bottomNav.classList.add('hidden');
                 } else if (pageId === 'resultPage') {
                     // 結果頁面也隱藏底部導航
+                    bottomNav.classList.add('hidden');
+                } else if (pageId === 'helpPage') {
+                    // 幫助頁面也隱藏底部導航
                     bottomNav.classList.add('hidden');
                 } else {
                     // 關閉相機並顯示底部導航
