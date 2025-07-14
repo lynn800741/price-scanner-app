@@ -4946,8 +4946,10 @@
         
         // 轉換並顯示歷史記錄（只在切換幣別時調用）
         async function convertAndDisplayHistory() {
+            console.log('convertAndDisplayHistory 開始執行');
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             const currentCurrency = getCurrentCurrency();
+            console.log('當前幣別:', currentCurrency, '歷史記錄數:', history.length);
             
             // 顯示載入中提示
             const loadingToast = showToast('正在轉換價格...', 'loading');
@@ -9239,6 +9241,8 @@
         
         // 改變幣別
         function changeCurrency(currency) {
+            console.log('切換幣別至:', currency);
+            
             // 保存幣別設置
             localStorage.setItem('appCurrency', currency);
             
@@ -9262,8 +9266,13 @@
         
         // 更新所有價格顯示
         function updateAllPrices() {
+            console.log('updateAllPrices 被調用');
+            const listPage = document.getElementById('listPage');
+            console.log('listPage active?', listPage.classList.contains('active'));
+            
             // 更新列表頁面的價格（使用轉換功能）
-            if (document.getElementById('listPage').classList.contains('active')) {
+            if (listPage.classList.contains('active')) {
+                console.log('開始轉換歷史記錄價格');
                 convertAndDisplayHistory();
             }
             
