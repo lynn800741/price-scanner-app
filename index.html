@@ -2439,6 +2439,80 @@
         .language-check.active {
             display: block;
         }
+
+        /* 幫助頁面樣式 */
+        .help-page {
+            padding-top: 60px;
+            padding-bottom: 20px;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .help-content {
+            padding: 20px;
+        }
+
+        .faq-section {
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .faq-question::before {
+            content: 'Q：';
+            color: #FF6B35;
+            margin-right: 5px;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .faq-answer::before {
+            content: 'A：';
+            color: #FF6B35;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .faq-answer ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .faq-answer ol li {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .faq-highlight {
+            color: #FF6B35;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -2781,6 +2855,191 @@
                 </svg>
                 <span data-i18n="list.delete">刪除</span>
             </button>
+        </div>
+
+        <!-- 幫助頁面 -->
+        <div class="page help-page" id="helpPage">
+            <div class="nav-header">
+                <button class="result-back-btn" onclick="switchPage('settingsPage')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">幫助中心</h1>
+            </div>
+
+            <div class="help-content">
+                <div class="faq-section">
+                    <div class="faq-item">
+                        <div class="faq-question">LENSY 的萬物價格辨識實際上是如何運作的呢？</div>
+                        <div class="faq-answer">LENSY 的價格辨識使用革命性的 GPT-4o 人工智能技術。當您上傳物品圖片時，我們的 AI 會分析圖片中的所有細節，包括品牌、型號、材質、狀態等，並結合市場資料庫估算出合理的價格範圍。無論是商品、建築、自然景觀，甚至是太陽月亮，LENSY 都能給出創意而專業的估價。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">LENSY 只接受當下拍的照片，還是可以從相簿中選取照片？</div>
+                        <div class="faq-answer">兩種方法都能在 LENSY 中使用。您可以即時拍攝想要辨識的物品，也可以從手機相簿中選取已存在的照片。在應用程式中，點擊中間的「相機」按鈕進入拍攝頁面，點擊白色圓圈即可拍照，或點擊左下方的圖片圖示從相簿選取照片。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">我可以更改應用程式的語言嗎？</div>
+                        <div class="faq-answer">當然可以！LENSY 提供 <span class="faq-highlight">16 種語言介面</span>，包括繁體中文、簡體中文、英語、日語、韓語、泰語、越南語、西班牙語、法語、德語、義大利語、葡萄牙語、阿拉伯語、土耳其語、俄語和印尼語。更改語言的步驟：
+                            <ol>
+                                <li>開啟 LENSY 應用程式</li>
+                                <li>點擊右下角「設定」圖示</li>
+                                <li>在「支援」區塊中點擊「語言」</li>
+                                <li>選擇您想使用的語言</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何查看我的會員資格是 LENSY Pro 會員或免費會員？</div>
+                        <div class="faq-answer">在 LENSY 應用程式的「設定」中，您可以查看會員狀態。請按照以下步驟操作：
+                            <ol>
+                                <li>開啟 LENSY 應用程式</li>
+                                <li>點擊右下角「設定」圖示</li>
+                                <li>在「會員服務」區塊查看「會員狀態」</li>
+                                <li>您可以看到目前是「免費版」或「Pro 版」，以及剩餘掃描次數</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何在新的裝置中恢復我的 Pro 會員？</div>
+                        <div class="faq-answer">如果您已經創建 LENSY 帳戶並購買了 Pro 會員，只需在新裝置上使用相同帳戶登入即可。如果您是透過 Apple ID 或 Google 帳號訂閱，請確保：
+                            <ol>
+                                <li>使用相同的 Apple ID 或 Google 帳號登入</li>
+                                <li>開啟 LENSY 應用程式</li>
+                                <li>前往「設定」>「會員服務」</li>
+                                <li>點擊「復原購買」</li>
+                                <li>系統會自動恢復您的 Pro 會員資格</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">我需要註冊才能使用 LENSY 嗎？</div>
+                        <div class="faq-answer">是的，您需要註冊帳戶才能使用 LENSY 的完整功能。註冊帳戶的好處包括：
+                            <br>• 雲端同步您的掃描記錄
+                            <br>• 在不同裝置間無縫切換使用
+                            <br>• 確保資料安全，不會因更換手機而遺失
+                            <br>• 享受個人化的 AI 分析服務
+                            <br>• 獲得會員專屬優惠和功能更新
+                            <br><br>註冊非常簡單，只需使用電子郵件或透過 Apple/Google 帳號快速登入即可。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">LENSY Pro 會員提供哪些福利？</div>
+                        <div class="faq-answer">LENSY Pro 會員解鎖完整的智能辨識功能，包括：
+                            <ol>
+                                <li>每月 <span class="faq-highlight">1000 次</span>無限制掃描分析</li>
+                                <li>AI 智能對話服務，深度了解物品資訊</li>
+                                <li>批次照片辨識，一次處理多張圖片</li>
+                                <li>匯出 Excel 報告功能</li>
+                                <li>自動儲存掃描結果到相簿</li>
+                                <li>去除所有廣告</li>
+                                <li>優先客戶支援服務</li>
+                                <li>未來新功能優先體驗</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">若物品辨識有誤，我該怎麼做？</div>
+                        <div class="faq-answer">由於 AI 辨識依賴圖片品質，請確保：
+                            <br>• 拍攝時光線充足
+                            <br>• 物品清晰對焦
+                            <br>• 包含完整的物品特徵
+                            <br><br>如果辨識結果不準確，您可以：
+                            <ol>
+                                <li>點擊結果頁面右上角的三點選單</li>
+                                <li>選擇「更正物品識別」重新分析</li>
+                                <li>或選擇「編輯名稱」手動修正</li>
+                                <li>也可以透過「設定」>「聯絡我們」回報問題</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">我可以同時分析多張照片嗎？</div>
+                        <div class="faq-answer">可以！這是 <span class="faq-highlight">LENSY Pro 會員</span>的專屬功能。Pro 會員可以：
+                            <ol>
+                                <li>在相機頁面點擊左下角的圖片圖示</li>
+                                <li>選擇多張照片（最多 10 張）</li>
+                                <li>系統會依序分析每張照片</li>
+                                <li>所有結果都會保存在歷史記錄中</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何更改價格顯示的幣別？</div>
+                        <div class="faq-answer">LENSY 支援多種貨幣顯示，更改步驟：
+                            <ol>
+                                <li>開啟 LENSY 應用程式</li>
+                                <li>點擊右下角「設定」圖示</li>
+                                <li>在「支援」區塊中點擊「幣別」</li>
+                                <li>選擇您偏好的貨幣（如台幣、美元、人民幣等）</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">我的個人資料會有資安疑慮嗎？</div>
+                        <div class="faq-answer">您的隱私安全是我們的首要考量：
+                            <br>• 所有資料都經過加密處理
+                            <br>• 照片僅用於 AI 分析，不會儲存在伺服器
+                            <br>• 嚴格遵守 GDPR 和各國隱私保護法規
+                            <br>• 您可以隨時刪除本地儲存的所有資料
+                            <br>• 相機權限僅在您主動拍照時使用</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何關閉自動續訂或取消訂閱？</div>
+                        <div class="faq-answer">如果您想取消 LENSY Pro 訂閱，請按照以下步驟操作：
+                            <br><br><strong>iOS 用戶：</strong>
+                            <ol>
+                                <li>開啟 iPhone 的「設定」</li>
+                                <li>點擊您的 Apple ID</li>
+                                <li>點擊「訂閱項目」</li>
+                                <li>找到 LENSY 訂閱並點擊</li>
+                                <li>選擇「取消訂閱」</li>
+                            </ol>
+                            <br><strong>Android 用戶：</strong>
+                            <ol>
+                                <li>開啟 Google Play 商店</li>
+                                <li>點擊右上角的個人資料圖示</li>
+                                <li>選擇「付款與訂閱」>「訂閱」</li>
+                                <li>找到 LENSY 訂閱</li>
+                                <li>選擇「取消訂閱」</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何刪除我的帳戶？</div>
+                        <div class="faq-answer">如果您想要刪除帳戶，請注意所有資料將永久刪除且無法恢復。刪除步驟：
+                            <ol>
+                                <li>開啟 LENSY 應用程式</li>
+                                <li>前往「設定」>「帳號」</li>
+                                <li>點擊「刪除帳戶」</li>
+                                <li>確認刪除操作</li>
+                            </ol>
+                            <br><span class="faq-highlight">注意：</span>刪除前請確保已備份重要的掃描記錄。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">如何聯絡客服支援？</div>
+                        <div class="faq-answer">如有任何問題或建議，歡迎透過以下方式聯絡我們：
+                            <ol>
+                                <li>應用程式內：「設定」>「聯絡我們」</li>
+                                <li>電子郵件：<span class="faq-highlight">lensyteam@gmail.com</span></li>
+                                <li>回覆時間：48 小時內</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 底部導航 -->
@@ -3678,7 +3937,7 @@
         
         // 顯示輔助說明
         function showHelp() {
-            alert('輔助說明\n\n歡迎使用 LENSY！\n\n基本操作：\n• 點擊相機按鈕開始掃描\n• 對準物品拍照即可識別價格\n• 可從相簿選擇照片進行識別\n\n如需更多協助，請聯絡我們。');
+            switchPage('helpPage');
         }
         
         // 顯示APP資訊
