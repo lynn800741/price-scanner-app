@@ -4534,14 +4534,236 @@
             }
         }
         
+        // 匯率管理
+        const ExchangeRateManager = {
+            // 獲取快取的匯率
+            getCachedRates: function() {
+                const cached = localStorage.getItem('exchangeRates');
+                if (!cached) return null;
+                
+                try {
+                    return JSON.parse(cached);
+                } catch (e) {
+                    return null;
+                }
+            },
+            
+            // 保存匯率到快取
+            saveCachedRates: function(rates) {
+                localStorage.setItem('exchangeRates', JSON.stringify(rates));
+            },
+            
+            // 檢查匯率是否需要更新（超過24小時）
+            needsUpdate: function(fromCurrency, toCurrency) {
+                const cached = this.getCachedRates();
+                if (!cached || !cached[fromCurrency] || !cached[fromCurrency][toCurrency]) {
+                    return true;
+                }
+                
+                const lastUpdate = new Date(cached[fromCurrency].lastUpdate);
+                const now = new Date();
+                const hoursDiff = (now - lastUpdate) / (1000 * 60 * 60);
+                
+                return hoursDiff > 24;
+            },
+            
+            // 從後端 API 獲取匯率
+            fetchExchangeRate: async function(fromCurrency, toCurrency) {
+                try {
+                    // 使用後端 API，避免暴露 API Key
+                    const API_URL = 'https://price-scanner-backend.vercel.app';
+                    const url = `${API_URL}/api/exchange-rate/${fromCurrency}/${toCurrency}`;
+                    
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error('匯率 API 請求失敗');
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.success && data.rate) {
+                        return data.rate;
+                    } else {
+                        throw new Error('無效的匯率數據');
+                    }
+                } catch (error) {
+                    console.error('獲取匯率失敗:', error);
+                    
+                    // 如果 API 失敗，使用備用的固定匯率
+                    return this.getFallbackRate(fromCurrency, toCurrency);
+                }
+            },
+            
+            // 備用固定匯率（當 API 無法使用時）
+            getFallbackRate: function(fromCurrency, toCurrency) {
+                const fallbackRates = {
+                    'USD': { 'TWD': 31.5, 'JPY': 150, 'EUR': 0.92, 'CNY': 7.2, 'KRW': 1300, 'HKD': 7.8 },
+                    'TWD': { 'USD': 0.032, 'JPY': 4.76, 'EUR': 0.029, 'CNY': 0.23, 'KRW': 41.3, 'HKD': 0.25 },
+                    'JPY': { 'USD': 0.0067, 'TWD': 0.21, 'EUR': 0.0061, 'CNY': 0.048, 'KRW': 8.67, 'HKD': 0.052 },
+                    'EUR': { 'USD': 1.09, 'TWD': 34.4, 'JPY': 163, 'CNY': 7.8, 'KRW': 1420, 'HKD': 8.5 },
+                    // 可以根據需要添加更多匯率
+                };
+                
+                if (fromCurrency === toCurrency) return 1;
+                
+                if (fallbackRates[fromCurrency] && fallbackRates[fromCurrency][toCurrency]) {
+                    return fallbackRates[fromCurrency][toCurrency];
+                }
+                
+                // 如果沒有直接匯率，嘗試通過 USD 轉換
+                if (fallbackRates[fromCurrency] && fallbackRates[fromCurrency]['USD'] &&
+                    fallbackRates['USD'] && fallbackRates['USD'][toCurrency]) {
+                    const toUSD = fallbackRates[fromCurrency]['USD'];
+                    const fromUSD = fallbackRates['USD'][toCurrency];
+                    return toUSD * fromUSD;
+                }
+                
+                return 1; // 最後的備用方案
+            },
+            
+            // 獲取匯率（優先使用快取）
+            getExchangeRate: async function(fromCurrency, toCurrency) {
+                if (fromCurrency === toCurrency) return 1;
+                
+                // 檢查快取
+                const cached = this.getCachedRates();
+                if (cached && cached[fromCurrency] && cached[fromCurrency][toCurrency] && 
+                    !this.needsUpdate(fromCurrency, toCurrency)) {
+                    return cached[fromCurrency][toCurrency];
+                }
+                
+                // 獲取新的匯率
+                const rate = await this.fetchExchangeRate(fromCurrency, toCurrency);
+                
+                // 更新快取
+                const rates = cached || {};
+                if (!rates[fromCurrency]) rates[fromCurrency] = {};
+                rates[fromCurrency][toCurrency] = rate;
+                rates[fromCurrency].lastUpdate = new Date().toISOString();
+                
+                this.saveCachedRates(rates);
+                
+                return rate;
+            },
+            
+            // 轉換金額
+            convertAmount: async function(amount, fromCurrency, toCurrency) {
+                if (!amount || !fromCurrency || !toCurrency) return 0;
+                if (fromCurrency === toCurrency) return amount;
+                
+                try {
+                    const rate = await this.getExchangeRate(fromCurrency, toCurrency);
+                    return amount * rate;
+                } catch (error) {
+                    console.error('匯率轉換失敗:', error);
+                    // 返回原金額作為備用方案
+                    return amount;
+                }
+            }
+        };
+        
+        // 格式化價格（帶幣別符號）
+        function formatPriceWithCurrency(amount, currency) {
+            const currencySymbols = {
+                'TWD': 'NT$',
+                'USD': '$',
+                'CNY': '¥',
+                'EUR': '€',
+                'JPY': '¥',
+                'KRW': '₩',
+                'HKD': 'HK$',
+                'SGD': 'S$',
+                'THB': '฿',
+                'VND': '₫',
+                'MYR': 'RM',
+                'PHP': '₱',
+                'IDR': 'Rp',
+                'GBP': '£',
+                'CAD': 'C$',
+                'AUD': 'A$',
+                'CHF': 'CHF'
+            };
+            
+            const symbol = currencySymbols[currency] || currency + ' ';
+            
+            // 根據幣別格式化數字
+            let formattedAmount;
+            if (currency === 'JPY' || currency === 'KRW' || currency === 'VND' || currency === 'IDR') {
+                // 這些貨幣通常不使用小數
+                formattedAmount = Math.round(amount).toLocaleString();
+            } else {
+                // 其他貨幣保留兩位小數
+                formattedAmount = amount.toFixed(2).toLocaleString();
+            }
+            
+            return `${symbol} ${formattedAmount}`;
+        }
+        
+        // 解析價格字串，提取幣別和金額
+        function parsePriceString(priceStr) {
+            if (!priceStr) return { currency: null, amount: 0 };
+            
+            // 定義貨幣符號到幣別代碼的映射
+            const currencyMap = {
+                'NT$': 'TWD', 'NT': 'TWD',
+                '$': 'USD',
+                '¥': 'JPY',  // 預設為日圓
+                '￥': 'CNY',
+                '€': 'EUR',
+                '₩': 'KRW',
+                'HK$': 'HKD',
+                'S$': 'SGD',
+                '฿': 'THB',
+                '₫': 'VND',
+                'RM': 'MYR',
+                '₱': 'PHP',
+                'Rp': 'IDR',
+                '£': 'GBP',
+                'C$': 'CAD',
+                'A$': 'AUD',
+                'CHF': 'CHF'
+            };
+            
+            // 嘗試匹配價格模式
+            let currency = null;
+            let amount = 0;
+            
+            // 先嘗試匹配特定貨幣符號
+            for (const [symbol, code] of Object.entries(currencyMap)) {
+                if (priceStr.includes(symbol)) {
+                    currency = code;
+                    // 提取數字部分
+                    const numStr = priceStr.replace(/[^\d.,]/g, '').replace(/,/g, '');
+                    amount = parseFloat(numStr) || 0;
+                    break;
+                }
+            }
+            
+            // 如果沒有匹配到，嘗試提取純數字
+            if (!currency) {
+                const numMatch = priceStr.match(/[\d,]+\.?\d*/);
+                if (numMatch) {
+                    amount = parseFloat(numMatch[0].replace(/,/g, '')) || 0;
+                }
+            }
+            
+            return { currency, amount };
+        }
+        
         // 儲存到歷史記錄
         function saveToHistory(data) {
             let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            
+            // 解析價格字串，提取幣別和金額
+            const priceInfo = parsePriceString(data.price);
             
             const historyItem = {
                 id: Date.now(),
                 name: data.name,
                 price: data.price,
+                baseCurrency: priceInfo.currency || getCurrentCurrency(),  // 基準幣別
+                baseAmount: priceInfo.amount || 0,                        // 基準金額（數字）
                 image: capturedImage,
                 data: data,
                 timestamp: new Date().toISOString()
@@ -4563,11 +4785,16 @@
         function saveToHistoryWithImage(data, imageData) {
             let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             
+            // 解析價格字串，提取幣別和金額
+            const priceInfo = parsePriceString(data.price);
+            
             // 為避免ID衝突，加入隨機數
             const historyItem = {
                 id: Date.now() + Math.floor(Math.random() * 1000),
                 name: data.name,
                 price: data.price,
+                baseCurrency: priceInfo.currency || getCurrentCurrency(),  // 基準幣別
+                baseAmount: priceInfo.amount || 0,                        // 基準金額（數字）
                 image: imageData,
                 data: data,
                 timestamp: new Date().toISOString()
@@ -4639,7 +4866,7 @@
                                 <img src="${item.image}" alt="${item.name}" class="history-img">
                                 <div class="history-info">
                                     <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${formatPrice(item.price)}</div>
+                                    <div class="history-price">${formatPrice(item.displayPrice || item.price)}</div>
                                     <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
                                 </div>
                             </div>
@@ -4654,9 +4881,46 @@
         }
         
         // 顯示歷史記錄
-        function displayHistory() {
+        async function displayHistory() {
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            const currentCurrency = getCurrentCurrency();
+            
+            // 先顯示原始資料，避免等待太久
             displayHistoryItems(history);
+            
+            // 轉換所有價格到當前幣別
+            const convertedHistory = await Promise.all(history.map(async (item) => {
+                // 如果沒有基準幣別資訊，保持原樣
+                if (!item.baseCurrency || !item.baseAmount) {
+                    return item;
+                }
+                
+                // 如果基準幣別與當前幣別相同，直接使用原價格
+                if (item.baseCurrency === currentCurrency) {
+                    return item;
+                }
+                
+                // 轉換價格
+                try {
+                    const convertedAmount = await ExchangeRateManager.convertAmount(
+                        item.baseAmount,
+                        item.baseCurrency,
+                        currentCurrency
+                    );
+                    
+                    // 創建新的項目，保留原始資料但更新顯示價格
+                    return {
+                        ...item,
+                        displayPrice: formatPriceWithCurrency(convertedAmount, currentCurrency),
+                        isConverted: true
+                    };
+                } catch (error) {
+                    console.error('價格轉換失敗:', error);
+                    return item;
+                }
+            }));
+            
+            displayHistoryItems(convertedHistory);
         }
         
         // 切換選取模式
