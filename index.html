@@ -4108,6 +4108,14 @@
                     formData.append('language', currentLang);
                     formData.append('currency', currentCurrency);
                     
+                    // Debug: 記錄每張圖片的語言設定
+                    console.log(`圖片 ${i + 1}: 語言=${currentLang}, 幣別=${currentCurrency}`);
+                    
+                    // Debug: 記錄 FormData 內容
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`FormData - ${key}:`, value);
+                    }
+                    
                     // 呼叫 API
                     const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
                     const response = await fetch(API_URL, {
@@ -4119,6 +4127,9 @@
                         const result = await response.json();
                         if (result.success && result.data) {
                             successCount++;
+                            
+                            // Debug: 記錄返回的資料
+                            console.log(`圖片 ${i + 1} 分析結果:`, result.data);
                             
                             // 儲存到歷史記錄
                             capturedImage = resizedImage;
@@ -4134,6 +4145,11 @@
                     }
                 } catch (error) {
                     console.error(`分析第 ${i + 1} 張圖片失敗:`, error);
+                }
+                
+                // 在請求之間加入小延遲，避免伺服器過載
+                if (i < imageFiles.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
             
