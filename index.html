@@ -2570,6 +2570,18 @@
                     </svg>
                 </div>
                 
+                <div class="list-item" onclick="showCurrencySelector()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1.93.66 1.64 2.08 1.64 1.51 0 2.1-.75 2.1-1.7 0-1.06-.76-1.56-2.44-1.87-1.79-.33-3.64-1.07-3.64-3.21 0-1.88 1.52-2.97 3.09-3.26V4.23h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.75s3.74 1.27 3.74 3.49c0 1.93-1.37 3.12-3.68 3.51z"/>
+                        </svg>
+                        <div class="list-item-title" data-i18n="settings.currency">幣別</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                
                 <div class="list-item">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
@@ -3197,6 +3209,109 @@
             </div>
         </div>
         
+        <!-- 幣別選擇頁面 -->
+        <div class="language-selector-page" id="currencySelectorPage">
+            <div class="language-header">
+                <button class="language-close-btn" onclick="closeCurrencySelector()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="language-title" data-i18n="currency.title">選擇幣別</h1>
+            </div>
+            
+            <div class="language-content">
+                <!-- 常用幣別 -->
+                <div class="language-section">
+                    <h2 class="language-section-title" data-i18n="currency.common">常用</h2>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCurrency('TWD')">
+                            <span class="language-name">NT$ 新台幣</span>
+                            <span class="language-check" data-currency="TWD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('USD')">
+                            <span class="language-name">$ 美元</span>
+                            <span class="language-check" data-currency="USD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('CNY')">
+                            <span class="language-name">¥ 人民幣</span>
+                            <span class="language-check" data-currency="CNY">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('EUR')">
+                            <span class="language-name">€ 歐元</span>
+                            <span class="language-check" data-currency="EUR">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('JPY')">
+                            <span class="language-name">¥ 日圓</span>
+                            <span class="language-check" data-currency="JPY">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 亞洲 -->
+                <div class="language-section">
+                    <h2 class="language-section-title" data-i18n="currency.asia">亞洲</h2>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCurrency('KRW')">
+                            <span class="language-name">₩ 韓圓</span>
+                            <span class="language-check" data-currency="KRW">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('HKD')">
+                            <span class="language-name">HK$ 港幣</span>
+                            <span class="language-check" data-currency="HKD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('SGD')">
+                            <span class="language-name">S$ 新加坡元</span>
+                            <span class="language-check" data-currency="SGD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('THB')">
+                            <span class="language-name">฿ 泰銖</span>
+                            <span class="language-check" data-currency="THB">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('VND')">
+                            <span class="language-name">₫ 越南盾</span>
+                            <span class="language-check" data-currency="VND">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('MYR')">
+                            <span class="language-name">RM 馬來幣</span>
+                            <span class="language-check" data-currency="MYR">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('PHP')">
+                            <span class="language-name">₱ 菲律賓披索</span>
+                            <span class="language-check" data-currency="PHP">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('IDR')">
+                            <span class="language-name">Rp 印尼盾</span>
+                            <span class="language-check" data-currency="IDR">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 其他 -->
+                <div class="language-section">
+                    <h2 class="language-section-title" data-i18n="currency.other">其他</h2>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCurrency('GBP')">
+                            <span class="language-name">£ 英鎊</span>
+                            <span class="language-check" data-currency="GBP">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('CAD')">
+                            <span class="language-name">C$ 加幣</span>
+                            <span class="language-check" data-currency="CAD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('AUD')">
+                            <span class="language-name">A$ 澳幣</span>
+                            <span class="language-check" data-currency="AUD">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCurrency('CHF')">
+                            <span class="language-name">CHF 瑞士法郎</span>
+                            <span class="language-check" data-currency="CHF">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- 忘記密碼頁面 -->
         <div class="forgot-password-page" id="forgotPasswordPage">
             <div class="forgot-header">
@@ -3657,9 +3772,11 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'ai_image.jpg');
                 
-                // 加入當前語言參數
+                // 加入當前語言和幣別參數
                 const currentLang = getCurrentLanguage();
+                const currentCurrency = getCurrentCurrency();
                 formData.append('language', currentLang);
+                formData.append('currency', currentCurrency);
                 
                 // 呼叫 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -3984,6 +4101,12 @@
                     const blob = await dataURLtoBlob(resizedImage);
                     const formData = new FormData();
                     formData.append('image', blob, `image${i}.jpg`);
+                    
+                    // 加入當前語言和幣別參數
+                    const currentLang = getCurrentLanguage();
+                    const currentCurrency = getCurrentCurrency();
+                    formData.append('language', currentLang);
+                    formData.append('currency', currentCurrency);
                     
                     // 呼叫 API
                     const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -4330,9 +4453,11 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'capture.jpg');
                 
-                // 加入當前語言參數
+                // 加入當前語言和幣別參數
                 const currentLang = getCurrentLanguage();
+                const currentCurrency = getCurrentCurrency();
                 formData.append('language', currentLang);
+                formData.append('currency', currentCurrency);
                 
                 // 呼叫後端 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -4695,9 +4820,11 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'capture.jpg');
                 
-                // 加入當前語言參數
+                // 加入當前語言和幣別參數
                 const currentLang = getCurrentLanguage();
+                const currentCurrency = getCurrentCurrency();
                 formData.append('language', currentLang);
+                formData.append('currency', currentCurrency);
                 
                 // 呼叫後端 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -5328,9 +5455,11 @@
                 formData.append('chatHistory', JSON.stringify(getChatHistory()));
                 formData.append('includeImage', includeImage.toString());
                 
-                // 加入當前語言參數
+                // 加入當前語言和幣別參數
                 const currentLang = getCurrentLanguage();
+                const currentCurrency = getCurrentCurrency();
                 formData.append('language', currentLang);
+                formData.append('currency', currentCurrency);
                 
                 // 呼叫 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
@@ -5500,6 +5629,7 @@
                 'settings.theme': '深色主題',
                 'settings.support': '支援',
                 'settings.language': '語言',
+                'settings.currency': '幣別',
                 'settings.loginRegister': '登入/註冊',
                 'settings.contactUs': '聯絡我們',
                 'settings.help': '輔助說明',
@@ -5518,6 +5648,12 @@
                 'language.asia': '亞洲',
                 'language.europe': '歐洲',
                 'language.other': '其他',
+                
+                // 幣別選擇頁面
+                'currency.title': '選擇幣別',
+                'currency.common': '常用',
+                'currency.asia': '亞洲',
+                'currency.other': '其他',
                 
                 // 列表頁面
                 'list.search': '搜尋照片',
@@ -5675,6 +5811,7 @@
                 'settings.theme': '深色主题',
                 'settings.support': '支持',
                 'settings.language': '语言',
+                'settings.currency': '货币',
                 'settings.loginRegister': '登录/注册',
                 'settings.contactUs': '联系我们',
                 'settings.help': '帮助说明',
@@ -5691,6 +5828,13 @@
                 'language.asia': '亚洲',
                 'language.europe': '欧洲',
                 'language.other': '其他',
+                
+                // 货币选择页面
+                'currency.title': '选择货币',
+                'currency.common': '常用',
+                'currency.asia': '亚洲',
+                'currency.other': '其他',
+                
                 'list.search': '搜索照片',
                 'list.selectMode': '选择',
                 'list.cancel': '取消',
@@ -5843,6 +5987,7 @@
                 'settings.theme': 'Dark Theme',
                 'settings.support': 'Support',
                 'settings.language': 'Language',
+                'settings.currency': 'Currency',
                 'settings.loginRegister': 'Login/Register',
                 'settings.contactUs': 'Contact Us',
                 'settings.help': 'Help',
@@ -5859,6 +6004,13 @@
                 'language.asia': 'Asia',
                 'language.europe': 'Europe',
                 'language.other': 'Other',
+                
+                // Currency selection page
+                'currency.title': 'Select Currency',
+                'currency.common': 'Common',
+                'currency.asia': 'Asia',
+                'currency.other': 'Other',
+                
                 'list.search': 'Search photos',
                 'list.selectMode': 'Select',
                 'list.cancel': 'Cancel',
@@ -6011,6 +6163,7 @@
                 'settings.theme': 'ダークテーマ',
                 'settings.support': 'サポート',
                 'settings.language': '言語',
+                'settings.currency': '通貨',
                 'settings.loginRegister': 'ログイン/登録',
                 'settings.contactUs': 'お問い合わせ',
                 'settings.help': 'ヘルプ',
@@ -6027,6 +6180,13 @@
                 'language.asia': 'アジア',
                 'language.europe': 'ヨーロッパ',
                 'language.other': 'その他',
+                
+                // 通貨選択ページ
+                'currency.title': '通貨を選択',
+                'currency.common': 'よく使う',
+                'currency.asia': 'アジア',
+                'currency.other': 'その他',
+                
                 'list.search': '写真を検索',
                 'list.selectMode': '選択',
                 'list.cancel': 'キャンセル',
@@ -6178,6 +6338,7 @@
                 'settings.theme': '다크 테마',
                 'settings.support': '지원',
                 'settings.language': '언어',
+                'settings.currency': '통화',
                 'settings.loginRegister': '로그인/가입',
                 'settings.contactUs': '문의하기',
                 'settings.help': '도움말',
@@ -6194,6 +6355,13 @@
                 'language.asia': '아시아',
                 'language.europe': '유럽',
                 'language.other': '기타',
+                
+                // 통화 선택 페이지
+                'currency.title': '통화 선택',
+                'currency.common': '자주 사용',
+                'currency.asia': '아시아',
+                'currency.other': '기타',
+                
                 'list.search': '사진 검색',
                 'list.selectMode': '선택',
                 'list.cancel': '취소',
@@ -6329,6 +6497,7 @@
                 'settings.theme': 'ธีมมืด',
                 'settings.support': 'สนับสนุน',
                 'settings.language': 'ภาษา',
+                'settings.currency': 'สกุลเงิน',
                 'settings.feedback': 'ข้อเสนอแนะ',
                 'settings.aboutVersion': 'เกี่ยวกับและเวอร์ชัน',
                 'settings.account': 'บัญชี',
@@ -6338,6 +6507,13 @@
                 'language.asia': 'เอเชีย',
                 'language.europe': 'ยุโรป',
                 'language.other': 'อื่นๆ',
+                
+                // หน้าเลือกสกุลเงิน
+                'currency.title': 'เลือกสกุลเงิน',
+                'currency.common': 'ใช้บ่อย',
+                'currency.asia': 'เอเชีย',
+                'currency.other': 'อื่นๆ',
+                
                 'list.search': 'ค้นหารูปภาพ',
                 'list.selectMode': 'เลือก',
                 'list.cancel': 'ยกเลิก',
@@ -6497,6 +6673,7 @@
                 'settings.theme': 'Giao diện tối',
                 'settings.support': 'Hỗ trợ',
                 'settings.language': 'Ngôn ngữ',
+                'settings.currency': 'Tiền tệ',
                 'settings.feedback': 'Phản hồi',
                 'settings.aboutVersion': 'Giới thiệu & Phiên bản',
                 'settings.account': 'Tài khoản',
@@ -6506,6 +6683,13 @@
                 'language.asia': 'Châu Á',
                 'language.europe': 'Châu Âu',
                 'language.other': 'Khác',
+                
+                // Trang chọn tiền tệ
+                'currency.title': 'Chọn tiền tệ',
+                'currency.common': 'Thường dùng',
+                'currency.asia': 'Châu Á',
+                'currency.other': 'Khác',
+                
                 'list.search': 'Tìm kiếm ảnh',
                 'list.selectMode': 'Chọn',
                 'list.cancel': 'Hủy',
@@ -6665,6 +6849,7 @@
                 'settings.theme': 'Tema oscuro',
                 'settings.support': 'Soporte',
                 'settings.language': 'Idioma',
+                'settings.currency': 'Moneda',
                 'settings.feedback': 'Comentarios',
                 'settings.aboutVersion': 'Acerca de y Versión',
                 'settings.account': 'Cuenta',
@@ -6674,6 +6859,13 @@
                 'language.asia': 'Asia',
                 'language.europe': 'Europa',
                 'language.other': 'Otros',
+                
+                // Página de selección de moneda
+                'currency.title': 'Seleccionar moneda',
+                'currency.common': 'Común',
+                'currency.asia': 'Asia',
+                'currency.other': 'Otros',
+                
                 'list.search': 'Buscar fotos',
                 'list.selectMode': 'Seleccionar',
                 'list.cancel': 'Cancelar',
@@ -6833,6 +7025,7 @@
                 'settings.theme': 'Thème sombre',
                 'settings.support': 'Support',
                 'settings.language': 'Langue',
+                'settings.currency': 'Devise',
                 'settings.feedback': 'Commentaires',
                 'settings.aboutVersion': 'À propos et Version',
                 'settings.account': 'Compte',
@@ -6842,6 +7035,13 @@
                 'language.asia': 'Asie',
                 'language.europe': 'Europe',
                 'language.other': 'Autres',
+                
+                // Page de sélection de devise
+                'currency.title': 'Sélectionner une devise',
+                'currency.common': 'Commun',
+                'currency.asia': 'Asie',
+                'currency.other': 'Autres',
+                
                 'list.search': 'Rechercher des photos',
                 'list.selectMode': 'Sélectionner',
                 'list.cancel': 'Annuler',
@@ -7001,6 +7201,7 @@
                 'settings.theme': 'Dunkles Design',
                 'settings.support': 'Unterstützung',
                 'settings.language': 'Sprache',
+                'settings.currency': 'Währung',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Über & Version',
                 'settings.account': 'Konto',
@@ -7010,6 +7211,13 @@
                 'language.asia': 'Asien',
                 'language.europe': 'Europa',
                 'language.other': 'Andere',
+                
+                // Währungsauswahlseite
+                'currency.title': 'Währung auswählen',
+                'currency.common': 'Häufig',
+                'currency.asia': 'Asien',
+                'currency.other': 'Andere',
+                
                 'list.search': 'Fotos suchen',
                 'list.selectMode': 'Auswählen',
                 'list.cancel': 'Abbrechen',
@@ -7169,6 +7377,7 @@
                 'settings.theme': 'Tema scuro',
                 'settings.support': 'Supporto',
                 'settings.language': 'Lingua',
+                'settings.currency': 'Valuta',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Info e Versione',
                 'settings.account': 'Account',
@@ -7178,6 +7387,13 @@
                 'language.asia': 'Asia',
                 'language.europe': 'Europa',
                 'language.other': 'Altri',
+                
+                // Pagina di selezione valuta
+                'currency.title': 'Seleziona valuta',
+                'currency.common': 'Comune',
+                'currency.asia': 'Asia',
+                'currency.other': 'Altri',
+                
                 'list.search': 'Cerca foto',
                 'list.selectMode': 'Seleziona',
                 'list.cancel': 'Annulla',
@@ -7337,6 +7553,7 @@
                 'settings.theme': 'Tema escuro',
                 'settings.support': 'Suporte',
                 'settings.language': 'Idioma',
+                'settings.currency': 'Moeda',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Sobre e Versão',
                 'settings.account': 'Conta',
@@ -7346,6 +7563,13 @@
                 'language.asia': 'Ásia',
                 'language.europe': 'Europa',
                 'language.other': 'Outros',
+                
+                // Página de seleção de moeda
+                'currency.title': 'Selecionar moeda',
+                'currency.common': 'Comum',
+                'currency.asia': 'Ásia',
+                'currency.other': 'Outros',
+                
                 'list.search': 'Pesquisar fotos',
                 'list.selectMode': 'Selecionar',
                 'list.cancel': 'Cancelar',
@@ -7505,6 +7729,7 @@
                 'settings.theme': 'المظهر الداكن',
                 'settings.support': 'الدعم',
                 'settings.language': 'اللغة',
+                'settings.currency': 'العملة',
                 'settings.feedback': 'التعليقات',
                 'settings.aboutVersion': 'حول والإصدار',
                 'settings.account': 'الحساب',
@@ -7514,6 +7739,13 @@
                 'language.asia': 'آسيا',
                 'language.europe': 'أوروبا',
                 'language.other': 'أخرى',
+                
+                // صفحة اختيار العملة
+                'currency.title': 'اختر العملة',
+                'currency.common': 'شائع',
+                'currency.asia': 'آسيا',
+                'currency.other': 'أخرى',
+                
                 'list.search': 'البحث عن الصور',
                 'list.selectMode': 'تحديد',
                 'list.cancel': 'إلغاء',
@@ -7673,6 +7905,7 @@
                 'settings.theme': 'Koyu tema',
                 'settings.support': 'Destek',
                 'settings.language': 'Dil',
+                'settings.currency': 'Para birimi',
                 'settings.feedback': 'Geri bildirim',
                 'settings.aboutVersion': 'Hakkında ve Sürüm',
                 'settings.account': 'Hesap',
@@ -7682,6 +7915,13 @@
                 'language.asia': 'Asya',
                 'language.europe': 'Avrupa',
                 'language.other': 'Diğer',
+                
+                // Para birimi seçim sayfası
+                'currency.title': 'Para birimi seçin',
+                'currency.common': 'Yaygın',
+                'currency.asia': 'Asya',
+                'currency.other': 'Diğer',
+                
                 'list.search': 'Fotoğraf ara',
                 'list.selectMode': 'Seç',
                 'list.cancel': 'İptal',
@@ -7841,6 +8081,7 @@
                 'settings.theme': 'Темная тема',
                 'settings.support': 'Поддержка',
                 'settings.language': 'Язык',
+                'settings.currency': 'Валюта',
                 'settings.feedback': 'Обратная связь',
                 'settings.aboutVersion': 'О программе и версия',
                 'settings.account': 'Аккаунт',
@@ -7850,6 +8091,13 @@
                 'language.asia': 'Азия',
                 'language.europe': 'Европа',
                 'language.other': 'Другие',
+                
+                // Страница выбора валюты
+                'currency.title': 'Выберите валюту',
+                'currency.common': 'Часто используемые',
+                'currency.asia': 'Азия',
+                'currency.other': 'Другие',
+                
                 'list.search': 'Поиск фотографий',
                 'list.selectMode': 'Выбрать',
                 'list.cancel': 'Отмена',
@@ -8009,6 +8257,7 @@
                 'settings.theme': 'Tema gelap',
                 'settings.support': 'Dukungan',
                 'settings.language': 'Bahasa',
+                'settings.currency': 'Mata uang',
                 'settings.feedback': 'Masukan',
                 'settings.aboutVersion': 'Tentang & Versi',
                 'settings.account': 'Akun',
@@ -8018,6 +8267,13 @@
                 'language.asia': 'Asia',
                 'language.europe': 'Eropa',
                 'language.other': 'Lainnya',
+                
+                // Halaman pemilihan mata uang
+                'currency.title': 'Pilih mata uang',
+                'currency.common': 'Umum',
+                'currency.asia': 'Asia',
+                'currency.other': 'Lainnya',
+                
                 'list.search': 'Cari foto',
                 'list.selectMode': 'Pilih',
                 'list.cancel': 'Batal',
@@ -8177,6 +8433,7 @@
                 'settings.theme': 'Madilim na tema',
                 'settings.support': 'Suporta',
                 'settings.language': 'Wika',
+                'settings.currency': 'Pera',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Tungkol at Bersyon',
                 'settings.account': 'Account',
@@ -8186,6 +8443,13 @@
                 'language.asia': 'Asya',
                 'language.europe': 'Europa',
                 'language.other': 'Iba pa',
+                
+                // Pahina ng pagpili ng pera
+                'currency.title': 'Piliin ang pera',
+                'currency.common': 'Karaniwan',
+                'currency.asia': 'Asya',
+                'currency.other': 'Iba pa',
+                
                 'list.search': 'Maghanap ng mga larawan',
                 'list.selectMode': 'Piliin',
                 'list.cancel': 'Kanselahin',
@@ -8341,6 +8605,35 @@
             return localStorage.getItem('appLanguage') || 'zh-TW';
         }
         
+        // 獲取當前幣別
+        function getCurrentCurrency() {
+            return localStorage.getItem('appCurrency') || 'TWD';
+        }
+        
+        // 獲取幣別符號
+        function getCurrencySymbol(currency) {
+            const symbols = {
+                'TWD': 'NT$',
+                'USD': '$',
+                'CNY': '¥',
+                'EUR': '€',
+                'JPY': '¥',
+                'KRW': '₩',
+                'HKD': 'HK$',
+                'SGD': 'S$',
+                'THB': '฿',
+                'VND': '₫',
+                'MYR': 'RM',
+                'PHP': '₱',
+                'IDR': 'Rp',
+                'GBP': '£',
+                'CAD': 'C$',
+                'AUD': 'A$',
+                'CHF': 'CHF'
+            };
+            return symbols[currency] || currency + ' ';
+        }
+        
         // 翻譯函數
         function t(key) {
             const lang = getCurrentLanguage();
@@ -8434,6 +8727,83 @@
             setTimeout(() => {
                 closeLanguageSelector();
             }, 300);
+        }
+        
+        // 顯示幣別選擇器
+        function showCurrencySelector() {
+            const currencyPage = document.getElementById('currencySelectorPage');
+            currencyPage.classList.add('active');
+            
+            // 更新當前幣別的勾選狀態
+            const currentCurrency = getCurrentCurrency();
+            document.querySelectorAll('.language-check[data-currency]').forEach(check => {
+                check.classList.remove('active');
+            });
+            const currentCheck = document.querySelector(`.language-check[data-currency="${currentCurrency}"]`);
+            if (currentCheck) {
+                currentCheck.classList.add('active');
+            }
+        }
+        
+        // 關閉幣別選擇器
+        function closeCurrencySelector() {
+            const currencyPage = document.getElementById('currencySelectorPage');
+            currencyPage.classList.remove('active');
+        }
+        
+        // 改變幣別
+        function changeCurrency(currency) {
+            // 保存幣別設置
+            localStorage.setItem('appCurrency', currency);
+            
+            // 更新勾選狀態
+            document.querySelectorAll('.language-check[data-currency]').forEach(check => {
+                check.classList.remove('active');
+            });
+            const newCheck = document.querySelector(`.language-check[data-currency="${currency}"]`);
+            if (newCheck) {
+                newCheck.classList.add('active');
+            }
+            
+            // 更新頁面上的價格顯示
+            updateAllPrices();
+            
+            // 關閉幣別選擇器
+            setTimeout(() => {
+                closeCurrencySelector();
+            }, 300);
+        }
+        
+        // 更新所有價格顯示
+        function updateAllPrices() {
+            // 更新列表頁面的價格
+            if (document.getElementById('listPage').classList.contains('active')) {
+                displayHistory();
+            }
+            
+            // 更新結果頁面的價格
+            if (currentAnalysisData && currentAnalysisData.price) {
+                const priceElement = document.querySelector('.price-value');
+                if (priceElement) {
+                    priceElement.textContent = formatPrice(currentAnalysisData.price);
+                }
+            }
+        }
+        
+        // 格式化價格顯示
+        function formatPrice(price) {
+            const currency = getCurrentCurrency();
+            const symbol = getCurrencySymbol(currency);
+            
+            // 如果價格是範圍（例如 "1000-2000"）
+            if (price.includes('-')) {
+                const [min, max] = price.split('-').map(p => p.replace(/[^\d.]/g, ''));
+                return `${symbol} ${min}-${max}`;
+            }
+            
+            // 單一價格
+            const numericPrice = price.replace(/[^\d.]/g, '');
+            return `${symbol} ${numericPrice}`;
         }
         
         // 頁面載入時初始化語言
