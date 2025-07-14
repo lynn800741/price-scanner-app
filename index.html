@@ -9267,20 +9267,33 @@
         // 更新所有價格顯示
         function updateAllPrices() {
             console.log('updateAllPrices 被調用');
-            const listPage = document.getElementById('listPage');
-            console.log('listPage active?', listPage.classList.contains('active'));
             
-            // 更新列表頁面的價格（使用轉換功能）
-            if (listPage.classList.contains('active')) {
-                console.log('開始轉換歷史記錄價格');
-                convertAndDisplayHistory();
-            }
+            // 總是轉換歷史記錄（不管在哪個頁面）
+            console.log('開始轉換歷史記錄價格');
+            convertAndDisplayHistory();
             
-            // 更新結果頁面的價格
+            // 更新結果頁面的價格（如果有的話）
             if (currentAnalysisData && currentAnalysisData.price) {
                 const priceElement = document.querySelector('.price-value');
                 if (priceElement) {
-                    priceElement.textContent = formatPrice(currentAnalysisData.price);
+                    // 如果有基準幣別和金額，進行轉換
+                    if (currentAnalysisData.baseCurrency && currentAnalysisData.baseAmount) {
+                        const currentCurrency = getCurrentCurrency();
+                        if (currentAnalysisData.baseCurrency !== currentCurrency) {
+                            // 需要轉換
+                            ExchangeRateManager.convertAmount(
+                                currentAnalysisData.baseAmount,
+                                currentAnalysisData.baseCurrency,
+                                currentCurrency
+                            ).then(convertedAmount => {
+                                priceElement.textContent = formatPriceWithCurrency(convertedAmount, currentCurrency);
+                            });
+                        } else {
+                            priceElement.textContent = formatPrice(currentAnalysisData.price);
+                        }
+                    } else {
+                        priceElement.textContent = formatPrice(currentAnalysisData.price);
+                    }
                 }
             }
         }
