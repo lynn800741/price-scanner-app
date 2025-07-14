@@ -3386,6 +3386,24 @@
         };
         
         // 價格格式化函數 - 統一所有價格顯示
+        function formatPrice(price) {
+            // 如果已經有 $ 符號，先移除
+            let priceString = price.toString().replace(/[$,]/g, '');
+            
+            // 嘗試解析數字
+            let numericPrice = parseFloat(priceString);
+            
+            // 如果不是有效數字，返回原始值
+            if (isNaN(numericPrice)) {
+                return price;
+            }
+            
+            // 格式化為整數，加上千位分隔符
+            let formattedPrice = Math.round(numericPrice).toLocaleString('zh-TW');
+            
+            // 加上 $ 符號
+            return '$' + formattedPrice;
+        }
         
         // 計算折扣百分比
         function calculateDiscount() {
@@ -4516,312 +4534,14 @@
             }
         }
         
-        // 匯率管理
-        const ExchangeRateManager = {
-            // 獲取快取的匯率
-            getCachedRates: function() {
-                const cached = localStorage.getItem('exchangeRates');
-                if (!cached) return null;
-                
-                try {
-                    return JSON.parse(cached);
-                } catch (e) {
-                    return null;
-                }
-            },
-            
-            // 保存匯率到快取
-            saveCachedRates: function(rates) {
-                localStorage.setItem('exchangeRates', JSON.stringify(rates));
-            },
-            
-            // 檢查匯率是否需要更新（超過24小時）
-            needsUpdate: function(fromCurrency, toCurrency) {
-                const cached = this.getCachedRates();
-                if (!cached || !cached[fromCurrency] || !cached[fromCurrency][toCurrency]) {
-                    return true;
-                }
-                
-                const lastUpdate = new Date(cached[fromCurrency].lastUpdate);
-                const now = new Date();
-                const hoursDiff = (now - lastUpdate) / (1000 * 60 * 60);
-                
-                return hoursDiff > 24;
-            },
-            
-            // 從後端 API 獲取匯率
-            fetchExchangeRate: async function(fromCurrency, toCurrency) {
-                try {
-                    // 使用後端 API，避免暴露 API Key
-                    const API_URL = 'https://price-scanner-backend.vercel.app';
-                    const url = `${API_URL}/api/exchange-rate/${fromCurrency}/${toCurrency}`;
-                    
-                    const response = await fetch(url);
-                    
-                    if (!response.ok) {
-                        throw new Error('匯率 API 請求失敗');
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (data.success && data.rate) {
-                        return data.rate;
-                    } else {
-                        throw new Error('無效的匯率數據');
-                    }
-                } catch (error) {
-                    console.error('獲取匯率失敗:', error);
-                    
-                    // 如果 API 失敗，使用備用的固定匯率
-                    return this.getFallbackRate(fromCurrency, toCurrency);
-                }
-            },
-            
-            // 備用固定匯率（當 API 無法使用時）
-            getFallbackRate: function(fromCurrency, toCurrency) {
-                const fallbackRates = {
-                    'USD': { 'TWD': 31.5, 'JPY': 150, 'EUR': 0.92, 'CNY': 7.2, 'KRW': 1300, 'HKD': 7.8 },
-                    'TWD': { 'USD': 0.032, 'JPY': 4.76, 'EUR': 0.029, 'CNY': 0.23, 'KRW': 41.3, 'HKD': 0.25 },
-                    'JPY': { 'USD': 0.0067, 'TWD': 0.21, 'EUR': 0.0061, 'CNY': 0.048, 'KRW': 8.67, 'HKD': 0.052 },
-                    'EUR': { 'USD': 1.09, 'TWD': 34.4, 'JPY': 163, 'CNY': 7.8, 'KRW': 1420, 'HKD': 8.5 },
-                    // 可以根據需要添加更多匯率
-                };
-                
-                if (fromCurrency === toCurrency) return 1;
-                
-                if (fallbackRates[fromCurrency] && fallbackRates[fromCurrency][toCurrency]) {
-                    return fallbackRates[fromCurrency][toCurrency];
-                }
-                
-                // 如果沒有直接匯率，嘗試通過 USD 轉換
-                if (fallbackRates[fromCurrency] && fallbackRates[fromCurrency]['USD'] &&
-                    fallbackRates['USD'] && fallbackRates['USD'][toCurrency]) {
-                    const toUSD = fallbackRates[fromCurrency]['USD'];
-                    const fromUSD = fallbackRates['USD'][toCurrency];
-                    return toUSD * fromUSD;
-                }
-                
-                return 1; // 最後的備用方案
-            },
-            
-            // 獲取匯率（優先使用快取）
-            getExchangeRate: async function(fromCurrency, toCurrency) {
-                if (fromCurrency === toCurrency) return 1;
-                
-                // 檢查快取
-                const cached = this.getCachedRates();
-                if (cached && cached[fromCurrency] && cached[fromCurrency][toCurrency] && 
-                    !this.needsUpdate(fromCurrency, toCurrency)) {
-                    return cached[fromCurrency][toCurrency];
-                }
-                
-                // 獲取新的匯率
-                const rate = await this.fetchExchangeRate(fromCurrency, toCurrency);
-                
-                // 更新快取
-                const rates = cached || {};
-                if (!rates[fromCurrency]) rates[fromCurrency] = {};
-                rates[fromCurrency][toCurrency] = rate;
-                rates[fromCurrency].lastUpdate = new Date().toISOString();
-                
-                this.saveCachedRates(rates);
-                
-                return rate;
-            },
-            
-            // 轉換金額
-            convertAmount: async function(amount, fromCurrency, toCurrency) {
-                if (!amount || !fromCurrency || !toCurrency) return 0;
-                if (fromCurrency === toCurrency) return amount;
-                
-                try {
-                    const rate = await this.getExchangeRate(fromCurrency, toCurrency);
-                    return amount * rate;
-                } catch (error) {
-                    console.error('匯率轉換失敗:', error);
-                    // 返回原金額作為備用方案
-                    return amount;
-                }
-            }
-        };
-        
-        // 格式化價格（帶幣別符號）
-        function formatPriceWithCurrency(amount, currency) {
-            const currencySymbols = {
-                'TWD': 'NT$',
-                'USD': '$',
-                'CNY': '¥',
-                'EUR': '€',
-                'JPY': '¥',
-                'KRW': '₩',
-                'HKD': 'HK$',
-                'SGD': 'S$',
-                'THB': '฿',
-                'VND': '₫',
-                'MYR': 'RM',
-                'PHP': '₱',
-                'IDR': 'Rp',
-                'GBP': '£',
-                'CAD': 'C$',
-                'AUD': 'A$',
-                'CHF': 'CHF'
-            };
-            
-            const symbol = currencySymbols[currency] || currency + ' ';
-            
-            // 根據幣別格式化數字
-            let formattedAmount;
-            if (currency === 'JPY' || currency === 'KRW' || currency === 'VND' || currency === 'IDR') {
-                // 這些貨幣通常不使用小數
-                formattedAmount = Math.round(amount).toLocaleString();
-            } else {
-                // 其他貨幣保留兩位小數
-                formattedAmount = amount.toFixed(2).toLocaleString();
-            }
-            
-            return `${symbol} ${formattedAmount}`;
-        }
-        
-        // Toast 提示功能
-        let toastCounter = 0;
-        function showToast(message, type = 'info') {
-            const toastId = `toast-${++toastCounter}`;
-            const toast = document.createElement('div');
-            toast.id = toastId;
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <div class="toast-content">
-                    ${type === 'loading' ? '<div class="toast-spinner"></div>' : ''}
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            // 添加樣式（如果還沒有）
-            if (!document.getElementById('toast-styles')) {
-                const style = document.createElement('style');
-                style.id = 'toast-styles';
-                style.innerHTML = `
-                    .toast {
-                        position: fixed;
-                        bottom: 80px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background: rgba(0, 0, 0, 0.8);
-                        color: white;
-                        padding: 12px 20px;
-                        border-radius: 8px;
-                        z-index: 10000;
-                        animation: slideUp 0.3s ease-out;
-                    }
-                    .toast-content {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-                    .toast-spinner {
-                        width: 16px;
-                        height: 16px;
-                        border: 2px solid #fff;
-                        border-top-color: transparent;
-                        border-radius: 50%;
-                        animation: spin 0.8s linear infinite;
-                    }
-                    .toast-success { background: rgba(76, 175, 80, 0.9); }
-                    .toast-error { background: rgba(244, 67, 54, 0.9); }
-                    .toast-loading { background: rgba(33, 150, 243, 0.9); }
-                    @keyframes slideUp {
-                        from { transform: translate(-50%, 100%); opacity: 0; }
-                        to { transform: translate(-50%, 0); opacity: 1; }
-                    }
-                    @keyframes spin {
-                        to { transform: rotate(360deg); }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            
-            document.body.appendChild(toast);
-            
-            // 非載入提示3秒後自動消失
-            if (type !== 'loading') {
-                setTimeout(() => hideToast(toastId), 3000);
-            }
-            
-            return toastId;
-        }
-        
-        function hideToast(toastId) {
-            const toast = document.getElementById(toastId);
-            if (toast) {
-                toast.style.animation = 'slideDown 0.3s ease-in';
-                setTimeout(() => toast.remove(), 300);
-            }
-        }
-        
-        // 解析價格字串，提取幣別和金額
-        function parsePriceString(priceStr) {
-            if (!priceStr) return { currency: null, amount: 0 };
-            
-            // 定義貨幣符號到幣別代碼的映射
-            const currencyMap = {
-                'NT$': 'TWD', 'NT': 'TWD',
-                '$': 'USD',
-                '¥': 'JPY',  // 預設為日圓
-                '￥': 'CNY',
-                '€': 'EUR',
-                '₩': 'KRW',
-                'HK$': 'HKD',
-                'S$': 'SGD',
-                '฿': 'THB',
-                '₫': 'VND',
-                'RM': 'MYR',
-                '₱': 'PHP',
-                'Rp': 'IDR',
-                '£': 'GBP',
-                'C$': 'CAD',
-                'A$': 'AUD',
-                'CHF': 'CHF'
-            };
-            
-            // 嘗試匹配價格模式
-            let currency = null;
-            let amount = 0;
-            
-            // 先嘗試匹配特定貨幣符號
-            for (const [symbol, code] of Object.entries(currencyMap)) {
-                if (priceStr.includes(symbol)) {
-                    currency = code;
-                    // 提取數字部分
-                    const numStr = priceStr.replace(/[^\d.,]/g, '').replace(/,/g, '');
-                    amount = parseFloat(numStr) || 0;
-                    break;
-                }
-            }
-            
-            // 如果沒有匹配到，嘗試提取純數字
-            if (!currency) {
-                const numMatch = priceStr.match(/[\d,]+\.?\d*/);
-                if (numMatch) {
-                    amount = parseFloat(numMatch[0].replace(/,/g, '')) || 0;
-                }
-            }
-            
-            return { currency, amount };
-        }
-        
         // 儲存到歷史記錄
         function saveToHistory(data) {
             let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            
-            // 解析價格字串，提取幣別和金額
-            const priceInfo = parsePriceString(data.price);
             
             const historyItem = {
                 id: Date.now(),
                 name: data.name,
                 price: data.price,
-                baseCurrency: priceInfo.currency || getCurrentCurrency(),  // 基準幣別
-                baseAmount: priceInfo.amount || 0,                        // 基準金額（數字）
                 image: capturedImage,
                 data: data,
                 timestamp: new Date().toISOString()
@@ -4843,16 +4563,11 @@
         function saveToHistoryWithImage(data, imageData) {
             let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             
-            // 解析價格字串，提取幣別和金額
-            const priceInfo = parsePriceString(data.price);
-            
             // 為避免ID衝突，加入隨機數
             const historyItem = {
                 id: Date.now() + Math.floor(Math.random() * 1000),
                 name: data.name,
                 price: data.price,
-                baseCurrency: priceInfo.currency || getCurrentCurrency(),  // 基準幣別
-                baseAmount: priceInfo.amount || 0,                        // 基準金額（數字）
                 image: imageData,
                 data: data,
                 timestamp: new Date().toISOString()
@@ -4924,7 +4639,7 @@
                                 <img src="${item.image}" alt="${item.name}" class="history-img">
                                 <div class="history-info">
                                     <div class="history-name">${item.name}</div>
-                                    <div class="history-price">${formatPrice(item.displayPrice || item.price)}</div>
+                                    <div class="history-price">${formatPrice(item.price)}</div>
                                     <div class="history-date">${formatDateDisplay(item.timestamp)}</div>
                                 </div>
                             </div>
@@ -4938,130 +4653,10 @@
             }
         }
         
-        // 顯示歷史記錄（不轉換，只顯示原始價格）
+        // 顯示歷史記錄
         function displayHistory() {
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             displayHistoryItems(history);
-        }
-        
-        // 轉換並顯示歷史記錄（只在切換幣別時調用）
-        async function convertAndDisplayHistory() {
-            console.log('convertAndDisplayHistory 開始執行');
-            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-            const currentCurrency = getCurrentCurrency();
-            console.log('當前幣別:', currentCurrency, '歷史記錄數:', history.length);
-            
-            // 顯示載入中提示
-            const loadingToast = showToast('正在轉換價格...', 'loading');
-            
-            try {
-                // 為舊資料補充基準幣別和金額（如果沒有的話）
-                const updatedHistory = history.map(item => {
-                    if (!item.baseCurrency || !item.baseAmount) {
-                        // 嘗試從價格字串解析
-                        const priceInfo = parsePriceString(item.price);
-                        if (priceInfo.currency && priceInfo.amount) {
-                            item.baseCurrency = priceInfo.currency;
-                            item.baseAmount = priceInfo.amount;
-                        } else {
-                            // 如果無法解析，假設是 TWD
-                            item.baseCurrency = 'TWD';
-                            item.baseAmount = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-                        }
-                    }
-                    return item;
-                });
-                
-                // 保存更新後的歷史記錄
-                localStorage.setItem('scanHistory', JSON.stringify(updatedHistory));
-                
-                // 收集需要的匯率組合
-                const ratesNeeded = new Set();
-                updatedHistory.forEach(item => {
-                    if (item.baseCurrency && item.baseCurrency !== currentCurrency) {
-                        ratesNeeded.add(`${item.baseCurrency}_${currentCurrency}`);
-                    }
-                });
-                
-                console.log('需要的匯率:', Array.from(ratesNeeded));
-                
-                // 批量獲取所需匯率
-                const rates = {};
-                
-                if (ratesNeeded.size > 0) {
-                    // 準備批量請求
-                    const pairs = Array.from(ratesNeeded).map(rateKey => {
-                        const [from, to] = rateKey.split('_');
-                        return { from, to };
-                    });
-                    
-                    try {
-                        // 批量請求匯率
-                        const API_URL = 'https://price-scanner-backend.vercel.app';
-                        const response = await fetch(`${API_URL}/api/exchange-rates`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ pairs })
-                        });
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            if (data.success && data.rates) {
-                                Object.assign(rates, data.rates);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('批量獲取匯率失敗:', error);
-                        // 失敗時使用本地備用匯率
-                        for (const rateKey of ratesNeeded) {
-                            const [from, to] = rateKey.split('_');
-                            rates[rateKey] = ExchangeRateManager.getFallbackRate(from, to);
-                        }
-                    }
-                }
-                
-                // 轉換所有價格
-                const convertedHistory = updatedHistory.map(item => {
-                    // 檢查每個項目的基準資料
-                    console.log(`項目 ${item.name}: baseCurrency=${item.baseCurrency}, baseAmount=${item.baseAmount}`);
-                    
-                    // 如果基準幣別與當前幣別相同，直接使用原價格
-                    if (item.baseCurrency === currentCurrency) {
-                        return item;
-                    }
-                    
-                    // 使用已獲取的匯率轉換
-                    const rateKey = `${item.baseCurrency}_${currentCurrency}`;
-                    const rate = rates[rateKey] || 1;
-                    const convertedAmount = item.baseAmount * rate;
-                    
-                    console.log(`轉換 ${item.name}: ${item.baseAmount} ${item.baseCurrency} -> ${convertedAmount} ${currentCurrency} (匯率: ${rate})`);
-                    
-                    // 創建新的項目，保留原始資料但更新顯示價格
-                    return {
-                        ...item,
-                        displayPrice: formatPriceWithCurrency(convertedAmount, currentCurrency),
-                        isConverted: true
-                    };
-                });
-                
-                // Debug: 檢查轉換結果
-                console.log('轉換後的歷史記錄:', convertedHistory);
-                
-                displayHistoryItems(convertedHistory);
-                
-                // 隱藏載入提示
-                hideToast(loadingToast);
-                showToast('價格轉換完成', 'success');
-                
-            } catch (error) {
-                console.error('批量轉換失敗:', error);
-                hideToast(loadingToast);
-                showToast('部分價格轉換失敗', 'error');
-                displayHistoryItems(history);
-            }
         }
         
         // 切換選取模式
@@ -9263,8 +8858,6 @@
         
         // 改變幣別
         function changeCurrency(currency) {
-            console.log('切換幣別至:', currency);
-            
             // 保存幣別設置
             localStorage.setItem('appCurrency', currency);
             
@@ -9288,45 +8881,22 @@
         
         // 更新所有價格顯示
         function updateAllPrices() {
-            console.log('updateAllPrices 被調用');
+            // 更新列表頁面的價格
+            if (document.getElementById('listPage').classList.contains('active')) {
+                displayHistory();
+            }
             
-            // 總是轉換歷史記錄（不管在哪個頁面）
-            console.log('開始轉換歷史記錄價格');
-            convertAndDisplayHistory();
-            
-            // 更新結果頁面的價格（如果有的話）
+            // 更新結果頁面的價格
             if (currentAnalysisData && currentAnalysisData.price) {
                 const priceElement = document.querySelector('.price-value');
                 if (priceElement) {
-                    // 如果有基準幣別和金額，進行轉換
-                    if (currentAnalysisData.baseCurrency && currentAnalysisData.baseAmount) {
-                        const currentCurrency = getCurrentCurrency();
-                        if (currentAnalysisData.baseCurrency !== currentCurrency) {
-                            // 需要轉換
-                            ExchangeRateManager.convertAmount(
-                                currentAnalysisData.baseAmount,
-                                currentAnalysisData.baseCurrency,
-                                currentCurrency
-                            ).then(convertedAmount => {
-                                priceElement.textContent = formatPriceWithCurrency(convertedAmount, currentCurrency);
-                            });
-                        } else {
-                            priceElement.textContent = formatPrice(currentAnalysisData.price);
-                        }
-                    } else {
-                        priceElement.textContent = formatPrice(currentAnalysisData.price);
-                    }
+                    priceElement.textContent = formatPrice(currentAnalysisData.price);
                 }
             }
         }
         
         // 格式化價格顯示
         function formatPrice(price) {
-            // 如果價格已經包含貨幣符號（已轉換的價格），直接返回
-            if (typeof price === 'string' && /^[A-Z$¥€£₩฿₫₱]+/.test(price)) {
-                return price;
-            }
-            
             const currency = getCurrentCurrency();
             const symbol = getCurrencySymbol(currency);
             
