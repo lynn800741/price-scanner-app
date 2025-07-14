@@ -4955,13 +4955,35 @@
             const loadingToast = showToast('正在轉換價格...', 'loading');
             
             try {
+                // 為舊資料補充基準幣別和金額（如果沒有的話）
+                const updatedHistory = history.map(item => {
+                    if (!item.baseCurrency || !item.baseAmount) {
+                        // 嘗試從價格字串解析
+                        const priceInfo = parsePriceString(item.price);
+                        if (priceInfo.currency && priceInfo.amount) {
+                            item.baseCurrency = priceInfo.currency;
+                            item.baseAmount = priceInfo.amount;
+                        } else {
+                            // 如果無法解析，假設是 TWD
+                            item.baseCurrency = 'TWD';
+                            item.baseAmount = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+                        }
+                    }
+                    return item;
+                });
+                
+                // 保存更新後的歷史記錄
+                localStorage.setItem('scanHistory', JSON.stringify(updatedHistory));
+                
                 // 收集需要的匯率組合
                 const ratesNeeded = new Set();
-                history.forEach(item => {
+                updatedHistory.forEach(item => {
                     if (item.baseCurrency && item.baseCurrency !== currentCurrency) {
                         ratesNeeded.add(`${item.baseCurrency}_${currentCurrency}`);
                     }
                 });
+                
+                console.log('需要的匯率:', Array.from(ratesNeeded));
                 
                 // 批量獲取所需匯率
                 const rates = {};
@@ -5001,11 +5023,9 @@
                 }
                 
                 // 轉換所有價格
-                const convertedHistory = history.map(item => {
-                    // 如果沒有基準幣別資訊，保持原樣
-                    if (!item.baseCurrency || !item.baseAmount) {
-                        return item;
-                    }
+                const convertedHistory = updatedHistory.map(item => {
+                    // 檢查每個項目的基準資料
+                    console.log(`項目 ${item.name}: baseCurrency=${item.baseCurrency}, baseAmount=${item.baseAmount}`);
                     
                     // 如果基準幣別與當前幣別相同，直接使用原價格
                     if (item.baseCurrency === currentCurrency) {
@@ -5016,6 +5036,8 @@
                     const rateKey = `${item.baseCurrency}_${currentCurrency}`;
                     const rate = rates[rateKey] || 1;
                     const convertedAmount = item.baseAmount * rate;
+                    
+                    console.log(`轉換 ${item.name}: ${item.baseAmount} ${item.baseCurrency} -> ${convertedAmount} ${currentCurrency} (匯率: ${rate})`);
                     
                     // 創建新的項目，保留原始資料但更新顯示價格
                     return {
