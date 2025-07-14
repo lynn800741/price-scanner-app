@@ -8602,12 +8602,57 @@
         
         // 獲取當前語言
         function getCurrentLanguage() {
-            return localStorage.getItem('appLanguage') || 'zh-TW';
+            // 如果已經設定，直接返回
+            const savedLanguage = localStorage.getItem('appLanguage');
+            if (savedLanguage) return savedLanguage;
+            
+            // 如果沒有設定，使用瀏覽器語言作為備用
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang) {
+                // 將瀏覽器語言碼轉換為我們支援的語言
+                const langMap = {
+                    'zh-TW': 'zh-TW',
+                    'zh-HK': 'zh-TW',
+                    'zh-CN': 'zh-CN',
+                    'zh': 'zh-CN',
+                    'en': 'en',
+                    'ja': 'ja',
+                    'ko': 'ko',
+                    'th': 'th',
+                    'vi': 'vi',
+                    'es': 'es',
+                    'fr': 'fr',
+                    'de': 'de',
+                    'it': 'it',
+                    'pt': 'pt',
+                    'ar': 'ar',
+                    'tr': 'tr',
+                    'ru': 'ru',
+                    'id': 'id',
+                    'fil': 'fil',
+                    'tl': 'fil'
+                };
+                
+                // 先嘗試完全匹配
+                if (langMap[browserLang]) return langMap[browserLang];
+                
+                // 再嘗試只匹配語言部分（忽略地區）
+                const langPrefix = browserLang.split('-')[0];
+                if (langMap[langPrefix]) return langMap[langPrefix];
+            }
+            
+            // 最終默認值
+            return 'en';
         }
         
         // 獲取當前幣別
         function getCurrentCurrency() {
-            return localStorage.getItem('appCurrency') || 'TWD';
+            // 如果已經設定，直接返回
+            const savedCurrency = localStorage.getItem('appCurrency');
+            if (savedCurrency) return savedCurrency;
+            
+            // 最終默認值
+            return 'USD';
         }
         
         // 獲取幣別符號
@@ -8806,8 +8851,105 @@
             return `${symbol} ${numericPrice}`;
         }
         
-        // 頁面載入時初始化語言
-        document.addEventListener('DOMContentLoaded', () => {
+        // 根據國家代碼獲取默認語言和幣別
+        function getDefaultsForCountry(countryCode) {
+            const countryDefaults = {
+                // 亞洲
+                'TW': { language: 'zh-TW', currency: 'TWD' },
+                'CN': { language: 'zh-CN', currency: 'CNY' },
+                'HK': { language: 'zh-TW', currency: 'HKD' },
+                'MO': { language: 'zh-TW', currency: 'HKD' },
+                'JP': { language: 'ja', currency: 'JPY' },
+                'KR': { language: 'ko', currency: 'KRW' },
+                'TH': { language: 'th', currency: 'THB' },
+                'VN': { language: 'vi', currency: 'VND' },
+                'SG': { language: 'en', currency: 'SGD' },
+                'MY': { language: 'en', currency: 'MYR' },
+                'ID': { language: 'id', currency: 'IDR' },
+                'PH': { language: 'fil', currency: 'PHP' },
+                
+                // 歐洲
+                'ES': { language: 'es', currency: 'EUR' },
+                'FR': { language: 'fr', currency: 'EUR' },
+                'DE': { language: 'de', currency: 'EUR' },
+                'IT': { language: 'it', currency: 'EUR' },
+                'PT': { language: 'pt', currency: 'EUR' },
+                'NL': { language: 'en', currency: 'EUR' },
+                'BE': { language: 'fr', currency: 'EUR' },
+                'AT': { language: 'de', currency: 'EUR' },
+                
+                // 美洲
+                'US': { language: 'en', currency: 'USD' },
+                'CA': { language: 'en', currency: 'CAD' },
+                'MX': { language: 'es', currency: 'USD' },
+                'BR': { language: 'pt', currency: 'USD' },
+                'AR': { language: 'es', currency: 'USD' },
+                
+                // 其他
+                'GB': { language: 'en', currency: 'GBP' },
+                'AU': { language: 'en', currency: 'AUD' },
+                'NZ': { language: 'en', currency: 'AUD' },
+                'CH': { language: 'de', currency: 'CHF' },
+                'SA': { language: 'ar', currency: 'USD' },
+                'AE': { language: 'ar', currency: 'USD' },
+                'TR': { language: 'tr', currency: 'USD' },
+                'RU': { language: 'ru', currency: 'USD' },
+                'IN': { language: 'en', currency: 'USD' }
+            };
+            
+            return countryDefaults[countryCode] || { language: 'en', currency: 'USD' };
+        }
+        
+        // 檢測用戶位置並設定默認值
+        async function detectLocationAndSetDefaults() {
+            // 檢查是否已經設定過
+            const hasSetLanguage = localStorage.getItem('appLanguage');
+            const hasSetCurrency = localStorage.getItem('appCurrency');
+            
+            // 如果都已設定，就不需要檢測
+            if (hasSetLanguage && hasSetCurrency) {
+                return;
+            }
+            
+            try {
+                // 使用免費的 IP 地理位置 API
+                const response = await fetch('https://ipapi.co/json/');
+                if (response.ok) {
+                    const data = await response.json();
+                    const countryCode = data.country_code;
+                    
+                    if (countryCode) {
+                        const defaults = getDefaultsForCountry(countryCode);
+                        
+                        // 只設定還沒有設定的項目
+                        if (!hasSetLanguage) {
+                            localStorage.setItem('appLanguage', defaults.language);
+                        }
+                        if (!hasSetCurrency) {
+                            localStorage.setItem('appCurrency', defaults.currency);
+                        }
+                        
+                        // 更新頁面顯示
+                        updatePageTexts();
+                    }
+                }
+            } catch (error) {
+                console.log('無法檢測位置，使用默認設定');
+                // 如果檢測失敗，設定默認值
+                if (!hasSetLanguage) {
+                    localStorage.setItem('appLanguage', 'zh-TW');
+                }
+                if (!hasSetCurrency) {
+                    localStorage.setItem('appCurrency', 'TWD');
+                }
+            }
+        }
+        
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 先檢測位置並設定默認值
+            await detectLocationAndSetDefaults();
+            // 然後更新頁面文字
             updatePageTexts();
         });
     </script>
