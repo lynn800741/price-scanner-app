@@ -4484,6 +4484,13 @@
                 formData.append('language', currentLang);
                 formData.append('currency', currentCurrency);
                 
+                // Debug: 記錄單張分析的語言設定
+                console.log(`[單張分析] 語言=${currentLang}, 幣別=${currentCurrency}`);
+                console.log('[單張分析] localStorage:', {
+                    appLanguage: localStorage.getItem('appLanguage'),
+                    appCurrency: localStorage.getItem('appCurrency')
+                });
+                
                 // 呼叫後端 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
                 
@@ -4497,6 +4504,9 @@
                 }
                 
                 const result = await response.json();
+                
+                // Debug: 記錄回傳結果
+                console.log('[單張分析] API 回傳結果:', result.data);
                 
                 // 隱藏載入動畫
                 loadingOverlay.classList.remove('active');
