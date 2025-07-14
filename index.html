@@ -65,6 +65,21 @@
             color: #333;
         }
 
+        /* 當沒有返回按鈕時，標題置中 */
+        .nav-header > .app-title:only-child {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* 當有返回按鈕時，標題絕對定位置中 */
+        .nav-header:has(.result-back-btn) .app-title,
+        .nav-header:has(.language-close-btn) .app-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+        }
+
         /* 底部導航 */
         .bottom-nav {
             position: fixed;
@@ -2378,12 +2393,7 @@
             fill: #333;
         }
         
-        .language-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            flex: 1;
-        }
+        /* 移除不需要的 language-title 樣式，統一使用 app-title */
         
         .language-content {
             flex: 1;
@@ -2673,7 +2683,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
                         </svg>
-                        <div class="list-item-title" data-i18n="settings.help">輔助說明</div>
+                        <div class="list-item-title" data-i18n="settings.help">幫助中心</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -3365,7 +3375,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="language-title" data-i18n="language.title">選擇語言</h1>
+                <h1 class="app-title" data-i18n="language.title">選擇語言</h1>
             </div>
             
             <div class="language-content">
@@ -3475,7 +3485,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="language-title" data-i18n="currency.title">選擇幣別</h1>
+                <h1 class="app-title" data-i18n="currency.title">選擇幣別</h1>
             </div>
             
             <div class="language-content">
@@ -5954,7 +5964,7 @@
                 'settings.currency': '幣別',
                 'settings.loginRegister': '登入/註冊',
                 'settings.contactUs': '聯絡我們',
-                'settings.help': '輔助說明',
+                'settings.help': '幫助中心',
                 'settings.about': '關於APP',
                 'settings.appInfo': 'APP資訊',
                 'settings.rateApp': '評價APP',
