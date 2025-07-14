@@ -4700,6 +4700,82 @@
             return `${symbol} ${formattedAmount}`;
         }
         
+        // Toast 提示功能
+        let toastCounter = 0;
+        function showToast(message, type = 'info') {
+            const toastId = `toast-${++toastCounter}`;
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    ${type === 'loading' ? '<div class="toast-spinner"></div>' : ''}
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            // 添加樣式（如果還沒有）
+            if (!document.getElementById('toast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'toast-styles';
+                style.innerHTML = `
+                    .toast {
+                        position: fixed;
+                        bottom: 80px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(0, 0, 0, 0.8);
+                        color: white;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        z-index: 10000;
+                        animation: slideUp 0.3s ease-out;
+                    }
+                    .toast-content {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    .toast-spinner {
+                        width: 16px;
+                        height: 16px;
+                        border: 2px solid #fff;
+                        border-top-color: transparent;
+                        border-radius: 50%;
+                        animation: spin 0.8s linear infinite;
+                    }
+                    .toast-success { background: rgba(76, 175, 80, 0.9); }
+                    .toast-error { background: rgba(244, 67, 54, 0.9); }
+                    .toast-loading { background: rgba(33, 150, 243, 0.9); }
+                    @keyframes slideUp {
+                        from { transform: translate(-50%, 100%); opacity: 0; }
+                        to { transform: translate(-50%, 0); opacity: 1; }
+                    }
+                    @keyframes spin {
+                        to { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(toast);
+            
+            // 非載入提示3秒後自動消失
+            if (type !== 'loading') {
+                setTimeout(() => hideToast(toastId), 3000);
+            }
+            
+            return toastId;
+        }
+        
+        function hideToast(toastId) {
+            const toast = document.getElementById(toastId);
+            if (toast) {
+                toast.style.animation = 'slideDown 0.3s ease-in';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+        
         // 解析價格字串，提取幣別和金額
         function parsePriceString(priceStr) {
             if (!priceStr) return { currency: null, amount: 0 };
@@ -4880,33 +4956,82 @@
             }
         }
         
-        // 顯示歷史記錄
-        async function displayHistory() {
+        // 顯示歷史記錄（不轉換，只顯示原始價格）
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+            displayHistoryItems(history);
+        }
+        
+        // 轉換並顯示歷史記錄（只在切換幣別時調用）
+        async function convertAndDisplayHistory() {
             const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
             const currentCurrency = getCurrentCurrency();
             
-            // 先顯示原始資料，避免等待太久
-            displayHistoryItems(history);
+            // 顯示載入中提示
+            const loadingToast = showToast('正在轉換價格...', 'loading');
             
-            // 轉換所有價格到當前幣別
-            const convertedHistory = await Promise.all(history.map(async (item) => {
-                // 如果沒有基準幣別資訊，保持原樣
-                if (!item.baseCurrency || !item.baseAmount) {
-                    return item;
+            try {
+                // 收集需要的匯率組合
+                const ratesNeeded = new Set();
+                history.forEach(item => {
+                    if (item.baseCurrency && item.baseCurrency !== currentCurrency) {
+                        ratesNeeded.add(`${item.baseCurrency}_${currentCurrency}`);
+                    }
+                });
+                
+                // 批量獲取所需匯率
+                const rates = {};
+                
+                if (ratesNeeded.size > 0) {
+                    // 準備批量請求
+                    const pairs = Array.from(ratesNeeded).map(rateKey => {
+                        const [from, to] = rateKey.split('_');
+                        return { from, to };
+                    });
+                    
+                    try {
+                        // 批量請求匯率
+                        const API_URL = 'https://price-scanner-backend.vercel.app';
+                        const response = await fetch(`${API_URL}/api/exchange-rates`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ pairs })
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success && data.rates) {
+                                Object.assign(rates, data.rates);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('批量獲取匯率失敗:', error);
+                        // 失敗時使用本地備用匯率
+                        for (const rateKey of ratesNeeded) {
+                            const [from, to] = rateKey.split('_');
+                            rates[rateKey] = ExchangeRateManager.getFallbackRate(from, to);
+                        }
+                    }
                 }
                 
-                // 如果基準幣別與當前幣別相同，直接使用原價格
-                if (item.baseCurrency === currentCurrency) {
-                    return item;
-                }
-                
-                // 轉換價格
-                try {
-                    const convertedAmount = await ExchangeRateManager.convertAmount(
-                        item.baseAmount,
-                        item.baseCurrency,
-                        currentCurrency
-                    );
+                // 轉換所有價格
+                const convertedHistory = history.map(item => {
+                    // 如果沒有基準幣別資訊，保持原樣
+                    if (!item.baseCurrency || !item.baseAmount) {
+                        return item;
+                    }
+                    
+                    // 如果基準幣別與當前幣別相同，直接使用原價格
+                    if (item.baseCurrency === currentCurrency) {
+                        return item;
+                    }
+                    
+                    // 使用已獲取的匯率轉換
+                    const rateKey = `${item.baseCurrency}_${currentCurrency}`;
+                    const rate = rates[rateKey] || 1;
+                    const convertedAmount = item.baseAmount * rate;
                     
                     // 創建新的項目，保留原始資料但更新顯示價格
                     return {
@@ -4914,13 +5039,20 @@
                         displayPrice: formatPriceWithCurrency(convertedAmount, currentCurrency),
                         isConverted: true
                     };
-                } catch (error) {
-                    console.error('價格轉換失敗:', error);
-                    return item;
-                }
-            }));
-            
-            displayHistoryItems(convertedHistory);
+                });
+                
+                displayHistoryItems(convertedHistory);
+                
+                // 隱藏載入提示
+                hideToast(loadingToast);
+                showToast('價格轉換完成', 'success');
+                
+            } catch (error) {
+                console.error('批量轉換失敗:', error);
+                hideToast(loadingToast);
+                showToast('部分價格轉換失敗', 'error');
+                displayHistoryItems(history);
+            }
         }
         
         // 切換選取模式
@@ -9145,9 +9277,9 @@
         
         // 更新所有價格顯示
         function updateAllPrices() {
-            // 更新列表頁面的價格
+            // 更新列表頁面的價格（使用轉換功能）
             if (document.getElementById('listPage').classList.contains('active')) {
-                displayHistory();
+                convertAndDisplayHistory();
             }
             
             // 更新結果頁面的價格
