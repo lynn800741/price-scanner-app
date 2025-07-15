@@ -2243,6 +2243,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-top: 80px;
         }
 
         .upload-box {
@@ -2374,7 +2375,11 @@
             padding: 15px 20px;
             background: #fff;
             border-bottom: 1px solid #eee;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
         
         .language-close-btn {
@@ -2400,6 +2405,7 @@
             flex: 1;
             overflow-y: auto;
             padding-bottom: 20px;
+            padding-top: 60px;
         }
         
         .language-section {
@@ -2453,14 +2459,30 @@
 
         /* 幫助頁面樣式 */
         .help-page {
-            padding-top: 60px;
-            padding-bottom: 20px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
             background: #f5f5f5;
-            min-height: 100vh;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .help-page.active {
+            display: flex;
+            animation: slideInRight 0.3s ease forwards;
         }
 
         .help-content {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
+            padding-top: 20px;
+            background: #f5f5f5;
         }
 
         .faq-section {
@@ -2871,7 +2893,7 @@
         <!-- 幫助頁面 -->
         <div class="page help-page" id="helpPage">
             <div class="language-header">
-                <button class="language-close-btn" onclick="switchPage('settingsPage')">
+                <button class="language-close-btn" onclick="closeHelp()">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
@@ -3687,8 +3709,7 @@
             settingsPage: document.getElementById('settingsPage'),
             cameraPage: document.getElementById('cameraPage'),
             listPage: document.getElementById('listPage'),
-            resultPage: document.getElementById('resultPage'),  // 新增結果頁面
-            helpPage: document.getElementById('helpPage')  // 新增幫助頁面
+            resultPage: document.getElementById('resultPage')  // 新增結果頁面
         };
         
         const bottomNav = document.getElementById('bottomNav');
@@ -3949,7 +3970,14 @@
         
         // 顯示輔助說明
         function showHelp() {
-            switchPage('helpPage');
+            const helpPage = document.getElementById('helpPage');
+            helpPage.classList.add('active');
+        }
+        
+        // 關閉幫助頁面
+        function closeHelp() {
+            const helpPage = document.getElementById('helpPage');
+            helpPage.classList.remove('active');
         }
         
         // 顯示APP資訊
@@ -6135,7 +6163,38 @@
                 'common.aiAnalyzing': 'AI 正在分析中...',
                 'common.aiAnalyzingTitle': 'AI 正在分析中',
                 'common.aiAnalyzingDesc': '正在深度理解圖片內容...',
-                'common.batchAnalyzing': '正在分析第 {current} / {total} 張圖片...'
+                'common.batchAnalyzing': '正在分析第 {current} / {total} 張圖片...',
+                
+                // 幫助中心
+                'help.title': '幫助中心',
+                'help.faq1.question': 'LENSY 的萬物價格辨識實際上是如何運作的呢？',
+                'help.faq1.answer': 'LENSY 的價格辨識使用革命性的 GPT-4o 人工智慧技術。當您上傳物品圖片時，我們的 AI 會分析圖片中的所有細節，包括品牌、型號、材質、狀態等，並結合市場資料庫估算出合理的價格範圍。無論是商品、建築、自然景觀，甚至是太陽月亮，LENSY 都能給出創意而專業的估價。',
+                'help.faq2.question': 'LENSY 只接受當下拍的照片，還是可以從相簿中選取照片？',
+                'help.faq2.answer': '兩種方法都能在 LENSY 中使用。您可以即時拍攝想要識別的物品，也可以從手機相簿中選取已存在的照片。在應用程式中，點擊中間的「相機」按鈕進入拍攝頁面，點擊白色圓圈即可拍照，或點擊左下方的圖片圖示從相簿選取照片。',
+                'help.faq3.question': '我可以更改應用程式的語言嗎？',
+                'help.faq3.answer': '當然可以！LENSY 提供 <span class="faq-highlight">16 種語言介面</span>，包括繁體中文、簡體中文、英語、日語、韓語、泰語、越南語、西班牙語、法語、德語、義大利語、葡萄牙語、阿拉伯語、土耳其語、俄語和印尼語。更改語言的步驟：<ol><li>開啟 LENSY 應用程式</li><li>點擊右下角「設定」圖示</li><li>在「支援」區塊中點擊「語言」</li><li>選擇您想使用的語言</li></ol>',
+                'help.faq4.question': '如何查看我的會員資格是 LENSY Pro 會員或免費會員？',
+                'help.faq4.answer': '在 LENSY 應用程式的「設定」中，您可以查看會員狀態。請按照以下步驟操作：<ol><li>開啟 LENSY 應用程式</li><li>點擊右下角「設定」圖示</li><li>在「會員服務」區塊查看「會員狀態」</li><li>您可以看到目前是「免費版」或「Pro 版」，以及剩餘掃描次數</li></ol>',
+                'help.faq5.question': '如何在新的裝置中恢復我的 Pro 會員？',
+                'help.faq5.answer': '如果您已經創建 LENSY 帳戶並購買了 Pro 會員，只需在新裝置上使用相同帳戶登入即可。如果您是透過 Apple ID 或 Google 帳號訂閱，請確保：<ol><li>使用相同的 Apple ID 或 Google 帳號登入</li><li>開啟 LENSY 應用程式</li><li>前往「設定」>「會員服務」</li><li>點擊「復原購買」</li><li>系統會自動恢復您的 Pro 會員資格</li></ol>',
+                'help.faq6.question': '我需要註冊才能使用 LENSY 嗎？',
+                'help.faq6.answer': '是的，您需要註冊帳戶才能使用 LENSY 的完整功能。註冊帳戶的好處包括：<br>• 雲端同步您的掃描記錄<br>• 在不同裝置間無縫切換使用<br>• 確保資料安全，不會因更換手機而遺失<br>• 享受個人化的 AI 分析服務<br>• 獲得會員專屬優惠和功能更新<br><br>註冊非常簡單，只需使用電子郵件或透過 Apple/Google 帳號快速登入即可。',
+                'help.faq7.question': 'LENSY Pro 會員提供哪些福利？',
+                'help.faq7.answer': 'LENSY Pro 會員解鎖完整的智能識別功能，包括：<ol><li>每月 <span class="faq-highlight">1000 次</span>無限制掃描分析</li><li>AI 智能對話服務，深度了解物品資訊</li><li>批次照片識別，一次處理多張圖片</li><li>匯出 Excel 報告功能</li><li>自動儲存掃描結果到相簿</li><li>去除所有廣告</li><li>優先客戶支援服務</li><li>未來新功能優先體驗</li></ol>',
+                'help.faq8.question': '若物品辨識有誤，我該怎麼做？',
+                'help.faq8.answer': '由於 AI 識別依賴圖片品質，請確保：<br>• 拍攝時光線充足<br>• 物品清晰對焦<br>• 包含完整的物品特徵<br><br>如果識別結果不準確，您可以：<ol><li>點擊結果頁面右上角的三點選單</li><li>選擇「更正物品識別」重新分析</li><li>或選擇「編輯名稱」手動修正</li><li>也可以透過「設定」>「聯絡我們」回報問題</li></ol>',
+                'help.faq9.question': '我可以同時分析多張照片嗎？',
+                'help.faq9.answer': '可以！這是 <span class="faq-highlight">LENSY Pro 會員</span>的專屬功能。Pro 會員可以：<ol><li>在相機頁面點擊左下角的圖片圖示</li><li>選擇多張照片（最多 10 張）</li><li>系統會依序分析每張照片</li><li>所有結果都會保存在歷史記錄中</li></ol>',
+                'help.faq10.question': '如何更改價格顯示的貨幣？',
+                'help.faq10.answer': 'LENSY 支援多種貨幣顯示，更改步驟：<ol><li>開啟 LENSY 應用程式</li><li>點擊右下角「設定」圖示</li><li>在「支援」區塊中點擊「貨幣」</li><li>選擇您偏好的貨幣（如台幣、美元、人民幣等）</li></ol>',
+                'help.faq11.question': '我的個人資料會有資安疑慮嗎？',
+                'help.faq11.answer': '您的隱私安全是我們的首要考量：<br>• 所有資料都經過加密處理<br>• 照片僅用於 AI 分析，不會儲存在伺服器<br>• 嚴格遵守 GDPR 和各國隱私保護法規<br>• 您可以隨時刪除本機儲存的所有資料<br>• 相機權限僅在您主動拍照時使用',
+                'help.faq12.question': '如何關閉自動續訂或取消訂閱？',
+                'help.faq12.answer': '如果您想取消 LENSY Pro 訂閱，請按照以下步驟操作：<br><br><strong>iOS 用戶：</strong><ol><li>開啟 iPhone 的「設定」</li><li>點擊您的 Apple ID</li><li>點擊「訂閱項目」</li><li>找到 LENSY 訂閱並點擊</li><li>選擇「取消訂閱」</li></ol><br><strong>Android 用戶：</strong><ol><li>開啟 Google Play 商店</li><li>點擊右上角的個人資料圖示</li><li>選擇「付款與訂閱」>「訂閱」</li><li>找到 LENSY 訂閱</li><li>選擇「取消訂閱」</li></ol>',
+                'help.faq13.question': '如何刪除我的帳戶？',
+                'help.faq13.answer': '如果您想要刪除帳戶，請注意所有資料將永久刪除且無法恢復。刪除步驟：<ol><li>開啟 LENSY 應用程式</li><li>前往「設定」>「帳號」</li><li>點擊「刪除帳戶」</li><li>確認刪除操作</li></ol><br><span class="faq-highlight">注意：</span>刪除前請確保已備份重要的掃描記錄。',
+                'help.faq14.question': '如何聯絡客服支援？',
+                'help.faq14.answer': '如有任何問題或建議，歡迎透過以下方式聯絡我們：<ol><li>應用程式內：「設定」>「聯絡我們」</li><li>電子郵件：<span class="faq-highlight">lensyteam@gmail.com</span></li><li>回覆時間：48 小時內</li></ol>'
             },
             'zh-CN': {
                 'app.title': 'LENSY - 万物价格扫描器',
@@ -8826,7 +8885,38 @@
                 'common.aiAnalyzing': 'جارٍ التحليل بواسطة الذكاء الاصطناعي...',
                 'common.aiAnalyzingTitle': 'جارٍ التحليل بواسطة الذكاء الاصطناعي',
                 'common.aiAnalyzingDesc': 'فهم محتوى الصورة...',
-                'common.batchAnalyzing': 'تحليل الصورة {current} من {total}...'
+                'common.batchAnalyzing': 'تحليل الصورة {current} من {total}...',
+                
+                // مركز المساعدة
+                'help.title': 'مركز المساعدة',
+                'help.faq1.question': 'كيف يعمل التعرف على الأسعار العالمي في LENSY فعلياً؟',
+                'help.faq1.answer': 'يستخدم التعرف على الأسعار في LENSY تقنية الذكاء الاصطناعي الثورية GPT-4o. عندما تقوم بتحميل صورة منتج، يقوم ذكاؤنا الاصطناعي بتحليل جميع التفاصيل في الصورة، بما في ذلك العلامة التجارية والطراز والمواد والحالة وما إلى ذلك، ويجمع مع قاعدة بيانات السوق لتقدير نطاق سعر معقول. سواء كانت منتجات أو مباني أو مناظر طبيعية أو حتى الشمس والقمر، يمكن لـ LENSY تقديم تقييمات إبداعية واحترافية.',
+                'help.faq2.question': 'هل يقبل LENSY فقط الصور الملتقطة في اللحظة، أم يمكنني اختيار الصور من ألبومي؟',
+                'help.faq2.answer': 'كلا الطريقتين تعملان في LENSY. يمكنك التقاط صور للعناصر التي تريد التعرف عليها في الوقت الفعلي، أو اختيار الصور الموجودة من ألبوم هاتفك. في التطبيق، انقر على زر "الكاميرا" في المنتصف للدخول إلى صفحة التصوير، انقر على الدائرة البيضاء لالتقاط صورة، أو انقر على أيقونة الصورة في الأسفل الأيسر لاختيار الصور من ألبومك.',
+                'help.faq3.question': 'هل يمكنني تغيير لغة التطبيق؟',
+                'help.faq3.answer': 'بالطبع! يوفر LENSY <span class="faq-highlight">16 واجهة لغة</span>، بما في ذلك الصينية التقليدية والصينية المبسطة والإنجليزية واليابانية والكورية والتايلاندية والفيتنامية والإسبانية والفرنسية والألمانية والإيطالية والبرتغالية والعربية والتركية والروسية والإندونيسية. خطوات تغيير اللغة:<ol><li>افتح تطبيق LENSY</li><li>انقر على أيقونة "الإعدادات" في الأسفل الأيمن</li><li>انقر على "اللغة" في قسم "الدعم"</li><li>اختر لغتك المفضلة</li></ol>',
+                'help.faq4.question': 'كيف يمكنني التحقق مما إذا كنت عضوًا في LENSY Pro أم عضوًا مجانيًا؟',
+                'help.faq4.answer': 'في "الإعدادات" في تطبيق LENSY، يمكنك التحقق من حالة عضويتك. يرجى اتباع هذه الخطوات:<ol><li>افتح تطبيق LENSY</li><li>انقر على أيقونة "الإعدادات" في الأسفل الأيمن</li><li>تحقق من "حالة العضو" في قسم "العضوية"</li><li>يمكنك معرفة ما إذا كنت حاليًا على "الإصدار المجاني" أو "إصدار Pro"، بالإضافة إلى عمليات المسح المتبقية</li></ol>',
+                'help.faq5.question': 'كيف يمكنني استعادة عضوية Pro الخاصة بي على جهاز جديد؟',
+                'help.faq5.answer': 'إذا كنت قد أنشأت حساب LENSY واشتريت عضوية Pro، فما عليك سوى تسجيل الدخول بنفس الحساب على جهازك الجديد. إذا اشتركت من خلال Apple ID أو حساب Google، يرجى التأكد من:<ol><li>تسجيل الدخول بنفس Apple ID أو حساب Google</li><li>فتح تطبيق LENSY</li><li>الذهاب إلى "الإعدادات" > "العضوية"</li><li>النقر على "استعادة الشراء"</li><li>سيقوم النظام تلقائيًا باستعادة عضوية Pro الخاصة بك</li></ol>',
+                'help.faq6.question': 'هل أحتاج إلى التسجيل لاستخدام LENSY؟',
+                'help.faq6.answer': 'نعم، تحتاج إلى تسجيل حساب لاستخدام ميزات LENSY الكاملة. تشمل فوائد التسجيل:<br>• مزامنة سجل المسح الخاص بك عبر السحابة<br>• التبديل السلس بين الأجهزة المختلفة<br>• أمان البيانات، لن تُفقد عند تغيير الهواتف<br>• الاستمتاع بخدمات تحليل الذكاء الاصطناعي المخصصة<br>• الحصول على عروض حصرية للأعضاء وتحديثات الميزات<br><br>التسجيل بسيط جدًا، ما عليك سوى استخدام البريد الإلكتروني أو تسجيل الدخول السريع من خلال حساب Apple/Google.',
+                'help.faq7.question': 'ما هي المزايا التي تقدمها عضوية LENSY Pro؟',
+                'help.faq7.answer': 'تفتح عضوية LENSY Pro ميزات التعرف الذكي الكاملة، بما في ذلك:<ol><li><span class="faq-highlight">1000 مرة</span> مسح غير محدود شهريًا</li><li>خدمة الحوار الذكي بالذكاء الاصطناعي للفهم العميق لمعلومات المنتج</li><li>التعرف على الصور المجمعة، معالجة صور متعددة دفعة واحدة</li><li>وظيفة التصدير إلى تقرير Excel</li><li>حفظ نتائج المسح تلقائيًا في الألبوم</li><li>إزالة جميع الإعلانات</li><li>دعم العملاء ذو الأولوية</li><li>الوصول المبكر إلى الميزات المستقبلية</li></ol>',
+                'help.faq8.question': 'ماذا يجب أن أفعل إذا كان التعرف على المنتج غير صحيح؟',
+                'help.faq8.answer': 'نظرًا لأن التعرف بالذكاء الاصطناعي يعتمد على جودة الصورة، يرجى التأكد من:<br>• الإضاءة الكافية عند التصوير<br>• التركيز الواضح على المنتج<br>• تضمين ميزات المنتج الكاملة<br><br>إذا كانت نتائج التعرف غير دقيقة، يمكنك:<ol><li>النقر على قائمة النقاط الثلاث في أعلى يمين صفحة النتائج</li><li>اختيار "تصحيح التعرف على المنتج" لإعادة التحليل</li><li>أو اختيار "تحرير الاسم" للتصحيح اليدوي</li><li>يمكنك أيضًا الإبلاغ عن المشكلات من خلال "الإعدادات" > "اتصل بنا"</li></ol>',
+                'help.faq9.question': 'هل يمكنني تحليل عدة صور في وقت واحد؟',
+                'help.faq9.answer': 'نعم! هذه ميزة حصرية <span class="faq-highlight">لأعضاء LENSY Pro</span>. يمكن لأعضاء Pro:<ol><li>النقر على أيقونة الصورة في أسفل يسار صفحة الكاميرا</li><li>اختيار صور متعددة (حتى 10)</li><li>سيقوم النظام بتحليل كل صورة بالتسلسل</li><li>سيتم حفظ جميع النتائج في السجل</li></ol>',
+                'help.faq10.question': 'كيف يمكنني تغيير عرض العملة؟',
+                'help.faq10.answer': 'يدعم LENSY عرض عملات متعددة. خطوات التغيير:<ol><li>افتح تطبيق LENSY</li><li>انقر على أيقونة "الإعدادات" في الأسفل الأيمن</li><li>انقر على "العملة" في قسم "الدعم"</li><li>اختر عملتك المفضلة (مثل TWD أو USD أو CNY وما إلى ذلك)</li></ol>',
+                'help.faq11.question': 'هل توجد أي مخاوف أمنية بخصوص بياناتي الشخصية؟',
+                'help.faq11.answer': 'خصوصيتك وأمانك هما أولويتنا القصوى:<br>• جميع البيانات مشفرة<br>• تُستخدم الصور فقط لتحليل الذكاء الاصطناعي، ولا تُخزن على الخوادم<br>• الامتثال الصارم لـ GDPR وقوانين حماية الخصوصية في جميع أنحاء العالم<br>• يمكنك حذف جميع البيانات المخزنة محليًا في أي وقت<br>• تُستخدم أذونات الكاميرا فقط عندما تقوم بالتقاط الصور بنشاط',
+                'help.faq12.question': 'كيف يمكنني إلغاء التجديد التلقائي أو إلغاء الاشتراك؟',
+                'help.faq12.answer': 'إذا كنت تريد إلغاء اشتراك LENSY Pro، يرجى اتباع هذه الخطوات:<br><br><strong>مستخدمو iOS:</strong><ol><li>افتح "الإعدادات" في iPhone</li><li>انقر على Apple ID الخاص بك</li><li>انقر على "الاشتراكات"</li><li>ابحث عن اشتراك LENSY وانقر عليه</li><li>اختر "إلغاء الاشتراك"</li></ol><br><strong>مستخدمو Android:</strong><ol><li>افتح متجر Google Play</li><li>انقر على أيقونة الملف الشخصي في أعلى اليمين</li><li>اختر "المدفوعات والاشتراكات" > "الاشتراكات"</li><li>ابحث عن اشتراك LENSY</li><li>اختر "إلغاء الاشتراك"</li></ol>',
+                'help.faq13.question': 'كيف يمكنني حذف حسابي؟',
+                'help.faq13.answer': 'إذا كنت تريد حذف حسابك، يرجى ملاحظة أن جميع البيانات سيتم حذفها نهائيًا ولا يمكن استردادها. خطوات الحذف:<ol><li>افتح تطبيق LENSY</li><li>اذهب إلى "الإعدادات" > "الحساب"</li><li>انقر على "حذف الحساب"</li><li>أكد الحذف</li></ol><br><span class="faq-highlight">ملاحظة:</span> يرجى التأكد من أنك قمت بنسخ احتياطي لسجلات المسح المهمة قبل الحذف.',
+                'help.faq14.question': 'كيف يمكنني الاتصال بدعم العملاء؟',
+                'help.faq14.answer': 'إذا كان لديك أي أسئلة أو اقتراحات، يرجى الاتصال بنا من خلال:<ol><li>داخل التطبيق: "الإعدادات" > "اتصل بنا"</li><li>البريد الإلكتروني: <span class="faq-highlight">lensyteam@gmail.com</span></li><li>وقت الاستجابة: خلال 48 ساعة</li></ol>'
             },
             'tr': {
                 'app.title': 'LENSY - Evrensel Fiyat Tarayıcı',
@@ -9022,7 +9112,38 @@
                 'common.aiAnalyzing': 'AI analiz ediyor...',
                 'common.aiAnalyzingTitle': 'AI analiz ediyor',
                 'common.aiAnalyzingDesc': 'Görüntü içeriğini anlıyor...',
-                'common.batchAnalyzing': '{current} / {total} görüntü analiz ediliyor...'
+                'common.batchAnalyzing': '{current} / {total} görüntü analiz ediliyor...',
+                
+                // Yardım Merkezi
+                'help.title': 'Yardım Merkezi',
+                'help.faq1.question': 'LENSY\'nin evrensel fiyat tanıma özelliği gerçekte nasıl çalışır?',
+                'help.faq1.answer': 'LENSY\'nin fiyat tanıma özelliği devrimci GPT-4o yapay zeka teknolojisini kullanır. Bir ürün görüntüsü yüklediğinizde, AI\'mız görüntüdeki tüm detayları analiz eder: marka, model, malzeme, durum vb. ve makul bir fiyat aralığı tahmin etmek için pazar veritabanıyla birleştirir. İster ürün, ister bina, ister doğal manzara, hatta güneş ve ay olsun, LENSY yaratıcı ve profesyonel değerlendirmeler sunabilir.',
+                'help.faq2.question': 'LENSY sadece o an çekilen fotoğrafları mı kabul ediyor, yoksa albümden fotoğraf seçebilir miyim?',
+                'help.faq2.answer': 'LENSY\'de her iki yöntem de çalışır. Tanımlamak istediğiniz öğelerin fotoğraflarını gerçek zamanlı olarak çekebilir veya telefonunuzun albümünden mevcut fotoğrafları seçebilirsiniz. Uygulamada, çekim sayfasına girmek için ortadaki "Kamera" düğmesine dokunun, fotoğraf çekmek için beyaz daireye dokunun veya albümünüzden fotoğraf seçmek için sol alttaki görüntü simgesine dokunun.',
+                'help.faq3.question': 'Uygulamanın dilini değiştirebilir miyim?',
+                'help.faq3.answer': 'Elbette! LENSY <span class="faq-highlight">16 dil arayüzü</span> sunar: Geleneksel Çince, Basitleştirilmiş Çince, İngilizce, Japonca, Korece, Tayca, Vietnamca, İspanyolca, Fransızca, Almanca, İtalyanca, Portekizce, Arapça, Türkçe, Rusça ve Endonezce. Dili değiştirme adımları:<ol><li>LENSY uygulamasını açın</li><li>Sağ alttaki "Ayarlar" simgesine dokunun</li><li>"Destek" bölümünde "Dil"e dokunun</li><li>Tercih ettiğiniz dili seçin</li></ol>',
+                'help.faq4.question': 'LENSY Pro üyesi mi yoksa ücretsiz üye mi olduğumu nasıl kontrol edebilirim?',
+                'help.faq4.answer': 'LENSY uygulamasının "Ayarlar" bölümünde üyelik durumunuzu kontrol edebilirsiniz. Lütfen şu adımları izleyin:<ol><li>LENSY uygulamasını açın</li><li>Sağ alttaki "Ayarlar" simgesine dokunun</li><li>"Üyelik" bölümünde "Üye Durumu"nu kontrol edin</li><li>Şu anda "Ücretsiz Sürüm" veya "Pro Sürüm"de olup olmadığınızı ve kalan tarama sayısını görebilirsiniz</li></ol>',
+                'help.faq5.question': 'Pro üyeliğimi yeni bir cihazda nasıl geri yükleyebilirim?',
+                'help.faq5.answer': 'Zaten bir LENSY hesabı oluşturduysanız ve Pro üyeliği satın aldıysanız, yeni cihazınızda aynı hesapla giriş yapmanız yeterlidir. Apple ID veya Google hesabı üzerinden abone olduysanız, lütfen şunlardan emin olun:<ol><li>Aynı Apple ID veya Google hesabıyla giriş yapın</li><li>LENSY uygulamasını açın</li><li>"Ayarlar" > "Üyelik"e gidin</li><li>"Satın Alımı Geri Yükle"ye dokunun</li><li>Sistem Pro üyeliğinizi otomatik olarak geri yükleyecektir</li></ol>',
+                'help.faq6.question': 'LENSY\'yi kullanmak için kayıt olmam gerekiyor mu?',
+                'help.faq6.answer': 'Evet, LENSY\'nin tam özelliklerini kullanmak için bir hesap oluşturmanız gerekiyor. Kayıt olmanın faydaları:<br>• Tarama geçmişinizi bulutta senkronize edin<br>• Farklı cihazlar arasında sorunsuz geçiş yapın<br>• Veri güvenliği, telefon değiştirirken kaybolmaz<br>• Kişiselleştirilmiş AI analiz hizmetlerinin keyfini çıkarın<br>• Üyelere özel teklifler ve özellik güncellemeleri alın<br><br>Kayıt çok basittir, sadece e-posta kullanın veya Apple/Google hesabı üzerinden hızlı giriş yapın.',
+                'help.faq7.question': 'LENSY Pro üyeliği hangi avantajları sunar?',
+                'help.faq7.answer': 'LENSY Pro üyeliği tam akıllı tanıma özelliklerini açar:<ol><li>Ayda <span class="faq-highlight">1000 kez</span> sınırsız tarama</li><li>Ürün bilgilerini derinlemesine anlamak için AI akıllı diyalog hizmeti</li><li>Toplu fotoğraf tanıma, birden fazla görüntüyü tek seferde işleme</li><li>Excel raporu dışa aktarma işlevi</li><li>Tarama sonuçlarını albüme otomatik kaydetme</li><li>Tüm reklamları kaldırma</li><li>Öncelikli müşteri desteği</li><li>Gelecekteki özelliklere erken erişim</li></ol>',
+                'help.faq8.question': 'Ürün tanıma yanlışsa ne yapmalıyım?',
+                'help.faq8.answer': 'AI tanıma görüntü kalitesine bağlı olduğundan, lütfen şunlardan emin olun:<br>• Çekim sırasında yeterli aydınlatma<br>• Ürüne net odaklanma<br>• Tam ürün özelliklerini dahil etme<br><br>Tanıma sonuçları yanlışsa, şunları yapabilirsiniz:<ol><li>Sonuç sayfasının sağ üst köşesindeki üç nokta menüsüne dokunun</li><li>Yeniden analiz için "Ürün Tanımayı Düzelt"i seçin</li><li>Veya manuel düzeltme için "İsmi Düzenle"yi seçin</li><li>"Ayarlar" > "Bize Ulaşın" üzerinden sorunları da bildirebilirsiniz</li></ol>',
+                'help.faq9.question': 'Aynı anda birden fazla fotoğrafı analiz edebilir miyim?',
+                'help.faq9.answer': 'Evet! Bu <span class="faq-highlight">LENSY Pro üyelerine</span> özel bir özelliktir. Pro üyeler şunları yapabilir:<ol><li>Kamera sayfasının sol altındaki görüntü simgesine dokunun</li><li>Birden fazla fotoğraf seçin (en fazla 10)</li><li>Sistem her fotoğrafı sırayla analiz edecektir</li><li>Tüm sonuçlar geçmişte kaydedilecektir</li></ol>',
+                'help.faq10.question': 'Fiyat gösterimi için para birimini nasıl değiştirebilirim?',
+                'help.faq10.answer': 'LENSY birden fazla para birimi gösterimini destekler. Değiştirme adımları:<ol><li>LENSY uygulamasını açın</li><li>Sağ alttaki "Ayarlar" simgesine dokunun</li><li>"Destek" bölümünde "Para Birimi"ne dokunun</li><li>Tercih ettiğiniz para birimini seçin (TWD, USD, CNY vb.)</li></ol>',
+                'help.faq11.question': 'Kişisel verilerimle ilgili güvenlik endişeleri var mı?',
+                'help.faq11.answer': 'Gizliliğiniz ve güvenliğiniz en büyük önceliğimizdir:<br>• Tüm veriler şifrelenir<br>• Fotoğraflar yalnızca AI analizi için kullanılır, sunucularda saklanmaz<br>• GDPR ve dünya çapındaki gizlilik koruma yasalarına sıkı uyum<br>• Yerel olarak saklanan tüm verileri istediğiniz zaman silebilirsiniz<br>• Kamera izinleri yalnızca aktif olarak fotoğraf çekerken kullanılır',
+                'help.faq12.question': 'Otomatik yenilemeyi nasıl iptal edebilirim veya abonelikten çıkabilirim?',
+                'help.faq12.answer': 'LENSY Pro aboneliğinizi iptal etmek istiyorsanız, lütfen şu adımları izleyin:<br><br><strong>iOS Kullanıcıları:</strong><ol><li>iPhone "Ayarlar"ı açın</li><li>Apple ID\'nize dokunun</li><li>"Abonelikler"e dokunun</li><li>LENSY aboneliğini bulun ve dokunun</li><li>"Aboneliği İptal Et"i seçin</li></ol><br><strong>Android Kullanıcıları:</strong><ol><li>Google Play Store\'u açın</li><li>Sağ üstteki profil simgesine dokunun</li><li>"Ödemeler ve abonelikler" > "Abonelikler"i seçin</li><li>LENSY aboneliğini bulun</li><li>"Aboneliği iptal et"i seçin</li></ol>',
+                'help.faq13.question': 'Hesabımı nasıl silebilirim?',
+                'help.faq13.answer': 'Hesabınızı silmek istiyorsanız, lütfen tüm verilerin kalıcı olarak silineceğini ve geri alınamayacağını unutmayın. Silme adımları:<ol><li>LENSY uygulamasını açın</li><li>"Ayarlar" > "Hesap"a gidin</li><li>"Hesabı Sil"e dokunun</li><li>Silme işlemini onaylayın</li></ol><br><span class="faq-highlight">Not:</span> Lütfen silmeden önce önemli tarama kayıtlarını yedeklediğinizden emin olun.',
+                'help.faq14.question': 'Müşteri desteğiyle nasıl iletişime geçebilirim?',
+                'help.faq14.answer': 'Herhangi bir sorunuz veya öneriniz varsa, lütfen bizimle iletişime geçin:<ol><li>Uygulama içi: "Ayarlar" > "Bize Ulaşın"</li><li>E-posta: <span class="faq-highlight">lensyteam@gmail.com</span></li><li>Yanıt süresi: 48 saat içinde</li></ol>'
             },
             'ru': {
                 'app.title': 'LENSY - Универсальный сканер цен',
@@ -9218,7 +9339,38 @@
                 'common.aiAnalyzing': 'ИИ анализирует...',
                 'common.aiAnalyzingTitle': 'ИИ анализирует',
                 'common.aiAnalyzingDesc': 'Понимание содержания изображения...',
-                'common.batchAnalyzing': 'Анализ изображения {current} из {total}...'
+                'common.batchAnalyzing': 'Анализ изображения {current} из {total}...',
+                
+                // Центр помощи
+                'help.title': 'Центр помощи',
+                'help.faq1.question': 'Как на самом деле работает универсальное распознавание цен LENSY?',
+                'help.faq1.answer': 'Распознавание цен LENSY использует революционную технологию искусственного интеллекта GPT-4o. Когда вы загружаете изображение товара, наш ИИ анализирует все детали на изображении, включая бренд, модель, материал, состояние и т.д., и объединяет с рыночной базой данных для оценки разумного диапазона цен. Будь то товары, здания, природные ландшафты или даже солнце и луна, LENSY может предоставить креативные и профессиональные оценки.',
+                'help.faq2.question': 'LENSY принимает только фотографии, сделанные в данный момент, или я могу выбрать фотографии из альбома?',
+                'help.faq2.answer': 'В LENSY работают оба метода. Вы можете делать фотографии товаров, которые хотите идентифицировать в реальном времени, или выбирать существующие фотографии из альбома вашего телефона. В приложении нажмите кнопку "Камера" в центре, чтобы войти на страницу съемки, нажмите белый круг, чтобы сделать фото, или нажмите значок изображения в левом нижнем углу, чтобы выбрать фотографии из вашего альбома.',
+                'help.faq3.question': 'Могу ли я изменить язык приложения?',
+                'help.faq3.answer': 'Конечно! LENSY предлагает <span class="faq-highlight">16 языковых интерфейсов</span>, включая традиционный китайский, упрощенный китайский, английский, японский, корейский, тайский, вьетнамский, испанский, французский, немецкий, итальянский, португальский, арабский, турецкий, русский и индонезийский. Шаги для изменения языка:<ol><li>Откройте приложение LENSY</li><li>Нажмите значок "Настройки" в правом нижнем углу</li><li>Нажмите "Язык" в разделе "Поддержка"</li><li>Выберите предпочитаемый язык</li></ol>',
+                'help.faq4.question': 'Как я могу проверить, являюсь ли я участником LENSY Pro или бесплатным участником?',
+                'help.faq4.answer': 'В "Настройках" приложения LENSY вы можете проверить статус вашего членства. Пожалуйста, следуйте этим шагам:<ol><li>Откройте приложение LENSY</li><li>Нажмите значок "Настройки" в правом нижнем углу</li><li>Проверьте "Статус участника" в разделе "Членство"</li><li>Вы можете увидеть, находитесь ли вы в настоящее время на "Бесплатной версии" или "Pro версии", а также оставшееся количество сканирований</li></ol>',
+                'help.faq5.question': 'Как мне восстановить мое членство Pro на новом устройстве?',
+                'help.faq5.answer': 'Если вы уже создали учетную запись LENSY и приобрели членство Pro, просто войдите с той же учетной записью на вашем новом устройстве. Если вы подписались через Apple ID или учетную запись Google, пожалуйста, убедитесь:<ol><li>Войдите с тем же Apple ID или учетной записью Google</li><li>Откройте приложение LENSY</li><li>Перейдите в "Настройки" > "Членство"</li><li>Нажмите "Восстановить покупку"</li><li>Система автоматически восстановит ваше членство Pro</li></ol>',
+                'help.faq6.question': 'Нужно ли мне регистрироваться для использования LENSY?',
+                'help.faq6.answer': 'Да, вам нужно зарегистрировать учетную запись для использования полных функций LENSY. Преимущества регистрации включают:<br>• Облачная синхронизация вашей истории сканирования<br>• Бесшовное переключение между различными устройствами<br>• Безопасность данных, не потеряется при смене телефонов<br>• Наслаждайтесь персонализированными услугами анализа ИИ<br>• Получите эксклюзивные предложения для участников и обновления функций<br><br>Регистрация очень проста, просто используйте электронную почту или быстрый вход через учетную запись Apple/Google.',
+                'help.faq7.question': 'Какие преимущества предлагает членство LENSY Pro?',
+                'help.faq7.answer': 'Членство LENSY Pro открывает полные интеллектуальные функции распознавания, включая:<ol><li><span class="faq-highlight">1000 раз</span> неограниченного сканирования в месяц</li><li>Интеллектуальный диалоговый сервис ИИ для глубокого понимания информации о товарах</li><li>Пакетное распознавание фотографий, обработка нескольких изображений одновременно</li><li>Функция экспорта в отчет Excel</li><li>Автоматическое сохранение результатов сканирования в альбом</li><li>Удаление всей рекламы</li><li>Приоритетная поддержка клиентов</li><li>Ранний доступ к будущим функциям</li></ol>',
+                'help.faq8.question': 'Что делать, если распознавание товара неверно?',
+                'help.faq8.answer': 'Поскольку распознавание ИИ зависит от качества изображения, пожалуйста, убедитесь:<br>• Достаточное освещение при съемке<br>• Четкая фокусировка на товаре<br>• Включение полных характеристик товара<br><br>Если результаты распознавания неточны, вы можете:<ol><li>Нажать меню из трех точек в правом верхнем углу страницы результатов</li><li>Выбрать "Исправить распознавание товара" для повторного анализа</li><li>Или выбрать "Редактировать название" для ручной коррекции</li><li>Вы также можете сообщить о проблемах через "Настройки" > "Связаться с нами"</li></ol>',
+                'help.faq9.question': 'Могу ли я анализировать несколько фотографий одновременно?',
+                'help.faq9.answer': 'Да! Это эксклюзивная функция для <span class="faq-highlight">участников LENSY Pro</span>. Участники Pro могут:<ol><li>Нажать значок изображения в левом нижнем углу страницы камеры</li><li>Выбрать несколько фотографий (до 10)</li><li>Система будет анализировать каждую фотографию последовательно</li><li>Все результаты будут сохранены в истории</li></ol>',
+                'help.faq10.question': 'Как изменить отображение валюты?',
+                'help.faq10.answer': 'LENSY поддерживает отображение нескольких валют. Шаги для изменения:<ol><li>Откройте приложение LENSY</li><li>Нажмите значок "Настройки" в правом нижнем углу</li><li>Нажмите "Валюта" в разделе "Поддержка"</li><li>Выберите предпочитаемую валюту (например, TWD, USD, CNY и т.д.)</li></ol>',
+                'help.faq11.question': 'Есть ли какие-либо проблемы безопасности с моими личными данными?',
+                'help.faq11.answer': 'Ваша конфиденциальность и безопасность - наш главный приоритет:<br>• Все данные зашифрованы<br>• Фотографии используются только для анализа ИИ, не хранятся на серверах<br>• Строгое соблюдение GDPR и законов о защите конфиденциальности по всему миру<br>• Вы можете удалить все локально сохраненные данные в любое время<br>• Разрешения камеры используются только когда вы активно делаете фотографии',
+                'help.faq12.question': 'Как отменить автоматическое продление или отписаться?',
+                'help.faq12.answer': 'Если вы хотите отменить подписку LENSY Pro, пожалуйста, следуйте этим шагам:<br><br><strong>Пользователи iOS:</strong><ol><li>Откройте "Настройки" iPhone</li><li>Нажмите на ваш Apple ID</li><li>Нажмите "Подписки"</li><li>Найдите подписку LENSY и нажмите</li><li>Выберите "Отменить подписку"</li></ol><br><strong>Пользователи Android:</strong><ol><li>Откройте Google Play Store</li><li>Нажмите значок профиля в правом верхнем углу</li><li>Выберите "Платежи и подписки" > "Подписки"</li><li>Найдите подписку LENSY</li><li>Выберите "Отменить подписку"</li></ol>',
+                'help.faq13.question': 'Как удалить мою учетную запись?',
+                'help.faq13.answer': 'Если вы хотите удалить свою учетную запись, пожалуйста, обратите внимание, что все данные будут удалены навсегда и не могут быть восстановлены. Шаги для удаления:<ol><li>Откройте приложение LENSY</li><li>Перейдите в "Настройки" > "Аккаунт"</li><li>Нажмите "Удалить аккаунт"</li><li>Подтвердите удаление</li></ol><br><span class="faq-highlight">Примечание:</span> Пожалуйста, убедитесь, что вы сделали резервную копию важных записей сканирования перед удалением.',
+                'help.faq14.question': 'Как связаться со службой поддержки клиентов?',
+                'help.faq14.answer': 'Если у вас есть какие-либо вопросы или предложения, пожалуйста, свяжитесь с нами через:<ol><li>В приложении: "Настройки" > "Связаться с нами"</li><li>Электронная почта: <span class="faq-highlight">lensyteam@gmail.com</span></li><li>Время ответа: В течение 48 часов</li></ol>'
             },
             'id': {
                 'app.title': 'LENSY - Pemindai Harga Universal',
@@ -9414,7 +9566,38 @@
                 'common.aiAnalyzing': 'AI sedang menganalisis...',
                 'common.aiAnalyzingTitle': 'AI sedang menganalisis',
                 'common.aiAnalyzingDesc': 'Memahami konten gambar...',
-                'common.batchAnalyzing': 'Menganalisis gambar {current} dari {total}...'
+                'common.batchAnalyzing': 'Menganalisis gambar {current} dari {total}...',
+                
+                // Pusat Bantuan
+                'help.title': 'Pusat Bantuan',
+                'help.faq1.question': 'Bagaimana sebenarnya pengenalan harga universal LENSY bekerja?',
+                'help.faq1.answer': 'Pengenalan harga LENSY menggunakan teknologi kecerdasan buatan GPT-4o yang revolusioner. Ketika Anda mengunggah gambar barang, AI kami menganalisis semua detail dalam gambar, termasuk merek, model, bahan, kondisi, dll., dan menggabungkannya dengan database pasar untuk memperkirakan kisaran harga yang wajar. Baik itu produk, bangunan, pemandangan alam, atau bahkan matahari dan bulan, LENSY dapat memberikan penilaian kreatif dan profesional.',
+                'help.faq2.question': 'Apakah LENSY hanya menerima foto yang diambil saat ini, atau bisakah saya memilih foto dari album?',
+                'help.faq2.answer': 'Kedua metode bekerja di LENSY. Anda dapat mengambil foto barang yang ingin Anda identifikasi secara real-time, atau memilih foto yang sudah ada dari album ponsel Anda. Dalam aplikasi, ketuk tombol "Kamera" di tengah untuk masuk ke halaman pengambilan gambar, ketuk lingkaran putih untuk mengambil foto, atau ketuk ikon gambar di kiri bawah untuk memilih foto dari album Anda.',
+                'help.faq3.question': 'Bisakah saya mengubah bahasa aplikasi?',
+                'help.faq3.answer': 'Tentu saja! LENSY menawarkan <span class="faq-highlight">16 antarmuka bahasa</span>, termasuk Cina Tradisional, Cina Sederhana, Inggris, Jepang, Korea, Thai, Vietnam, Spanyol, Prancis, Jerman, Italia, Portugis, Arab, Turki, Rusia, dan Indonesia. Langkah-langkah untuk mengubah bahasa:<ol><li>Buka aplikasi LENSY</li><li>Ketuk ikon "Pengaturan" di kanan bawah</li><li>Ketuk "Bahasa" di bagian "Dukungan"</li><li>Pilih bahasa yang Anda inginkan</li></ol>',
+                'help.faq4.question': 'Bagaimana cara memeriksa apakah saya anggota LENSY Pro atau anggota gratis?',
+                'help.faq4.answer': 'Di "Pengaturan" aplikasi LENSY, Anda dapat memeriksa status keanggotaan Anda. Silakan ikuti langkah-langkah ini:<ol><li>Buka aplikasi LENSY</li><li>Ketuk ikon "Pengaturan" di kanan bawah</li><li>Periksa "Status Anggota" di bagian "Keanggotaan"</li><li>Anda dapat melihat apakah Anda saat ini menggunakan "Versi Gratis" atau "Versi Pro", serta sisa pemindaian</li></ol>',
+                'help.faq5.question': 'Bagaimana cara memulihkan keanggotaan Pro saya di perangkat baru?',
+                'help.faq5.answer': 'Jika Anda sudah membuat akun LENSY dan membeli keanggotaan Pro, cukup masuk dengan akun yang sama di perangkat baru Anda. Jika Anda berlangganan melalui Apple ID atau akun Google, pastikan:<ol><li>Masuk dengan Apple ID atau akun Google yang sama</li><li>Buka aplikasi LENSY</li><li>Pergi ke "Pengaturan" > "Keanggotaan"</li><li>Ketuk "Pulihkan Pembelian"</li><li>Sistem akan secara otomatis memulihkan keanggotaan Pro Anda</li></ol>',
+                'help.faq6.question': 'Apakah saya perlu mendaftar untuk menggunakan LENSY?',
+                'help.faq6.answer': 'Ya, Anda perlu mendaftar akun untuk menggunakan fitur lengkap LENSY. Manfaat mendaftar termasuk:<br>• Sinkronisasi cloud riwayat pemindaian Anda<br>• Beralih mulus antar perangkat yang berbeda<br>• Keamanan data, tidak akan hilang saat mengganti ponsel<br>• Nikmati layanan analisis AI yang dipersonalisasi<br>• Dapatkan penawaran eksklusif anggota dan pembaruan fitur<br><br>Pendaftaran sangat mudah, cukup gunakan email atau login cepat melalui akun Apple/Google.',
+                'help.faq7.question': 'Apa manfaat yang ditawarkan keanggotaan LENSY Pro?',
+                'help.faq7.answer': 'Keanggotaan LENSY Pro membuka fitur pengenalan cerdas lengkap, termasuk:<ol><li><span class="faq-highlight">1000 kali</span> pemindaian tanpa batas per bulan</li><li>Layanan dialog AI cerdas untuk pemahaman mendalam informasi barang</li><li>Pengenalan foto batch, memproses beberapa gambar sekaligus</li><li>Fungsi ekspor ke laporan Excel</li><li>Simpan otomatis hasil pemindaian ke album</li><li>Hapus semua iklan</li><li>Dukungan pelanggan prioritas</li><li>Akses awal ke fitur masa depan</li></ol>',
+                'help.faq8.question': 'Apa yang harus saya lakukan jika pengenalan barang salah?',
+                'help.faq8.answer': 'Karena pengenalan AI bergantung pada kualitas gambar, pastikan:<br>• Pencahayaan yang cukup saat pengambilan gambar<br>• Fokus yang jelas pada barang<br>• Sertakan fitur barang yang lengkap<br><br>Jika hasil pengenalan tidak akurat, Anda dapat:<ol><li>Ketuk menu tiga titik di kanan atas halaman hasil</li><li>Pilih "Perbaiki Pengenalan Barang" untuk menganalisis ulang</li><li>Atau pilih "Edit Nama" untuk koreksi manual</li><li>Anda juga dapat melaporkan masalah melalui "Pengaturan" > "Hubungi Kami"</li></ol>',
+                'help.faq9.question': 'Bisakah saya menganalisis beberapa foto sekaligus?',
+                'help.faq9.answer': 'Ya! Ini adalah fitur eksklusif untuk <span class="faq-highlight">anggota LENSY Pro</span>. Anggota Pro dapat:<ol><li>Ketuk ikon gambar di kiri bawah halaman kamera</li><li>Pilih beberapa foto (hingga 10)</li><li>Sistem akan menganalisis setiap foto secara berurutan</li><li>Semua hasil akan disimpan dalam riwayat</li></ol>',
+                'help.faq10.question': 'Bagaimana cara mengubah tampilan mata uang?',
+                'help.faq10.answer': 'LENSY mendukung tampilan multi mata uang. Langkah-langkah untuk mengubah:<ol><li>Buka aplikasi LENSY</li><li>Ketuk ikon "Pengaturan" di kanan bawah</li><li>Ketuk "Mata Uang" di bagian "Dukungan"</li><li>Pilih mata uang yang Anda inginkan (seperti TWD, USD, CNY, dll.)</li></ol>',
+                'help.faq11.question': 'Apakah ada masalah keamanan dengan data pribadi saya?',
+                'help.faq11.answer': 'Privasi dan keamanan Anda adalah prioritas utama kami:<br>• Semua data dienkripsi<br>• Foto hanya digunakan untuk analisis AI, tidak disimpan di server<br>• Kepatuhan ketat terhadap GDPR dan undang-undang perlindungan privasi di seluruh dunia<br>• Anda dapat menghapus semua data yang tersimpan secara lokal kapan saja<br>• Izin kamera hanya digunakan saat Anda aktif mengambil foto',
+                'help.faq12.question': 'Bagaimana cara membatalkan perpanjangan otomatis atau berhenti berlangganan?',
+                'help.faq12.answer': 'Jika Anda ingin membatalkan langganan LENSY Pro, ikuti langkah-langkah ini:<br><br><strong>Pengguna iOS:</strong><ol><li>Buka "Pengaturan" iPhone</li><li>Ketuk Apple ID Anda</li><li>Ketuk "Langganan"</li><li>Temukan langganan LENSY dan ketuk</li><li>Pilih "Batalkan Langganan"</li></ol><br><strong>Pengguna Android:</strong><ol><li>Buka Google Play Store</li><li>Ketuk ikon profil di kanan atas</li><li>Pilih "Pembayaran & langganan" > "Langganan"</li><li>Temukan langganan LENSY</li><li>Pilih "Batalkan langganan"</li></ol>',
+                'help.faq13.question': 'Bagaimana cara menghapus akun saya?',
+                'help.faq13.answer': 'Jika Anda ingin menghapus akun Anda, harap diperhatikan semua data akan dihapus secara permanen dan tidak dapat dipulihkan. Langkah-langkah penghapusan:<ol><li>Buka aplikasi LENSY</li><li>Pergi ke "Pengaturan" > "Akun"</li><li>Ketuk "Hapus Akun"</li><li>Konfirmasi penghapusan</li></ol><br><span class="faq-highlight">Catatan:</span> Pastikan Anda telah mencadangkan catatan pemindaian penting sebelum penghapusan.',
+                'help.faq14.question': 'Bagaimana cara menghubungi dukungan pelanggan?',
+                'help.faq14.answer': 'Jika Anda memiliki pertanyaan atau saran, silakan hubungi kami melalui:<ol><li>Dalam aplikasi: "Pengaturan" > "Hubungi Kami"</li><li>Email: <span class="faq-highlight">lensyteam@gmail.com</span></li><li>Waktu respons: Dalam 48 jam</li></ol>'
             },
             'tl': {
                 'app.title': 'LENSY - Universal na Scanner ng Presyo',
@@ -9610,7 +9793,38 @@
                 'common.aiAnalyzing': 'Sinusuri ng AI...',
                 'common.aiAnalyzingTitle': 'Sinusuri ng AI',
                 'common.aiAnalyzingDesc': 'Nauunawaan ang nilalaman ng larawan...',
-                'common.batchAnalyzing': 'Sinusuri ang larawan {current} ng {total}...'
+                'common.batchAnalyzing': 'Sinusuri ang larawan {current} ng {total}...',
+                
+                // Help Center
+                'help.title': 'Help Center',
+                'help.faq1.question': 'Paano talaga gumagana ang universal na pagkilala sa presyo ng LENSY?',
+                'help.faq1.answer': 'Ang pagkilala sa presyo ng LENSY ay gumagamit ng rebolusyonaryong teknolohiya ng artificial intelligence na GPT-4o. Kapag nag-upload ka ng larawan ng produkto, sinusuri ng aming AI ang lahat ng detalye sa larawan, kasama ang brand, modelo, materyal, kondisyon, atbp., at pinagsasama ito sa database ng merkado upang tantyahin ang makatwirang hanay ng presyo. Maging ito man ay mga produkto, gusali, natural na tanawin, o kahit araw at buwan, makakapagbigay ang LENSY ng creative at propesyonal na pagtatasa.',
+                'help.faq2.question': 'Tumatanggap ba ang LENSY ng mga larawang kinunan lang ngayon, o pwede bang pumili ng mga larawan mula sa album?',
+                'help.faq2.answer': 'Pareho ang gumagana sa LENSY. Maaari kang kumuha ng mga larawan ng mga item na gusto mong kilalanin sa real-time, o pumili ng mga existing na larawan mula sa album ng iyong telepono. Sa app, i-tap ang button na "Camera" sa gitna para pumasok sa pahina ng pagkuha, i-tap ang puting bilog para kumuha ng larawan, o i-tap ang icon ng larawan sa kaliwang ibaba para pumili ng mga larawan mula sa iyong album.',
+                'help.faq3.question': 'Maaari ko bang baguhin ang wika ng app?',
+                'help.faq3.answer': 'Syempre! Nag-aalok ang LENSY ng <span class="faq-highlight">16 na interface ng wika</span>, kasama ang Traditional Chinese, Simplified Chinese, English, Japanese, Korean, Thai, Vietnamese, Spanish, French, German, Italian, Portuguese, Arabic, Turkish, Russian, at Indonesian. Mga hakbang para baguhin ang wika:<ol><li>Buksan ang LENSY app</li><li>I-tap ang icon na "Mga Setting" sa kanang ibaba</li><li>I-tap ang "Wika" sa seksyong "Suporta"</li><li>Piliin ang iyong gustong wika</li></ol>',
+                'help.faq4.question': 'Paano ko malalaman kung ako ay LENSY Pro member o free member?',
+                'help.faq4.answer': 'Sa "Mga Setting" ng LENSY app, maaari mong tingnan ang status ng iyong membership. Mangyaring sundin ang mga hakbang na ito:<ol><li>Buksan ang LENSY app</li><li>I-tap ang icon na "Mga Setting" sa kanang ibaba</li><li>Tingnan ang "Katayuan ng Miyembro" sa seksyong "Membership"</li><li>Makikita mo kung ikaw ay kasalukuyang nasa "Libreng Bersyon" o "Pro Bersyon", pati na rin ang natitirang mga pag-scan</li></ol>',
+                'help.faq5.question': 'Paano ko maibabalik ang aking Pro membership sa bagong device?',
+                'help.faq5.answer': 'Kung nakagawa ka na ng LENSY account at bumili ng Pro membership, mag-log in lang gamit ang parehong account sa iyong bagong device. Kung nag-subscribe ka sa pamamagitan ng Apple ID o Google account, mangyaring siguraduhin:<ol><li>Mag-log in gamit ang parehong Apple ID o Google account</li><li>Buksan ang LENSY app</li><li>Pumunta sa "Mga Setting" > "Membership"</li><li>I-tap ang "Ibalik ang Pagbili"</li><li>Awtomatikong ibabalik ng system ang iyong Pro membership</li></ol>',
+                'help.faq6.question': 'Kailangan ko bang mag-register para gamitin ang LENSY?',
+                'help.faq6.answer': 'Oo, kailangan mong gumawa ng account para gamitin ang buong features ng LENSY. Kasama sa mga benepisyo ng pag-register:<br>• Cloud sync ng iyong scan history<br>• Seamless na paglipat sa iba\'t ibang devices<br>• Seguridad ng data, hindi mawawala kapag nagpalit ng telepono<br>• Tamasahin ang personalized na AI analysis services<br>• Makakuha ng eksklusibong alok para sa mga miyembro at update ng features<br><br>Napakadaling mag-register, gamitin lang ang email o mabilis na pag-login sa pamamagitan ng Apple/Google account.',
+                'help.faq7.question': 'Anong mga benepisyo ang inaalok ng LENSY Pro membership?',
+                'help.faq7.answer': 'Ang LENSY Pro membership ay nag-unlock ng kumpletong intelligent recognition features, kasama ang:<ol><li><span class="faq-highlight">1000 beses</span> na walang limitasyong pag-scan bawat buwan</li><li>AI intelligent dialogue service para sa malalim na pag-unawa sa impormasyon ng item</li><li>Batch photo recognition, pagproseso ng maraming larawan nang sabay-sabay</li><li>Export sa Excel report function</li><li>Auto-save ng mga resulta ng pag-scan sa album</li><li>Alisin ang lahat ng ads</li><li>Priority customer support</li><li>Maagang access sa mga darating na features</li></ol>',
+                'help.faq8.question': 'Ano ang dapat kong gawin kung mali ang pagkilala sa item?',
+                'help.faq8.answer': 'Dahil nakadepende ang AI recognition sa kalidad ng larawan, mangyaring siguraduhin:<br>• Sapat na ilaw habang kumukuha ng larawan<br>• Malinaw na focus sa item<br>• Isama ang kumpletong features ng item<br><br>Kung hindi tumpak ang mga resulta ng pagkilala, maaari mong:<ol><li>I-tap ang three-dot menu sa kanang itaas ng pahina ng resulta</li><li>Piliin ang "Itama ang Pagkilala sa Item" para muling suriin</li><li>O piliin ang "I-edit ang Pangalan" para manual na itama</li><li>Maaari mo ring i-report ang mga isyu sa pamamagitan ng "Mga Setting" > "Makipag-ugnayan sa Amin"</li></ol>',
+                'help.faq9.question': 'Maaari ko bang suriin ang maraming larawan nang sabay-sabay?',
+                'help.faq9.answer': 'Oo! Ito ay eksklusibong feature para sa <span class="faq-highlight">mga LENSY Pro member</span>. Ang mga Pro member ay maaaring:<ol><li>I-tap ang icon ng larawan sa kaliwang ibaba ng camera page</li><li>Pumili ng maraming larawan (hanggang 10)</li><li>Susuriin ng system ang bawat larawan nang sunud-sunod</li><li>Lahat ng resulta ay ise-save sa history</li></ol>',
+                'help.faq10.question': 'Paano ko babaguhin ang display ng currency?',
+                'help.faq10.answer': 'Sinusuportahan ng LENSY ang maraming currency display. Mga hakbang para baguhin:<ol><li>Buksan ang LENSY app</li><li>I-tap ang icon na "Mga Setting" sa kanang ibaba</li><li>I-tap ang "Pera" sa seksyong "Suporta"</li><li>Piliin ang iyong gustong currency (tulad ng TWD, USD, CNY, atbp.)</li></ol>',
+                'help.faq11.question': 'May mga alalahanin ba sa seguridad ang aking personal na data?',
+                'help.faq11.answer': 'Ang iyong privacy at seguridad ay aming pangunahing priyoridad:<br>• Lahat ng data ay naka-encrypt<br>• Ang mga larawan ay ginagamit lang para sa AI analysis, hindi naka-store sa mga server<br>• Mahigpit na pagsunod sa GDPR at mga batas sa proteksyon ng privacy sa buong mundo<br>• Maaari mong tanggalin ang lahat ng locally stored na data anumang oras<br>• Ang mga pahintulot sa camera ay ginagamit lang kapag aktibong kumukuha ka ng mga larawan',
+                'help.faq12.question': 'Paano ko ikikansela ang auto-renewal o mag-unsubscribe?',
+                'help.faq12.answer': 'Kung gusto mong kanselahin ang iyong LENSY Pro subscription, mangyaring sundin ang mga hakbang na ito:<br><br><strong>iOS Users:</strong><ol><li>Buksan ang iPhone "Settings"</li><li>I-tap ang iyong Apple ID</li><li>I-tap ang "Subscriptions"</li><li>Hanapin ang LENSY subscription at i-tap</li><li>Piliin ang "Cancel Subscription"</li></ol><br><strong>Android Users:</strong><ol><li>Buksan ang Google Play Store</li><li>I-tap ang profile icon sa kanang itaas</li><li>Piliin ang "Payments & subscriptions" > "Subscriptions"</li><li>Hanapin ang LENSY subscription</li><li>Piliin ang "Cancel subscription"</li></ol>',
+                'help.faq13.question': 'Paano ko tatanggalin ang aking account?',
+                'help.faq13.answer': 'Kung gusto mong tanggalin ang iyong account, mangyaring tandaan na lahat ng data ay permanenteng matatanggal at hindi na maibabalik. Mga hakbang para tanggalin:<ol><li>Buksan ang LENSY app</li><li>Pumunta sa "Mga Setting" > "Account"</li><li>I-tap ang "Burahin ang Account"</li><li>Kumpirmahin ang pagtanggal</li></ol><br><span class="faq-highlight">Tandaan:</span> Mangyaring siguraduhin na na-backup mo na ang mga mahalagang scan records bago tanggalin.',
+                'help.faq14.question': 'Paano ako makikipag-ugnayan sa customer support?',
+                'help.faq14.answer': 'Kung mayroon kang anumang mga tanong o suhestiyon, mangyaring makipag-ugnayan sa amin sa pamamagitan ng:<ol><li>Sa loob ng app: "Mga Setting" > "Makipag-ugnayan sa Amin"</li><li>Email: <span class="faq-highlight">lensyteam@gmail.com</span></li><li>Oras ng pagtugon: Sa loob ng 48 oras</li></ol>'
             }
         };
         
