@@ -3983,7 +3983,14 @@
         
         // 顯示APP資訊
         function showAppInfo() {
-            alert('LENSY - 萬物價格掃描器\n\n版本：1.0.0\n開發者：LENSY Team\n\n使用 AI 技術，精準識別物品並估算價格。\n\n© 2024 LENSY. All rights reserved.');
+            const lang = getCurrentLanguage();
+            const title = t('appInfo.title');
+            const version = t('appInfo.version');
+            const developer = t('appInfo.developer');
+            const description = t('appInfo.description');
+            const copyright = t('appInfo.copyright');
+            
+            alert(`${title}\n\n${version}\n${developer}\n\n${description}\n\n${copyright}`);
         }
         
         // 評價APP
@@ -6004,6 +6011,13 @@
                 'settings.account': '帳號',
                 'settings.logout': '登出',
                 
+                // APP資訊對話框
+                'appInfo.title': 'LENSY - 萬物價格掃描器',
+                'appInfo.version': '版本：1.0.0',
+                'appInfo.developer': '開發者：LENSY Team',
+                'appInfo.description': '使用 AI 技術，精準識別物品並估算價格。',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 // 語言選擇頁面
                 'language.title': '選擇語言',
                 'language.common': '常用',
@@ -6236,6 +6250,14 @@
                 'settings.aboutVersion': '关于与版本',
                 'settings.account': '账号',
                 'settings.logout': '退出',
+                
+                // APP信息对话框
+                'appInfo.title': 'LENSY - 万物价格扫描器',
+                'appInfo.version': '版本：1.0.0',
+                'appInfo.developer': '开发者：LENSY Team',
+                'appInfo.description': '使用 AI 技术，精准识别物品并估算价格。',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': '选择语言',
                 'language.common': '常用',
                 'language.asia': '亚洲',
@@ -6463,6 +6485,14 @@
                 'settings.aboutVersion': 'About & Version',
                 'settings.account': 'Account',
                 'settings.logout': 'Logout',
+                
+                // App Info Dialog
+                'appInfo.title': 'LENSY - Universal Price Scanner',
+                'appInfo.version': 'Version: 1.0.0',
+                'appInfo.developer': 'Developer: LENSY Team',
+                'appInfo.description': 'Using AI technology to accurately identify items and estimate prices.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Select Language',
                 'language.common': 'Common',
                 'language.asia': 'Asia',
@@ -6690,6 +6720,14 @@
                 'settings.aboutVersion': 'バージョン情報',
                 'settings.account': 'アカウント',
                 'settings.logout': 'ログアウト',
+                
+                // アプリ情報ダイアログ
+                'appInfo.title': 'LENSY - 万物価格スキャナー',
+                'appInfo.version': 'バージョン：1.0.0',
+                'appInfo.developer': '開発者：LENSY Team',
+                'appInfo.description': 'AI技術を使用して、アイテムを正確に識別し、価格を見積もります。',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': '言語を選択',
                 'language.common': 'よく使う',
                 'language.asia': 'アジア',
@@ -6916,6 +6954,14 @@
                 'settings.aboutVersion': '정보 및 버전',
                 'settings.account': '계정',
                 'settings.logout': '로그아웃',
+                
+                // 앱 정보 대화상자
+                'appInfo.title': 'LENSY - 만물 가격 스캐너',
+                'appInfo.version': '버전: 1.0.0',
+                'appInfo.developer': '개발자: LENSY Team',
+                'appInfo.description': 'AI 기술을 사용하여 물품을 정확하게 식별하고 가격을 추정합니다.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': '언어 선택',
                 'language.common': '자주 사용',
                 'language.asia': '아시아',
@@ -7119,6 +7165,14 @@
                 'settings.aboutVersion': 'เกี่ยวกับและเวอร์ชัน',
                 'settings.account': 'บัญชี',
                 'settings.logout': 'ออกจากระบบ',
+                
+                // กล่องข้อมูลแอป
+                'appInfo.title': 'LENSY - เครื่องสแกนราคาสินค้า',
+                'appInfo.version': 'เวอร์ชัน: 1.0.0',
+                'appInfo.developer': 'ผู้พัฒนา: LENSY Team',
+                'appInfo.description': 'ใช้เทคโนโลยี AI เพื่อระบุสินค้าและประเมินราคาได้อย่างแม่นยำ',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'เลือกภาษา',
                 'language.common': 'ใช้บ่อย',
                 'language.asia': 'เอเชีย',
@@ -7346,6 +7400,14 @@
                 'settings.aboutVersion': 'Giới thiệu & Phiên bản',
                 'settings.account': 'Tài khoản',
                 'settings.logout': 'Đăng xuất',
+                
+                // Hộp thoại thông tin ứng dụng
+                'appInfo.title': 'LENSY - Máy quét giá vạn vật',
+                'appInfo.version': 'Phiên bản: 1.0.0',
+                'appInfo.developer': 'Nhà phát triển: LENSY Team',
+                'appInfo.description': 'Sử dụng công nghệ AI để nhận diện chính xác vật phẩm và ước tính giá cả.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Chọn ngôn ngữ',
                 'language.common': 'Thường dùng',
                 'language.asia': 'Châu Á',
@@ -7573,6 +7635,14 @@
                 'settings.aboutVersion': 'Acerca de y Versión',
                 'settings.account': 'Cuenta',
                 'settings.logout': 'Cerrar sesión',
+                
+                // Diálogo de información de la aplicación
+                'appInfo.title': 'LENSY - Escáner Universal de Precios',
+                'appInfo.version': 'Versión: 1.0.0',
+                'appInfo.developer': 'Desarrollador: LENSY Team',
+                'appInfo.description': 'Utilizando tecnología de IA para identificar con precisión artículos y estimar precios.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Seleccionar idioma',
                 'language.common': 'Común',
                 'language.asia': 'Asia',
@@ -7800,6 +7870,14 @@
                 'settings.aboutVersion': 'À propos et Version',
                 'settings.account': 'Compte',
                 'settings.logout': 'Déconnexion',
+                
+                // Boîte de dialogue d'informations sur l'application
+                'appInfo.title': 'LENSY - Scanner de Prix Universel',
+                'appInfo.version': 'Version : 1.0.0',
+                'appInfo.developer': 'Développeur : LENSY Team',
+                'appInfo.description': 'Utilise la technologie IA pour identifier avec précision les articles et estimer les prix.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Sélectionner la langue',
                 'language.common': 'Commun',
                 'language.asia': 'Asie',
@@ -8027,6 +8105,14 @@
                 'settings.aboutVersion': 'Über & Version',
                 'settings.account': 'Konto',
                 'settings.logout': 'Abmelden',
+                
+                // App-Info-Dialog
+                'appInfo.title': 'LENSY - Universeller Preisscanner',
+                'appInfo.version': 'Version: 1.0.0',
+                'appInfo.developer': 'Entwickler: LENSY Team',
+                'appInfo.description': 'Verwendet KI-Technologie, um Artikel genau zu identifizieren und Preise zu schätzen.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Sprache auswählen',
                 'language.common': 'Häufig',
                 'language.asia': 'Asien',
@@ -8254,6 +8340,14 @@
                 'settings.aboutVersion': 'Info e Versione',
                 'settings.account': 'Account',
                 'settings.logout': 'Esci',
+                
+                // Finestra informazioni app
+                'appInfo.title': 'LENSY - Scanner Universale dei Prezzi',
+                'appInfo.version': 'Versione: 1.0.0',
+                'appInfo.developer': 'Sviluppatore: LENSY Team',
+                'appInfo.description': 'Utilizza la tecnologia IA per identificare con precisione gli articoli e stimare i prezzi.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Seleziona lingua',
                 'language.common': 'Comune',
                 'language.asia': 'Asia',
@@ -8481,6 +8575,14 @@
                 'settings.aboutVersion': 'Sobre e Versão',
                 'settings.account': 'Conta',
                 'settings.logout': 'Sair',
+                
+                // Diálogo de informações do aplicativo
+                'appInfo.title': 'LENSY - Scanner Universal de Preços',
+                'appInfo.version': 'Versão: 1.0.0',
+                'appInfo.developer': 'Desenvolvedor: LENSY Team',
+                'appInfo.description': 'Usando tecnologia de IA para identificar com precisão itens e estimar preços.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Selecionar idioma',
                 'language.common': 'Comum',
                 'language.asia': 'Ásia',
@@ -8708,6 +8810,14 @@
                 'settings.aboutVersion': 'حول والإصدار',
                 'settings.account': 'الحساب',
                 'settings.logout': 'تسجيل الخروج',
+                
+                // مربع حوار معلومات التطبيق
+                'appInfo.title': 'LENSY - ماسح الأسعار العالمي',
+                'appInfo.version': 'الإصدار: 1.0.0',
+                'appInfo.developer': 'المطور: LENSY Team',
+                'appInfo.description': 'استخدام تقنية الذكاء الاصطناعي لتحديد العناصر بدقة وتقدير الأسعار.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'اختر اللغة',
                 'language.common': 'شائع',
                 'language.asia': 'آسيا',
@@ -8935,6 +9045,14 @@
                 'settings.aboutVersion': 'Hakkında ve Sürüm',
                 'settings.account': 'Hesap',
                 'settings.logout': 'Çıkış yap',
+                
+                // Uygulama bilgisi iletişim kutusu
+                'appInfo.title': 'LENSY - Evrensel Fiyat Tarayıcı',
+                'appInfo.version': 'Sürüm: 1.0.0',
+                'appInfo.developer': 'Geliştirici: LENSY Team',
+                'appInfo.description': 'Öğeleri doğru bir şekilde tanımlamak ve fiyatları tahmin etmek için AI teknolojisini kullanır.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Dil seçin',
                 'language.common': 'Yaygın',
                 'language.asia': 'Asya',
@@ -9162,6 +9280,14 @@
                 'settings.aboutVersion': 'О программе и версия',
                 'settings.account': 'Аккаунт',
                 'settings.logout': 'Выйти',
+                
+                // Диалог информации о приложении
+                'appInfo.title': 'LENSY - Универсальный сканер цен',
+                'appInfo.version': 'Версия: 1.0.0',
+                'appInfo.developer': 'Разработчик: LENSY Team',
+                'appInfo.description': 'Использует технологию ИИ для точной идентификации предметов и оценки цен.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Выберите язык',
                 'language.common': 'Часто используемые',
                 'language.asia': 'Азия',
@@ -9389,6 +9515,14 @@
                 'settings.aboutVersion': 'Tentang & Versi',
                 'settings.account': 'Akun',
                 'settings.logout': 'Keluar',
+                
+                // Dialog info aplikasi
+                'appInfo.title': 'LENSY - Pemindai Harga Universal',
+                'appInfo.version': 'Versi: 1.0.0',
+                'appInfo.developer': 'Pengembang: LENSY Team',
+                'appInfo.description': 'Menggunakan teknologi AI untuk mengidentifikasi barang dengan akurat dan memperkirakan harga.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Pilih bahasa',
                 'language.common': 'Umum',
                 'language.asia': 'Asia',
@@ -9616,6 +9750,14 @@
                 'settings.aboutVersion': 'Tungkol at Bersyon',
                 'settings.account': 'Account',
                 'settings.logout': 'Mag-logout',
+                
+                // Dialog ng impormasyon ng app
+                'appInfo.title': 'LENSY - Universal na Scanner ng Presyo',
+                'appInfo.version': 'Bersyon: 1.0.0',
+                'appInfo.developer': 'Developer: LENSY Team',
+                'appInfo.description': 'Gumagamit ng AI technology upang tumpak na makilala ang mga item at tantyahin ang mga presyo.',
+                'appInfo.copyright': '© 2024 LENSY. All rights reserved.',
+                
                 'language.title': 'Piliin ang wika',
                 'language.common': 'Karaniwan',
                 'language.asia': 'Asya',
