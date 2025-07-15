@@ -3738,26 +3738,8 @@
         function updateDiscountBadge() {
             const discountBadge = document.querySelector('.discount-badge');
             if (discountBadge) {
-                const discount = calculateDiscount();
-                const lang = getCurrentLanguage();
-                
-                // 根據語言設定折扣文字格式
-                let discountText;
-                switch(lang) {
-                    case 'en':
-                        discountText = `Save ${discount}%`;
-                        break;
-                    case 'ja':
-                        discountText = `${discount}%割引`;
-                        break;
-                    case 'ko':
-                        discountText = `${discount}% 할인`;
-                        break;
-                    default:
-                        discountText = `省${discount}%`;
-                }
-                
-                discountBadge.textContent = discountText;
+                // 使用翻譯系統顯示折扣標籤
+                discountBadge.textContent = t('pro.discountBadge');
             }
         }
         
