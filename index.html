@@ -4060,11 +4060,13 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'ai_image.jpg');
                 
-                // 加入當前語言和幣別參數
+                // 加入當前語言、幣別和國家代碼參數
                 const currentLang = getCurrentLanguage();
                 const currentCurrency = getCurrentCurrency();
+                const currentCountryCode = await getCurrentCountryCode();
                 formData.append('language', currentLang);
                 formData.append('currency', currentCurrency);
+                formData.append('countryCode', currentCountryCode);
                 
                 // 呼叫 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -4373,10 +4375,11 @@
             const loadingText = loadingOverlay.querySelector('.loading-text');
             loadingOverlay.classList.add('active');
             
-            // 在開始批次分析前就固定語言和幣別設定
+            // 在開始批次分析前就固定語言、幣別和國家代碼設定
             const batchLanguage = getCurrentLanguage();
             const batchCurrency = getCurrentCurrency();
-            console.log(`批次分析開始 - 統一使用語言: ${batchLanguage}, 幣別: ${batchCurrency}`);
+            const batchCountryCode = await getCurrentCountryCode();
+            console.log(`批次分析開始 - 統一使用語言: ${batchLanguage}, 幣別: ${batchCurrency}, 國家: ${batchCountryCode}`);
             
             let successCount = 0;
             const results = [];
@@ -4398,9 +4401,10 @@
                     const formData = new FormData();
                     formData.append('image', blob, `image${i}.jpg`);
                     
-                    // 使用批次分析開始時鎖定的語言和幣別設定
+                    // 使用批次分析開始時鎖定的語言、幣別和國家代碼設定
                     formData.append('language', batchLanguage);
                     formData.append('currency', batchCurrency);
+                    formData.append('countryCode', batchCountryCode);
                     
                     // Debug: 記錄每張圖片的語言設定
                     console.log(`圖片 ${i + 1}: 使用鎖定的語言=${batchLanguage}, 幣別=${batchCurrency}`);
@@ -4771,11 +4775,13 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'capture.jpg');
                 
-                // 加入當前語言和幣別參數
+                // 加入當前語言、幣別和國家代碼參數
                 const currentLang = getCurrentLanguage();
                 const currentCurrency = getCurrentCurrency();
+                const currentCountryCode = await getCurrentCountryCode();
                 formData.append('language', currentLang);
                 formData.append('currency', currentCurrency);
+                formData.append('countryCode', currentCountryCode);
                 
                 // Debug: 記錄單張分析的語言設定
                 console.log(`[單張分析] 語言=${currentLang}, 幣別=${currentCurrency}`);
@@ -5177,11 +5183,13 @@
                 const formData = new FormData();
                 formData.append('image', blob, 'capture.jpg');
                 
-                // 加入當前語言和幣別參數
+                // 加入當前語言、幣別和國家代碼參數
                 const currentLang = getCurrentLanguage();
                 const currentCurrency = getCurrentCurrency();
+                const currentCountryCode = await getCurrentCountryCode();
                 formData.append('language', currentLang);
                 formData.append('currency', currentCurrency);
+                formData.append('countryCode', currentCountryCode);
                 
                 // 呼叫後端 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/analyze';
@@ -5407,11 +5415,128 @@
         // 取得平台 URL
         function getPlatformUrl(platform, searchTerm) {
             const urls = {
+                // 台灣
                 '蝦皮購物': `https://shopee.tw/search?keyword=${encodeURIComponent(searchTerm)}`,
                 'PChome 24h': `https://24h.pchome.com.tw/search/?q=${encodeURIComponent(searchTerm)}`,
                 'momo購物網': `https://www.momoshop.com.tw/search/searchShop.jsp?keyword=${encodeURIComponent(searchTerm)}`,
                 '露天拍賣': `https://find.ruten.com.tw/s/?q=${encodeURIComponent(searchTerm)}`,
-                'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`
+                'Yahoo拍賣': `https://tw.search.yahoo.com/search?p=${encodeURIComponent(searchTerm)}`,
+                
+                // 美國
+                'Amazon': `https://www.amazon.com/s?k=${encodeURIComponent(searchTerm)}`,
+                'eBay': `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(searchTerm)}`,
+                'Walmart': `https://www.walmart.com/search?q=${encodeURIComponent(searchTerm)}`,
+                'Target': `https://www.target.com/s?searchTerm=${encodeURIComponent(searchTerm)}`,
+                'Best Buy': `https://www.bestbuy.com/site/searchpage.jsp?st=${encodeURIComponent(searchTerm)}`,
+                
+                // 中國
+                '淘寶': `https://s.taobao.com/search?q=${encodeURIComponent(searchTerm)}`,
+                '京東': `https://search.jd.com/Search?keyword=${encodeURIComponent(searchTerm)}`,
+                '拼多多': `https://mobile.pinduoduo.com/search_result.html?search_key=${encodeURIComponent(searchTerm)}`,
+                '天貓': `https://list.tmall.com/search_product.htm?q=${encodeURIComponent(searchTerm)}`,
+                '蘇寧易購': `https://search.suning.com/${encodeURIComponent(searchTerm)}/`,
+                
+                // 日本
+                'Amazon.co.jp': `https://www.amazon.co.jp/s?k=${encodeURIComponent(searchTerm)}`,
+                '楽天市場': `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(searchTerm)}/`,
+                'Yahoo!ショッピング': `https://shopping.yahoo.co.jp/search?p=${encodeURIComponent(searchTerm)}`,
+                'メルカリ': `https://www.mercari.com/jp/search/?keyword=${encodeURIComponent(searchTerm)}`,
+                'ヨドバシカメラ': `https://www.yodobashi.com/?word=${encodeURIComponent(searchTerm)}`,
+                
+                // 韓國
+                'Coupang': `https://www.coupang.com/np/search?q=${encodeURIComponent(searchTerm)}`,
+                'Gmarket': `http://browse.gmarket.co.kr/search?keyword=${encodeURIComponent(searchTerm)}`,
+                '11번가': `https://search.11st.co.kr/Search.tmall?kwd=${encodeURIComponent(searchTerm)}`,
+                'Naver Shopping': `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(searchTerm)}`,
+                'Auction': `http://browse.auction.co.kr/search?keyword=${encodeURIComponent(searchTerm)}`,
+                
+                // 東南亞
+                'Shopee': `https://shopee.com/search?keyword=${encodeURIComponent(searchTerm)}`,
+                'Lazada': `https://www.lazada.com/catalog/?q=${encodeURIComponent(searchTerm)}`,
+                'Tokopedia': `https://www.tokopedia.com/search?q=${encodeURIComponent(searchTerm)}`,
+                'Bukalapak': `https://www.bukalapak.com/products?search[keywords]=${encodeURIComponent(searchTerm)}`,
+                'Blibli': `https://www.blibli.com/cari/${encodeURIComponent(searchTerm)}`,
+                'Tiki': `https://tiki.vn/search?q=${encodeURIComponent(searchTerm)}`,
+                'Sendo': `https://www.sendo.vn/tim-kiem?q=${encodeURIComponent(searchTerm)}`,
+                'JD Central': `https://www.jd.co.th/catalog/?q=${encodeURIComponent(searchTerm)}`,
+                'Central Online': `https://www.central.co.th/en/search/${encodeURIComponent(searchTerm)}`,
+                'Zalora': `https://www.zalora.com/search?q=${encodeURIComponent(searchTerm)}`,
+                'Carousell': `https://www.carousell.com/search/${encodeURIComponent(searchTerm)}`,
+                'Qoo10': `https://www.qoo10.com/s/?keyword=${encodeURIComponent(searchTerm)}`,
+                
+                // 英國
+                'Amazon.co.uk': `https://www.amazon.co.uk/s?k=${encodeURIComponent(searchTerm)}`,
+                'Argos': `https://www.argos.co.uk/search/${encodeURIComponent(searchTerm)}/`,
+                'ASOS': `https://www.asos.com/search/?q=${encodeURIComponent(searchTerm)}`,
+                'Tesco': `https://www.tesco.com/groceries/en-GB/search?query=${encodeURIComponent(searchTerm)}`,
+                
+                // 德國
+                'Amazon.de': `https://www.amazon.de/s?k=${encodeURIComponent(searchTerm)}`,
+                'Otto': `https://www.otto.de/suche/${encodeURIComponent(searchTerm)}/`,
+                'Zalando': `https://www.zalando.de/catalog/?q=${encodeURIComponent(searchTerm)}`,
+                'MediaMarkt': `https://www.mediamarkt.de/de/search.html?query=${encodeURIComponent(searchTerm)}`,
+                
+                // 法國
+                'Amazon.fr': `https://www.amazon.fr/s?k=${encodeURIComponent(searchTerm)}`,
+                'Cdiscount': `https://www.cdiscount.com/search/10/${encodeURIComponent(searchTerm)}.html`,
+                'Fnac': `https://www.fnac.com/Search/SearchResult.aspx?Search=${encodeURIComponent(searchTerm)}`,
+                'La Redoute': `https://www.laredoute.fr/pplp/100/${encodeURIComponent(searchTerm)}.aspx`,
+                
+                // 其他歐洲
+                'Amazon.it': `https://www.amazon.it/s?k=${encodeURIComponent(searchTerm)}`,
+                'Amazon.es': `https://www.amazon.es/s?k=${encodeURIComponent(searchTerm)}`,
+                'El Corte Inglés': `https://www.elcorteingles.es/search/?s=${encodeURIComponent(searchTerm)}`,
+                'Wallapop': `https://es.wallapop.com/search?keywords=${encodeURIComponent(searchTerm)}`,
+                
+                // 巴西
+                'Mercado Livre': `https://lista.mercadolivre.com.br/${encodeURIComponent(searchTerm)}`,
+                'Amazon.com.br': `https://www.amazon.com.br/s?k=${encodeURIComponent(searchTerm)}`,
+                'Americanas': `https://www.americanas.com.br/busca/${encodeURIComponent(searchTerm)}`,
+                'Magazine Luiza': `https://www.magazineluiza.com.br/busca/${encodeURIComponent(searchTerm)}/`,
+                'OLX': `https://www.olx.com.br/brasil?q=${encodeURIComponent(searchTerm)}`,
+                
+                // 加拿大
+                'Amazon.ca': `https://www.amazon.ca/s?k=${encodeURIComponent(searchTerm)}`,
+                'Walmart Canada': `https://www.walmart.ca/search?q=${encodeURIComponent(searchTerm)}`,
+                'Canadian Tire': `https://www.canadiantire.ca/en/search.html?q=${encodeURIComponent(searchTerm)}`,
+                'Best Buy Canada': `https://www.bestbuy.ca/en-ca/search?search=${encodeURIComponent(searchTerm)}`,
+                
+                // 澳洲
+                'Amazon.com.au': `https://www.amazon.com.au/s?k=${encodeURIComponent(searchTerm)}`,
+                'Gumtree': `https://www.gumtree.com.au/s-search.html?keywords=${encodeURIComponent(searchTerm)}`,
+                'JB Hi-Fi': `https://www.jbhifi.com.au/search?query=${encodeURIComponent(searchTerm)}`,
+                'Kogan': `https://www.kogan.com/au/shop/?q=${encodeURIComponent(searchTerm)}`,
+                
+                // 俄羅斯
+                'Ozon': `https://www.ozon.ru/search/?text=${encodeURIComponent(searchTerm)}`,
+                'Wildberries': `https://www.wildberries.ru/catalog/0/search.aspx?search=${encodeURIComponent(searchTerm)}`,
+                'AliExpress Russia': `https://aliexpress.ru/wholesale?SearchText=${encodeURIComponent(searchTerm)}`,
+                'Avito': `https://www.avito.ru/rossiya?q=${encodeURIComponent(searchTerm)}`,
+                'Яндекс.Маркет': `https://market.yandex.ru/search?text=${encodeURIComponent(searchTerm)}`,
+                
+                // 土耳其
+                'Trendyol': `https://www.trendyol.com/sr?q=${encodeURIComponent(searchTerm)}`,
+                'Hepsiburada': `https://www.hepsiburada.com/ara?q=${encodeURIComponent(searchTerm)}`,
+                'n11': `https://www.n11.com/arama?q=${encodeURIComponent(searchTerm)}`,
+                'GittiGidiyor': `https://www.gittigidiyor.com/arama/?k=${encodeURIComponent(searchTerm)}`,
+                'Amazon.com.tr': `https://www.amazon.com.tr/s?k=${encodeURIComponent(searchTerm)}`,
+                
+                // 中東
+                'Amazon.sa': `https://www.amazon.sa/s?k=${encodeURIComponent(searchTerm)}`,
+                'noon': `https://www.noon.com/search/?q=${encodeURIComponent(searchTerm)}`,
+                'Jarir': `https://www.jarir.com/sa-en/catalogsearch/result/?q=${encodeURIComponent(searchTerm)}`,
+                'extra': `https://www.extra.com/en-sa/search/?text=${encodeURIComponent(searchTerm)}`,
+                'Souq': `https://egypt.souq.com/eg-en/search?q=${encodeURIComponent(searchTerm)}`,
+                
+                // 香港
+                'HKTVmall': `https://www.hktvmall.com/hktv/zh/search_a?keyword=${encodeURIComponent(searchTerm)}`,
+                'PriceHK': `https://www.price.com.hk/search.php?q=${encodeURIComponent(searchTerm)}`,
+                '友和YOHO': `https://www.yohohongkong.com/search?q=${encodeURIComponent(searchTerm)}`,
+                '豐澤': `https://www.fortress.com.hk/zt/search?q=${encodeURIComponent(searchTerm)}`,
+                
+                // 其他
+                'AliExpress': `https://www.aliexpress.com/wholesale?SearchText=${encodeURIComponent(searchTerm)}`,
+                'Facebook Marketplace': `https://www.facebook.com/marketplace/search/?query=${encodeURIComponent(searchTerm)}`
             };
             return urls[platform] || '#';
         }
@@ -5813,11 +5938,13 @@
                 formData.append('chatHistory', JSON.stringify(getChatHistory()));
                 formData.append('includeImage', includeImage.toString());
                 
-                // 加入當前語言和幣別參數
+                // 加入當前語言、幣別和國家代碼參數
                 const currentLang = getCurrentLanguage();
                 const currentCurrency = getCurrentCurrency();
+                const currentCountryCode = await getCurrentCountryCode();
                 formData.append('language', currentLang);
                 formData.append('currency', currentCurrency);
+                formData.append('countryCode', currentCountryCode);
                 
                 // 呼叫 API
                 const API_URL = 'https://price-scanner-backend.vercel.app/api/chat';
@@ -10115,6 +10242,54 @@
             
             // 最終默認值
             return 'USD';
+        }
+        
+        // 獲取當前國家代碼
+        async function getCurrentCountryCode() {
+            // 先檢查是否有儲存的國家代碼
+            const savedCountryCode = localStorage.getItem('countryCode');
+            if (savedCountryCode) return savedCountryCode;
+            
+            try {
+                // 嘗試獲取 IP 地理位置
+                const response = await fetch('https://ipapi.co/json/');
+                if (response.ok) {
+                    const data = await response.json();
+                    const countryCode = data.country_code;
+                    
+                    if (countryCode) {
+                        // 儲存國家代碼
+                        localStorage.setItem('countryCode', countryCode);
+                        return countryCode;
+                    }
+                }
+            } catch (error) {
+                console.error('無法獲取國家代碼:', error);
+            }
+            
+            // 根據語言猜測國家代碼
+            const language = getCurrentLanguage();
+            const languageCountryMap = {
+                'zh-TW': 'TW',
+                'zh-CN': 'CN',
+                'en': 'US',
+                'ja': 'JP',
+                'ko': 'KR',
+                'th': 'TH',
+                'vi': 'VN',
+                'es': 'ES',
+                'fr': 'FR',
+                'de': 'DE',
+                'it': 'IT',
+                'pt': 'BR',
+                'ar': 'SA',
+                'tr': 'TR',
+                'ru': 'RU',
+                'id': 'ID',
+                'fil': 'PH'
+            };
+            
+            return languageCountryMap[language] || 'US';
         }
         
         // 獲取幣別符號
