@@ -4477,13 +4477,15 @@
             
             // 顯示結果
             if (successCount > 0) {
-                alert(`批次分析完成！\n成功：${successCount} 張\n失敗：${imageFiles.length - successCount} 張`);
+                const successMsg = t('common.batchSuccess').replace('{count}', successCount);
+                const failedMsg = t('common.batchFailed').replace('{count}', imageFiles.length - successCount);
+                alert(`${t('common.batchComplete')}\n${successMsg}\n${failedMsg}`);
                 
                 // 切換到列表頁面並重新載入
                 switchPage('listPage');
                 displayHistory();
             } else {
-                alert('批次分析失敗，請稍後再試');
+                alert(t('common.batchAnalysisFailed'));
             }
             
             // 清除輸入值
@@ -6179,6 +6181,10 @@
                 'common.aiAnalyzingTitle': 'AI 正在分析中',
                 'common.aiAnalyzingDesc': '正在深度理解圖片內容...',
                 'common.batchAnalyzing': '正在分析第 {current} / {total} 張圖片...',
+                'common.batchComplete': '批次分析完成！',
+                'common.batchSuccess': '成功：{count} 張',
+                'common.batchFailed': '失敗：{count} 張',
+                'common.batchAnalysisFailed': '批次分析失敗，請稍後再試',
                 
                 // 幫助中心
                 'help.title': '幫助中心',
@@ -6414,6 +6420,10 @@
                 'common.aiAnalyzingTitle': 'AI 正在分析中',
                 'common.aiAnalyzingDesc': '正在深度理解图片内容...',
                 'common.batchAnalyzing': '正在分析第 {current} / {total} 张图片...',
+                'common.batchComplete': '批次分析完成！',
+                'common.batchSuccess': '成功：{count} 张',
+                'common.batchFailed': '失败：{count} 张',
+                'common.batchAnalysisFailed': '批次分析失败，请稍后再试',
                 
                 // 帮助中心
                 'help.title': '帮助中心',
@@ -6649,6 +6659,10 @@
                 'common.aiAnalyzingTitle': 'AI is analyzing',
                 'common.aiAnalyzingDesc': 'Understanding image content...',
                 'common.batchAnalyzing': 'Analyzing image {current} of {total}...',
+                'common.batchComplete': 'Batch analysis complete!',
+                'common.batchSuccess': 'Success: {count} images',
+                'common.batchFailed': 'Failed: {count} images',
+                'common.batchAnalysisFailed': 'Batch analysis failed, please try again later',
                 
                 // Help Center
                 'help.title': 'Help Center',
@@ -6883,6 +6897,10 @@
                 'common.aiAnalyzingTitle': 'AI分析中',
                 'common.aiAnalyzingDesc': '画像内容を深く理解しています...',
                 'common.batchAnalyzing': '{current} / {total} 枚目の画像を分析中...',
+                'common.batchComplete': 'バッチ分析完了！',
+                'common.batchSuccess': '成功：{count} 枚',
+                'common.batchFailed': '失敗：{count} 枚',
+                'common.batchAnalysisFailed': 'バッチ分析に失敗しました、後でもう一度お試しください',
                 
                 // ヘルプセンター
                 'help.title': 'ヘルプセンター',
@@ -7117,6 +7135,10 @@
                 'common.aiAnalyzingTitle': 'AI가 분석 중입니다',
                 'common.aiAnalyzingDesc': '이미지 내용을 이해하고 있습니다...',
                 'common.batchAnalyzing': '{current} / {total} 번째 이미지 분석 중...',
+                'common.batchComplete': '일괄 분석 완료!',
+                'common.batchSuccess': '성공: {count}개',
+                'common.batchFailed': '실패: {count}개',
+                'common.batchAnalysisFailed': '일괄 분석에 실패했습니다. 나중에 다시 시도해주세요',
                 
                 // 도움말 센터
                 'help.title': '도움말 센터',
@@ -7352,6 +7374,10 @@
                 'common.aiAnalyzingTitle': 'AI กำลังวิเคราะห์',
                 'common.aiAnalyzingDesc': 'กำลังทำความเข้าใจเนื้อหารูปภาพ...',
                 'common.batchAnalyzing': 'กำลังวิเคราะห์รูปภาพที่ {current} จาก {total}...',
+                'common.batchComplete': 'การวิเคราะห์แบทช์เสร็จสมบูรณ์!',
+                'common.batchSuccess': 'สำเร็จ: {count} ภาพ',
+                'common.batchFailed': 'ล้มเหลว: {count} ภาพ',
+                'common.batchAnalysisFailed': 'การวิเคราะห์แบทช์ล้มเหลว โปรดลองใหม่อีกครั้ง',
                 
                 // ศูนย์ช่วยเหลือ
                 'help.title': 'ศูนย์ช่วยเหลือ',
@@ -7587,6 +7613,10 @@
                 'common.aiAnalyzingTitle': 'AI đang phân tích',
                 'common.aiAnalyzingDesc': 'Đang hiểu nội dung hình ảnh...',
                 'common.batchAnalyzing': 'Đang phân tích hình ảnh {current} / {total}...',
+                'common.batchComplete': 'Phân tích hàng loạt hoàn tất!',
+                'common.batchSuccess': 'Thành công: {count} ảnh',
+                'common.batchFailed': 'Thất bại: {count} ảnh',
+                'common.batchAnalysisFailed': 'Phân tích hàng loạt thất bại, vui lòng thử lại sau',
                 
                 // Trung tâm trợ giúp
                 'help.title': 'Trung tâm trợ giúp',
@@ -7822,6 +7852,10 @@
                 'common.aiAnalyzingTitle': 'IA analizando',
                 'common.aiAnalyzingDesc': 'Comprendiendo el contenido de la imagen...',
                 'common.batchAnalyzing': 'Analizando imagen {current} de {total}...',
+                'common.batchComplete': '¡Análisis por lotes completo!',
+                'common.batchSuccess': 'Éxito: {count} imágenes',
+                'common.batchFailed': 'Fallidas: {count} imágenes',
+                'common.batchAnalysisFailed': 'Falló el análisis por lotes, inténtalo de nuevo más tarde',
                 
                 // Centro de ayuda
                 'help.title': 'Centro de ayuda',
@@ -8057,6 +8091,10 @@
                 'common.aiAnalyzingTitle': 'L\'IA analyse',
                 'common.aiAnalyzingDesc': 'Comprendre le contenu de l\'image...',
                 'common.batchAnalyzing': 'Analyse de l\'image {current} sur {total}...',
+                'common.batchComplete': 'Analyse par lots terminée !',
+                'common.batchSuccess': 'Succès : {count} images',
+                'common.batchFailed': 'Échec : {count} images',
+                'common.batchAnalysisFailed': 'L\'analyse par lots a échoué, veuillez réessayer plus tard',
                 
                 // Centre d'aide
                 'help.title': 'Centre d\'aide',
@@ -8292,6 +8330,10 @@
                 'common.aiAnalyzingTitle': 'KI analysiert',
                 'common.aiAnalyzingDesc': 'Bildinhalt verstehen...',
                 'common.batchAnalyzing': 'Analysiere Bild {current} von {total}...',
+                'common.batchComplete': 'Batch-Analyse abgeschlossen!',
+                'common.batchSuccess': 'Erfolgreich: {count} Bilder',
+                'common.batchFailed': 'Fehlgeschlagen: {count} Bilder',
+                'common.batchAnalysisFailed': 'Batch-Analyse fehlgeschlagen, bitte später erneut versuchen',
                 
                 // Hilfezentrum
                 'help.title': 'Hilfezentrum',
@@ -8527,6 +8569,10 @@
                 'common.aiAnalyzingTitle': 'L\'IA sta analizzando',
                 'common.aiAnalyzingDesc': 'Comprensione del contenuto dell\'immagine...',
                 'common.batchAnalyzing': 'Analizzando immagine {current} di {total}...',
+                'common.batchComplete': 'Analisi batch completata!',
+                'common.batchSuccess': 'Successo: {count} immagini',
+                'common.batchFailed': 'Fallite: {count} immagini',
+                'common.batchAnalysisFailed': 'Analisi batch fallita, riprova più tardi',
                 
                 // Centro assistenza
                 'help.title': 'Centro assistenza',
@@ -8762,6 +8808,10 @@
                 'common.aiAnalyzingTitle': 'IA analisando',
                 'common.aiAnalyzingDesc': 'Compreendendo o conteúdo da imagem...',
                 'common.batchAnalyzing': 'Analisando imagem {current} de {total}...',
+                'common.batchComplete': 'Análise em lote concluída!',
+                'common.batchSuccess': 'Sucesso: {count} imagens',
+                'common.batchFailed': 'Falha: {count} imagens',
+                'common.batchAnalysisFailed': 'Análise em lote falhou, tente novamente mais tarde',
                 
                 // Centro de ajuda
                 'help.title': 'Centro de ajuda',
@@ -8997,6 +9047,10 @@
                 'common.aiAnalyzingTitle': 'جارٍ التحليل بواسطة الذكاء الاصطناعي',
                 'common.aiAnalyzingDesc': 'فهم محتوى الصورة...',
                 'common.batchAnalyzing': 'تحليل الصورة {current} من {total}...',
+                'common.batchComplete': 'اكتمل تحليل الدفعة!',
+                'common.batchSuccess': 'نجح: {count} صور',
+                'common.batchFailed': 'فشل: {count} صور',
+                'common.batchAnalysisFailed': 'فشل تحليل الدفعة، يرجى المحاولة مرة أخرى لاحقاً',
                 
                 // مركز المساعدة
                 'help.title': 'مركز المساعدة',
@@ -9232,6 +9286,10 @@
                 'common.aiAnalyzingTitle': 'AI analiz ediyor',
                 'common.aiAnalyzingDesc': 'Görüntü içeriğini anlıyor...',
                 'common.batchAnalyzing': '{current} / {total} görüntü analiz ediliyor...',
+                'common.batchComplete': 'Toplu analiz tamamlandı!',
+                'common.batchSuccess': 'Başarılı: {count} görüntü',
+                'common.batchFailed': 'Başarısız: {count} görüntü',
+                'common.batchAnalysisFailed': 'Toplu analiz başarısız oldu, lütfen daha sonra tekrar deneyin',
                 
                 // Yardım Merkezi
                 'help.title': 'Yardım Merkezi',
@@ -9467,6 +9525,10 @@
                 'common.aiAnalyzingTitle': 'ИИ анализирует',
                 'common.aiAnalyzingDesc': 'Понимание содержания изображения...',
                 'common.batchAnalyzing': 'Анализ изображения {current} из {total}...',
+                'common.batchComplete': 'Пакетный анализ завершен!',
+                'common.batchSuccess': 'Успешно: {count} изобр.',
+                'common.batchFailed': 'Неудачно: {count} изобр.',
+                'common.batchAnalysisFailed': 'Пакетный анализ не удался, пожалуйста, попробуйте позже',
                 
                 // Центр помощи
                 'help.title': 'Центр помощи',
@@ -9702,6 +9764,10 @@
                 'common.aiAnalyzingTitle': 'AI sedang menganalisis',
                 'common.aiAnalyzingDesc': 'Memahami konten gambar...',
                 'common.batchAnalyzing': 'Menganalisis gambar {current} dari {total}...',
+                'common.batchComplete': 'Analisis batch selesai!',
+                'common.batchSuccess': 'Berhasil: {count} gambar',
+                'common.batchFailed': 'Gagal: {count} gambar',
+                'common.batchAnalysisFailed': 'Analisis batch gagal, silakan coba lagi nanti',
                 
                 // Pusat Bantuan
                 'help.title': 'Pusat Bantuan',
@@ -9937,6 +10003,10 @@
                 'common.aiAnalyzingTitle': 'Sinusuri ng AI',
                 'common.aiAnalyzingDesc': 'Nauunawaan ang nilalaman ng larawan...',
                 'common.batchAnalyzing': 'Sinusuri ang larawan {current} ng {total}...',
+                'common.batchComplete': 'Tapos na ang batch analysis!',
+                'common.batchSuccess': 'Tagumpay: {count} larawan',
+                'common.batchFailed': 'Nabigo: {count} larawan',
+                'common.batchAnalysisFailed': 'Nabigo ang batch analysis, pakisubukan muli mamaya',
                 
                 // Help Center
                 'help.title': 'Help Center',
