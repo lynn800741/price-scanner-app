@@ -269,12 +269,15 @@
             position: relative;
             height: 100vh;
             background: #000;
+            overflow: hidden;
+            touch-action: none; /* 防止瀏覽器預設的觸控行為 */
         }
-
+        
         #cameraFeed {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.1s ease-out;
         }
 
         .camera-overlay {
@@ -4357,6 +4360,7 @@
                 // 如果切換到相機頁面，啟動相機並隱藏底部導航
                 if (pageId === 'cameraPage') {
                     initCamera();
+                    setupCameraZoom();
                     bottomNav.classList.add('hidden');
                 } else if (pageId === 'resultPage') {
                     // 結果頁面也隱藏底部導航
@@ -4423,6 +4427,95 @@
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
                 stream = null;
+            }
+        }
+        
+        // 相機縮放功能
+        let currentZoom = 1;
+        let zoomStartDistance = 0;
+        
+        function setupCameraZoom() {
+            const cameraFeed = document.getElementById('cameraFeed');
+            const cameraContainer = document.getElementById('cameraPage');
+            
+            // 觸控縮放支援
+            let touches = [];
+            
+            cameraContainer.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    touches = Array.from(e.touches);
+                    zoomStartDistance = getDistance(touches[0], touches[1]);
+                }
+            });
+            
+            cameraContainer.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2 && touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                    const scale = currentDistance / zoomStartDistance;
+                    
+                    // 限制縮放範圍在 1x 到 3x 之間
+                    const newZoom = Math.max(1, Math.min(3, currentZoom * scale));
+                    
+                    // 檢查是否支援相機硬體縮放
+                    applyZoom(newZoom);
+                }
+            });
+            
+            cameraContainer.addEventListener('touchend', (e) => {
+                if (e.touches.length < 2) {
+                    touches = [];
+                    currentZoom = parseFloat(cameraFeed.style.transform?.match(/scale\(([\d.]+)\)/)?.[1] || 1);
+                }
+            });
+            
+            // 雙擊重置縮放
+            let lastTap = 0;
+            cameraContainer.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    e.preventDefault();
+                    currentZoom = 1;
+                    applyZoom(1);
+                }
+                lastTap = currentTime;
+            });
+        }
+        
+        function getDistance(touch1, touch2) {
+            const dx = touch1.clientX - touch2.clientX;
+            const dy = touch1.clientY - touch2.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        
+        async function applyZoom(zoom) {
+            const cameraFeed = document.getElementById('cameraFeed');
+            
+            // 首先嘗試使用相機硬體縮放
+            if (stream) {
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                
+                if (capabilities.zoom) {
+                    // 使用硬體縮放
+                    const minZoom = capabilities.zoom.min || 1;
+                    const maxZoom = capabilities.zoom.max || 1;
+                    const hardwareZoom = minZoom + (zoom - 1) * (maxZoom - minZoom) / 2;
+                    
+                    try {
+                        await track.applyConstraints({
+                            advanced: [{ zoom: hardwareZoom }]
+                        });
+                    } catch (error) {
+                        console.log('硬體縮放失敗，使用軟體縮放');
+                    }
+                } else {
+                    // 使用 CSS 軟體縮放
+                    cameraFeed.style.transform = `scale(${zoom})`;
+                    cameraFeed.style.transformOrigin = 'center center';
+                }
             }
         }
         
