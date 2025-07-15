@@ -2690,6 +2690,18 @@
                     </svg>
                 </div>
                 
+                <div class="list-item" onclick="showCountrySelector()">
+                    <div class="list-item-left">
+                        <svg class="list-item-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                        <div class="list-item-title" data-i18n="settings.country">地區</div>
+                    </div>
+                    <svg class="list-item-arrow" viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+                
                 <div class="list-item">
                     <div class="list-item-left">
                         <svg class="list-item-icon" viewBox="0 0 24 24">
@@ -3598,6 +3610,152 @@
                         <div class="language-item" onclick="changeCurrency('CHF')">
                             <span class="language-name">CHF <span data-i18n="currency.CHF">瑞士法郎</span></span>
                             <span class="language-check" data-currency="CHF">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 國家選擇頁面 -->
+        <div class="language-selector-page" id="countrySelectorPage">
+            <div class="language-header">
+                <button class="language-close-btn" onclick="closeCountrySelector()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="app-title" data-i18n="country.title">選擇地區</h1>
+            </div>
+            
+            <div class="language-content">
+                <!-- 亞洲 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="country.asia">亞洲</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCountry('TW')">
+                            <span class="language-name">🇹🇼 <span data-i18n="country.TW">台灣</span></span>
+                            <span class="language-check" data-country="TW">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('CN')">
+                            <span class="language-name">🇨🇳 <span data-i18n="country.CN">中國</span></span>
+                            <span class="language-check" data-country="CN">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('JP')">
+                            <span class="language-name">🇯🇵 <span data-i18n="country.JP">日本</span></span>
+                            <span class="language-check" data-country="JP">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('KR')">
+                            <span class="language-name">🇰🇷 <span data-i18n="country.KR">韓國</span></span>
+                            <span class="language-check" data-country="KR">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('TH')">
+                            <span class="language-name">🇹🇭 <span data-i18n="country.TH">泰國</span></span>
+                            <span class="language-check" data-country="TH">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('VN')">
+                            <span class="language-name">🇻🇳 <span data-i18n="country.VN">越南</span></span>
+                            <span class="language-check" data-country="VN">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('SG')">
+                            <span class="language-name">🇸🇬 <span data-i18n="country.SG">新加坡</span></span>
+                            <span class="language-check" data-country="SG">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('MY')">
+                            <span class="language-name">🇲🇾 <span data-i18n="country.MY">馬來西亞</span></span>
+                            <span class="language-check" data-country="MY">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('PH')">
+                            <span class="language-name">🇵🇭 <span data-i18n="country.PH">菲律賓</span></span>
+                            <span class="language-check" data-country="PH">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('ID')">
+                            <span class="language-name">🇮🇩 <span data-i18n="country.ID">印尼</span></span>
+                            <span class="language-check" data-country="ID">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 美洲 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="country.americas">美洲</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCountry('US')">
+                            <span class="language-name">🇺🇸 <span data-i18n="country.US">美國</span></span>
+                            <span class="language-check" data-country="US">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('CA')">
+                            <span class="language-name">🇨🇦 <span data-i18n="country.CA">加拿大</span></span>
+                            <span class="language-check" data-country="CA">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('MX')">
+                            <span class="language-name">🇲🇽 <span data-i18n="country.MX">墨西哥</span></span>
+                            <span class="language-check" data-country="MX">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('BR')">
+                            <span class="language-name">🇧🇷 <span data-i18n="country.BR">巴西</span></span>
+                            <span class="language-check" data-country="BR">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 歐洲 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="country.europe">歐洲</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCountry('GB')">
+                            <span class="language-name">🇬🇧 <span data-i18n="country.GB">英國</span></span>
+                            <span class="language-check" data-country="GB">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('DE')">
+                            <span class="language-name">🇩🇪 <span data-i18n="country.DE">德國</span></span>
+                            <span class="language-check" data-country="DE">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('FR')">
+                            <span class="language-name">🇫🇷 <span data-i18n="country.FR">法國</span></span>
+                            <span class="language-check" data-country="FR">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('ES')">
+                            <span class="language-name">🇪🇸 <span data-i18n="country.ES">西班牙</span></span>
+                            <span class="language-check" data-country="ES">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('IT')">
+                            <span class="language-name">🇮🇹 <span data-i18n="country.IT">義大利</span></span>
+                            <span class="language-check" data-country="IT">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('PT')">
+                            <span class="language-name">🇵🇹 <span data-i18n="country.PT">葡萄牙</span></span>
+                            <span class="language-check" data-country="PT">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('NL')">
+                            <span class="language-name">🇳🇱 <span data-i18n="country.NL">荷蘭</span></span>
+                            <span class="language-check" data-country="NL">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('BE')">
+                            <span class="language-name">🇧🇪 <span data-i18n="country.BE">比利時</span></span>
+                            <span class="language-check" data-country="BE">✓</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 其他地區 -->
+                <div class="language-section">
+                    <h3 class="language-section-title" data-i18n="country.other">其他地區</h3>
+                    <div class="language-list">
+                        <div class="language-item" onclick="changeCountry('AU')">
+                            <span class="language-name">🇦🇺 <span data-i18n="country.AU">澳洲</span></span>
+                            <span class="language-check" data-country="AU">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('TR')">
+                            <span class="language-name">🇹🇷 <span data-i18n="country.TR">土耳其</span></span>
+                            <span class="language-check" data-country="TR">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('AE')">
+                            <span class="language-name">🇦🇪 <span data-i18n="country.AE">阿聯酋</span></span>
+                            <span class="language-check" data-country="AE">✓</span>
+                        </div>
+                        <div class="language-item" onclick="changeCountry('ZA')">
+                            <span class="language-name">🇿🇦 <span data-i18n="country.ZA">南非</span></span>
+                            <span class="language-check" data-country="ZA">✓</span>
                         </div>
                     </div>
                 </div>
@@ -6115,6 +6273,7 @@
                 'settings.support': '支援',
                 'settings.language': '語言',
                 'settings.currency': '貨幣',
+                'settings.country': '地區',
                 'settings.loginRegister': '登入/註冊',
                 'settings.contactUs': '聯絡我們',
                 'settings.help': '幫助中心',
@@ -6166,6 +6325,39 @@
                 'currency.MYR': '馬來幣',
                 'currency.VND': '越南盾',
                 'currency.INR': '印度盧比',
+                
+                // 國家選擇頁面
+                'country.title': '選擇地區',
+                'country.asia': '亞洲',
+                'country.americas': '美洲',
+                'country.europe': '歐洲',
+                'country.other': '其他地區',
+                'country.TW': '台灣',
+                'country.CN': '中國',
+                'country.JP': '日本',
+                'country.KR': '韓國',
+                'country.TH': '泰國',
+                'country.VN': '越南',
+                'country.SG': '新加坡',
+                'country.MY': '馬來西亞',
+                'country.PH': '菲律賓',
+                'country.ID': '印尼',
+                'country.US': '美國',
+                'country.CA': '加拿大',
+                'country.MX': '墨西哥',
+                'country.BR': '巴西',
+                'country.GB': '英國',
+                'country.DE': '德國',
+                'country.FR': '法國',
+                'country.ES': '西班牙',
+                'country.IT': '義大利',
+                'country.PT': '葡萄牙',
+                'country.NL': '荷蘭',
+                'country.BE': '比利時',
+                'country.AU': '澳洲',
+                'country.TR': '土耳其',
+                'country.AE': '阿聯酋',
+                'country.ZA': '南非',
                 
                 // 列表頁面
                 'list.search': '搜尋照片',
@@ -6361,6 +6553,7 @@
                 'settings.support': '支持',
                 'settings.language': '语言',
                 'settings.currency': '货币',
+                'settings.country': '地区',
                 'settings.loginRegister': '登录/注册',
                 'settings.contactUs': '联系我们',
                 'settings.help': '帮助说明',
@@ -6411,6 +6604,39 @@
                 'currency.MYR': '马来西亚令吉',
                 'currency.VND': '越南盾',
                 'currency.INR': '印度卢比',
+                
+                // 国家选择页面
+                'country.title': '选择地区',
+                'country.asia': '亚洲',
+                'country.americas': '美洲',
+                'country.europe': '欧洲',
+                'country.other': '其他地区',
+                'country.TW': '台湾',
+                'country.CN': '中国',
+                'country.JP': '日本',
+                'country.KR': '韩国',
+                'country.TH': '泰国',
+                'country.VN': '越南',
+                'country.SG': '新加坡',
+                'country.MY': '马来西亚',
+                'country.PH': '菲律宾',
+                'country.ID': '印尼',
+                'country.US': '美国',
+                'country.CA': '加拿大',
+                'country.MX': '墨西哥',
+                'country.BR': '巴西',
+                'country.GB': '英国',
+                'country.DE': '德国',
+                'country.FR': '法国',
+                'country.ES': '西班牙',
+                'country.IT': '意大利',
+                'country.PT': '葡萄牙',
+                'country.NL': '荷兰',
+                'country.BE': '比利时',
+                'country.AU': '澳大利亚',
+                'country.TR': '土耳其',
+                'country.AE': '阿联酋',
+                'country.ZA': '南非',
                 
                 'list.search': '搜索照片',
                 'list.selectMode': '选择',
@@ -6602,6 +6828,7 @@
                 'settings.support': 'Support',
                 'settings.language': 'Language',
                 'settings.currency': 'Currency',
+                'settings.country': 'Country',
                 'settings.loginRegister': 'Login/Register',
                 'settings.contactUs': 'Contact Us',
                 'settings.help': 'Help',
@@ -6652,6 +6879,39 @@
                 'currency.MYR': 'Malaysian Ringgit',
                 'currency.VND': 'Vietnamese Dong',
                 'currency.INR': 'Indian Rupee',
+                
+                // Country selection page
+                'country.title': 'Select Country',
+                'country.asia': 'Asia',
+                'country.americas': 'Americas',
+                'country.europe': 'Europe',
+                'country.other': 'Other Regions',
+                'country.TW': 'Taiwan',
+                'country.CN': 'China',
+                'country.JP': 'Japan',
+                'country.KR': 'South Korea',
+                'country.TH': 'Thailand',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapore',
+                'country.MY': 'Malaysia',
+                'country.PH': 'Philippines',
+                'country.ID': 'Indonesia',
+                'country.US': 'United States',
+                'country.CA': 'Canada',
+                'country.MX': 'Mexico',
+                'country.BR': 'Brazil',
+                'country.GB': 'United Kingdom',
+                'country.DE': 'Germany',
+                'country.FR': 'France',
+                'country.ES': 'Spain',
+                'country.IT': 'Italy',
+                'country.PT': 'Portugal',
+                'country.NL': 'Netherlands',
+                'country.BE': 'Belgium',
+                'country.AU': 'Australia',
+                'country.TR': 'Turkey',
+                'country.AE': 'UAE',
+                'country.ZA': 'South Africa',
                 
                 'list.search': 'Search photos',
                 'list.selectMode': 'Select',
@@ -6843,6 +7103,7 @@
                 'settings.support': 'サポート',
                 'settings.language': '言語',
                 'settings.currency': '通貨',
+                'settings.country': '地域',
                 'settings.loginRegister': 'ログイン/登録',
                 'settings.contactUs': 'お問い合わせ',
                 'settings.help': 'ヘルプ',
@@ -6893,6 +7154,39 @@
                 'currency.MYR': 'マレーシアリンギット',
                 'currency.VND': 'ベトナムドン',
                 'currency.INR': 'インドルピー',
+                
+                // 国選択ページ
+                'country.title': '国を選択',
+                'country.asia': 'アジア',
+                'country.americas': 'アメリカ大陸',
+                'country.europe': 'ヨーロッパ',
+                'country.other': 'その他の地域',
+                'country.TW': '台湾',
+                'country.CN': '中国',
+                'country.JP': '日本',
+                'country.KR': '韓国',
+                'country.TH': 'タイ',
+                'country.VN': 'ベトナム',
+                'country.SG': 'シンガポール',
+                'country.MY': 'マレーシア',
+                'country.PH': 'フィリピン',
+                'country.ID': 'インドネシア',
+                'country.US': 'アメリカ',
+                'country.CA': 'カナダ',
+                'country.MX': 'メキシコ',
+                'country.BR': 'ブラジル',
+                'country.GB': 'イギリス',
+                'country.DE': 'ドイツ',
+                'country.FR': 'フランス',
+                'country.ES': 'スペイン',
+                'country.IT': 'イタリア',
+                'country.PT': 'ポルトガル',
+                'country.NL': 'オランダ',
+                'country.BE': 'ベルギー',
+                'country.AU': 'オーストラリア',
+                'country.TR': 'トルコ',
+                'country.AE': 'アラブ首長国連邦',
+                'country.ZA': '南アフリカ',
                 
                 'list.search': '写真を検索',
                 'list.selectMode': '選択',
@@ -7083,6 +7377,7 @@
                 'settings.support': '지원',
                 'settings.language': '언어',
                 'settings.currency': '통화',
+                'settings.country': '국가',
                 'settings.loginRegister': '로그인/가입',
                 'settings.contactUs': '문의하기',
                 'settings.help': '도움말',
@@ -7133,6 +7428,39 @@
                 'currency.MYR': '말레이시아 링깃',
                 'currency.VND': '베트남 동',
                 'currency.INR': '인도 루피',
+                
+                // 국가 선택 페이지
+                'country.title': '국가 선택',
+                'country.asia': '아시아',
+                'country.americas': '아메리카',
+                'country.europe': '유럽',
+                'country.other': '기타 지역',
+                'country.TW': '대만',
+                'country.CN': '중국',
+                'country.JP': '일본',
+                'country.KR': '한국',
+                'country.TH': '태국',
+                'country.VN': '베트남',
+                'country.SG': '싱가포르',
+                'country.MY': '말레이시아',
+                'country.PH': '필리핀',
+                'country.ID': '인도네시아',
+                'country.US': '미국',
+                'country.CA': '캐나다',
+                'country.MX': '멕시코',
+                'country.BR': '브라질',
+                'country.GB': '영국',
+                'country.DE': '독일',
+                'country.FR': '프랑스',
+                'country.ES': '스페인',
+                'country.IT': '이탈리아',
+                'country.PT': '포르투갈',
+                'country.NL': '네덜란드',
+                'country.BE': '벨기에',
+                'country.AU': '호주',
+                'country.TR': '터키',
+                'country.AE': '아랍에미리트',
+                'country.ZA': '남아프리카',
                 
                 'list.search': '사진 검색',
                 'list.selectMode': '선택',
@@ -7307,6 +7635,7 @@
                 'settings.support': 'สนับสนุน',
                 'settings.language': 'ภาษา',
                 'settings.currency': 'สกุลเงิน',
+                'settings.country': 'ประเทศ',
                 'settings.feedback': 'ข้อเสนอแนะ',
                 'settings.aboutVersion': 'เกี่ยวกับและเวอร์ชัน',
                 'settings.account': 'บัญชี',
@@ -7350,6 +7679,39 @@
                 'currency.MYR': 'ริงกิตมาเลเซีย',
                 'currency.VND': 'ดองเวียดนาม',
                 'currency.INR': 'รูปีอินเดีย',
+                
+                // หน้าเลือกประเทศ
+                'country.title': 'เลือกประเทศ',
+                'country.asia': 'เอเชีย',
+                'country.americas': 'อเมริกา',
+                'country.europe': 'ยุโรป',
+                'country.other': 'ภูมิภาคอื่นๆ',
+                'country.TW': 'ไต้หวัน',
+                'country.CN': 'จีน',
+                'country.JP': 'ญี่ปุ่น',
+                'country.KR': 'เกาหลีใต้',
+                'country.TH': 'ไทย',
+                'country.VN': 'เวียดนาม',
+                'country.SG': 'สิงคโปร์',
+                'country.MY': 'มาเลเซีย',
+                'country.PH': 'ฟิลิปปินส์',
+                'country.ID': 'อินโดนีเซีย',
+                'country.US': 'สหรัฐอเมริกา',
+                'country.CA': 'แคนาดา',
+                'country.MX': 'เม็กซิโก',
+                'country.BR': 'บราซิล',
+                'country.GB': 'สหราชอาณาจักร',
+                'country.DE': 'เยอรมนี',
+                'country.FR': 'ฝรั่งเศส',
+                'country.ES': 'สเปน',
+                'country.IT': 'อิตาลี',
+                'country.PT': 'โปรตุเกส',
+                'country.NL': 'เนเธอร์แลนด์',
+                'country.BE': 'เบลเยียม',
+                'country.AU': 'ออสเตรเลีย',
+                'country.TR': 'ตุรกี',
+                'country.AE': 'สหรัฐอาหรับเอมิเรตส์',
+                'country.ZA': 'แอฟริกาใต้',
                 
                 'list.search': 'ค้นหารูปภาพ',
                 'list.selectMode': 'เลือก',
@@ -7548,6 +7910,7 @@
                 'settings.support': 'Hỗ trợ',
                 'settings.language': 'Ngôn ngữ',
                 'settings.currency': 'Tiền tệ',
+                'settings.country': 'Quốc gia',
                 'settings.feedback': 'Phản hồi',
                 'settings.aboutVersion': 'Giới thiệu & Phiên bản',
                 'settings.account': 'Tài khoản',
@@ -7591,6 +7954,39 @@
                 'currency.MYR': 'Ringgit Malaysia',
                 'currency.VND': 'Đồng Việt Nam',
                 'currency.INR': 'Rupee Ấn Độ',
+                
+                // Trang chọn quốc gia
+                'country.title': 'Chọn quốc gia',
+                'country.asia': 'Châu Á',
+                'country.americas': 'Châu Mỹ',
+                'country.europe': 'Châu Âu',
+                'country.other': 'Khu vực khác',
+                'country.TW': 'Đài Loan',
+                'country.CN': 'Trung Quốc',
+                'country.JP': 'Nhật Bản',
+                'country.KR': 'Hàn Quốc',
+                'country.TH': 'Thái Lan',
+                'country.VN': 'Việt Nam',
+                'country.SG': 'Singapore',
+                'country.MY': 'Malaysia',
+                'country.PH': 'Philippines',
+                'country.ID': 'Indonesia',
+                'country.US': 'Hoa Kỳ',
+                'country.CA': 'Canada',
+                'country.MX': 'Mexico',
+                'country.BR': 'Brazil',
+                'country.GB': 'Vương quốc Anh',
+                'country.DE': 'Đức',
+                'country.FR': 'Pháp',
+                'country.ES': 'Tây Ban Nha',
+                'country.IT': 'Ý',
+                'country.PT': 'Bồ Đào Nha',
+                'country.NL': 'Hà Lan',
+                'country.BE': 'Bỉ',
+                'country.AU': 'Úc',
+                'country.TR': 'Thổ Nhĩ Kỳ',
+                'country.AE': 'UAE',
+                'country.ZA': 'Nam Phi',
                 
                 'list.search': 'Tìm kiếm ảnh',
                 'list.selectMode': 'Chọn',
@@ -7789,6 +8185,7 @@
                 'settings.support': 'Soporte',
                 'settings.language': 'Idioma',
                 'settings.currency': 'Moneda',
+                'settings.country': 'País',
                 'settings.feedback': 'Comentarios',
                 'settings.aboutVersion': 'Acerca de y Versión',
                 'settings.account': 'Cuenta',
@@ -7832,6 +8229,39 @@
                 'currency.MYR': 'Ringgit malayo',
                 'currency.VND': 'Dong vietnamita',
                 'currency.INR': 'Rupia india',
+                
+                // Página de selección de país
+                'country.title': 'Seleccionar país',
+                'country.asia': 'Asia',
+                'country.americas': 'Américas',
+                'country.europe': 'Europa',
+                'country.other': 'Otras regiones',
+                'country.TW': 'Taiwán',
+                'country.CN': 'China',
+                'country.JP': 'Japón',
+                'country.KR': 'Corea del Sur',
+                'country.TH': 'Tailandia',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapur',
+                'country.MY': 'Malasia',
+                'country.PH': 'Filipinas',
+                'country.ID': 'Indonesia',
+                'country.US': 'Estados Unidos',
+                'country.CA': 'Canadá',
+                'country.MX': 'México',
+                'country.BR': 'Brasil',
+                'country.GB': 'Reino Unido',
+                'country.DE': 'Alemania',
+                'country.FR': 'Francia',
+                'country.ES': 'España',
+                'country.IT': 'Italia',
+                'country.PT': 'Portugal',
+                'country.NL': 'Países Bajos',
+                'country.BE': 'Bélgica',
+                'country.AU': 'Australia',
+                'country.TR': 'Turquía',
+                'country.AE': 'EAU',
+                'country.ZA': 'Sudáfrica',
                 
                 'list.search': 'Buscar fotos',
                 'list.selectMode': 'Seleccionar',
@@ -8030,6 +8460,7 @@
                 'settings.support': 'Support',
                 'settings.language': 'Langue',
                 'settings.currency': 'Devise',
+                'settings.country': 'Pays',
                 'settings.feedback': 'Commentaires',
                 'settings.aboutVersion': 'À propos et Version',
                 'settings.account': 'Compte',
@@ -8073,6 +8504,39 @@
                 'currency.MYR': 'Ringgit malaisien',
                 'currency.VND': 'Dong vietnamien',
                 'currency.INR': 'Roupie indienne',
+                
+                // Page de sélection du pays
+                'country.title': 'Sélectionner le pays',
+                'country.asia': 'Asie',
+                'country.americas': 'Amériques',
+                'country.europe': 'Europe',
+                'country.other': 'Autres régions',
+                'country.TW': 'Taïwan',
+                'country.CN': 'Chine',
+                'country.JP': 'Japon',
+                'country.KR': 'Corée du Sud',
+                'country.TH': 'Thaïlande',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapour',
+                'country.MY': 'Malaisie',
+                'country.PH': 'Philippines',
+                'country.ID': 'Indonésie',
+                'country.US': 'États-Unis',
+                'country.CA': 'Canada',
+                'country.MX': 'Mexique',
+                'country.BR': 'Brésil',
+                'country.GB': 'Royaume-Uni',
+                'country.DE': 'Allemagne',
+                'country.FR': 'France',
+                'country.ES': 'Espagne',
+                'country.IT': 'Italie',
+                'country.PT': 'Portugal',
+                'country.NL': 'Pays-Bas',
+                'country.BE': 'Belgique',
+                'country.AU': 'Australie',
+                'country.TR': 'Turquie',
+                'country.AE': 'EAU',
+                'country.ZA': 'Afrique du Sud',
                 
                 'list.search': 'Rechercher des photos',
                 'list.selectMode': 'Sélectionner',
@@ -8271,6 +8735,7 @@
                 'settings.support': 'Unterstützung',
                 'settings.language': 'Sprache',
                 'settings.currency': 'Währung',
+                'settings.country': 'Land',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Über & Version',
                 'settings.account': 'Konto',
@@ -8314,6 +8779,39 @@
                 'currency.MYR': 'Malaysischer Ringgit',
                 'currency.VND': 'Vietnamesischer Dong',
                 'currency.INR': 'Indische Rupie',
+                
+                // Länderauswahlseite
+                'country.title': 'Land auswählen',
+                'country.asia': 'Asien',
+                'country.americas': 'Amerika',
+                'country.europe': 'Europa',
+                'country.other': 'Andere Regionen',
+                'country.TW': 'Taiwan',
+                'country.CN': 'China',
+                'country.JP': 'Japan',
+                'country.KR': 'Südkorea',
+                'country.TH': 'Thailand',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapur',
+                'country.MY': 'Malaysia',
+                'country.PH': 'Philippinen',
+                'country.ID': 'Indonesien',
+                'country.US': 'Vereinigte Staaten',
+                'country.CA': 'Kanada',
+                'country.MX': 'Mexiko',
+                'country.BR': 'Brasilien',
+                'country.GB': 'Vereinigtes Königreich',
+                'country.DE': 'Deutschland',
+                'country.FR': 'Frankreich',
+                'country.ES': 'Spanien',
+                'country.IT': 'Italien',
+                'country.PT': 'Portugal',
+                'country.NL': 'Niederlande',
+                'country.BE': 'Belgien',
+                'country.AU': 'Australien',
+                'country.TR': 'Türkei',
+                'country.AE': 'VAE',
+                'country.ZA': 'Südafrika',
                 
                 'list.search': 'Fotos suchen',
                 'list.selectMode': 'Auswählen',
@@ -8512,6 +9010,7 @@
                 'settings.support': 'Supporto',
                 'settings.language': 'Lingua',
                 'settings.currency': 'Valuta',
+                'settings.country': 'Paese',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Info e Versione',
                 'settings.account': 'Account',
@@ -8555,6 +9054,39 @@
                 'currency.MYR': 'Ringgit malese',
                 'currency.VND': 'Dong vietnamita',
                 'currency.INR': 'Rupia indiana',
+                
+                // Pagina di selezione del paese
+                'country.title': 'Seleziona paese',
+                'country.asia': 'Asia',
+                'country.americas': 'Americhe',
+                'country.europe': 'Europa',
+                'country.other': 'Altre regioni',
+                'country.TW': 'Taiwan',
+                'country.CN': 'Cina',
+                'country.JP': 'Giappone',
+                'country.KR': 'Corea del Sud',
+                'country.TH': 'Thailandia',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapore',
+                'country.MY': 'Malesia',
+                'country.PH': 'Filippine',
+                'country.ID': 'Indonesia',
+                'country.US': 'Stati Uniti',
+                'country.CA': 'Canada',
+                'country.MX': 'Messico',
+                'country.BR': 'Brasile',
+                'country.GB': 'Regno Unito',
+                'country.DE': 'Germania',
+                'country.FR': 'Francia',
+                'country.ES': 'Spagna',
+                'country.IT': 'Italia',
+                'country.PT': 'Portogallo',
+                'country.NL': 'Paesi Bassi',
+                'country.BE': 'Belgio',
+                'country.AU': 'Australia',
+                'country.TR': 'Turchia',
+                'country.AE': 'EAU',
+                'country.ZA': 'Sudafrica',
                 
                 'list.search': 'Cerca foto',
                 'list.selectMode': 'Seleziona',
@@ -8753,6 +9285,7 @@
                 'settings.support': 'Suporte',
                 'settings.language': 'Idioma',
                 'settings.currency': 'Moeda',
+                'settings.country': 'País',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Sobre e Versão',
                 'settings.account': 'Conta',
@@ -8796,6 +9329,39 @@
                 'currency.MYR': 'Ringgit malaio',
                 'currency.VND': 'Dong vietnamita',
                 'currency.INR': 'Rupia indiana',
+                
+                // Página de seleção de país
+                'country.title': 'Selecionar país',
+                'country.asia': 'Ásia',
+                'country.americas': 'Américas',
+                'country.europe': 'Europa',
+                'country.other': 'Outras regiões',
+                'country.TW': 'Taiwan',
+                'country.CN': 'China',
+                'country.JP': 'Japão',
+                'country.KR': 'Coreia do Sul',
+                'country.TH': 'Tailândia',
+                'country.VN': 'Vietnã',
+                'country.SG': 'Singapura',
+                'country.MY': 'Malásia',
+                'country.PH': 'Filipinas',
+                'country.ID': 'Indonésia',
+                'country.US': 'Estados Unidos',
+                'country.CA': 'Canadá',
+                'country.MX': 'México',
+                'country.BR': 'Brasil',
+                'country.GB': 'Reino Unido',
+                'country.DE': 'Alemanha',
+                'country.FR': 'França',
+                'country.ES': 'Espanha',
+                'country.IT': 'Itália',
+                'country.PT': 'Portugal',
+                'country.NL': 'Países Baixos',
+                'country.BE': 'Bélgica',
+                'country.AU': 'Austrália',
+                'country.TR': 'Turquia',
+                'country.AE': 'EAU',
+                'country.ZA': 'África do Sul',
                 
                 'list.search': 'Pesquisar fotos',
                 'list.selectMode': 'Selecionar',
@@ -8994,6 +9560,7 @@
                 'settings.support': 'الدعم',
                 'settings.language': 'اللغة',
                 'settings.currency': 'العملة',
+                'settings.country': 'البلد',
                 'settings.feedback': 'التعليقات',
                 'settings.aboutVersion': 'حول والإصدار',
                 'settings.account': 'الحساب',
@@ -9037,6 +9604,39 @@
                 'currency.MYR': 'رينغيت ماليزي',
                 'currency.VND': 'دونغ فيتنامي',
                 'currency.INR': 'روبية هندية',
+                
+                // صفحة اختيار البلد
+                'country.title': 'اختر البلد',
+                'country.asia': 'آسيا',
+                'country.americas': 'الأمريكتان',
+                'country.europe': 'أوروبا',
+                'country.other': 'مناطق أخرى',
+                'country.TW': 'تايوان',
+                'country.CN': 'الصين',
+                'country.JP': 'اليابان',
+                'country.KR': 'كوريا الجنوبية',
+                'country.TH': 'تايلاند',
+                'country.VN': 'فيتنام',
+                'country.SG': 'سنغافورة',
+                'country.MY': 'ماليزيا',
+                'country.PH': 'الفلبين',
+                'country.ID': 'إندونيسيا',
+                'country.US': 'الولايات المتحدة',
+                'country.CA': 'كندا',
+                'country.MX': 'المكسيك',
+                'country.BR': 'البرازيل',
+                'country.GB': 'المملكة المتحدة',
+                'country.DE': 'ألمانيا',
+                'country.FR': 'فرنسا',
+                'country.ES': 'إسبانيا',
+                'country.IT': 'إيطاليا',
+                'country.PT': 'البرتغال',
+                'country.NL': 'هولندا',
+                'country.BE': 'بلجيكا',
+                'country.AU': 'أستراليا',
+                'country.TR': 'تركيا',
+                'country.AE': 'الإمارات',
+                'country.ZA': 'جنوب أفريقيا',
                 
                 'list.search': 'البحث عن الصور',
                 'list.selectMode': 'تحديد',
@@ -9235,6 +9835,7 @@
                 'settings.support': 'Destek',
                 'settings.language': 'Dil',
                 'settings.currency': 'Para birimi',
+                'settings.country': 'Ülke',
                 'settings.feedback': 'Geri bildirim',
                 'settings.aboutVersion': 'Hakkında ve Sürüm',
                 'settings.account': 'Hesap',
@@ -9278,6 +9879,39 @@
                 'currency.MYR': 'Malezya Ringgiti',
                 'currency.VND': 'Vietnam Dongu',
                 'currency.INR': 'Hindistan Rupisi',
+                
+                // Ülke seçimi sayfası
+                'country.title': 'Ülke Seçin',
+                'country.asia': 'Asya',
+                'country.americas': 'Amerika',
+                'country.europe': 'Avrupa',
+                'country.other': 'Diğer Bölgeler',
+                'country.TW': 'Tayvan',
+                'country.CN': 'Çin',
+                'country.JP': 'Japonya',
+                'country.KR': 'Güney Kore',
+                'country.TH': 'Tayland',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapur',
+                'country.MY': 'Malezya',
+                'country.PH': 'Filipinler',
+                'country.ID': 'Endonezya',
+                'country.US': 'Amerika Birleşik Devletleri',
+                'country.CA': 'Kanada',
+                'country.MX': 'Meksika',
+                'country.BR': 'Brezilya',
+                'country.GB': 'Birleşik Krallık',
+                'country.DE': 'Almanya',
+                'country.FR': 'Fransa',
+                'country.ES': 'İspanya',
+                'country.IT': 'İtalya',
+                'country.PT': 'Portekiz',
+                'country.NL': 'Hollanda',
+                'country.BE': 'Belçika',
+                'country.AU': 'Avustralya',
+                'country.TR': 'Türkiye',
+                'country.AE': 'BAE',
+                'country.ZA': 'Güney Afrika',
                 
                 'list.search': 'Fotoğraf ara',
                 'list.selectMode': 'Seç',
@@ -9476,6 +10110,7 @@
                 'settings.support': 'Поддержка',
                 'settings.language': 'Язык',
                 'settings.currency': 'Валюта',
+                'settings.country': 'Страна',
                 'settings.feedback': 'Обратная связь',
                 'settings.aboutVersion': 'О программе и версия',
                 'settings.account': 'Аккаунт',
@@ -9519,6 +10154,39 @@
                 'currency.MYR': 'Малайзийский ринггит',
                 'currency.VND': 'Вьетнамский донг',
                 'currency.INR': 'Индийская рупия',
+                
+                // Страница выбора страны
+                'country.title': 'Выберите страну',
+                'country.asia': 'Азия',
+                'country.americas': 'Америка',
+                'country.europe': 'Европа',
+                'country.other': 'Другие регионы',
+                'country.TW': 'Тайвань',
+                'country.CN': 'Китай',
+                'country.JP': 'Япония',
+                'country.KR': 'Южная Корея',
+                'country.TH': 'Таиланд',
+                'country.VN': 'Вьетнам',
+                'country.SG': 'Сингапур',
+                'country.MY': 'Малайзия',
+                'country.PH': 'Филиппины',
+                'country.ID': 'Индонезия',
+                'country.US': 'США',
+                'country.CA': 'Канада',
+                'country.MX': 'Мексика',
+                'country.BR': 'Бразилия',
+                'country.GB': 'Великобритания',
+                'country.DE': 'Германия',
+                'country.FR': 'Франция',
+                'country.ES': 'Испания',
+                'country.IT': 'Италия',
+                'country.PT': 'Португалия',
+                'country.NL': 'Нидерланды',
+                'country.BE': 'Бельгия',
+                'country.AU': 'Австралия',
+                'country.TR': 'Турция',
+                'country.AE': 'ОАЭ',
+                'country.ZA': 'Южная Африка',
                 
                 'list.search': 'Поиск фотографий',
                 'list.selectMode': 'Выбрать',
@@ -9717,6 +10385,7 @@
                 'settings.support': 'Dukungan',
                 'settings.language': 'Bahasa',
                 'settings.currency': 'Mata uang',
+                'settings.country': 'Negara',
                 'settings.feedback': 'Masukan',
                 'settings.aboutVersion': 'Tentang & Versi',
                 'settings.account': 'Akun',
@@ -9760,6 +10429,39 @@
                 'currency.MYR': 'Ringgit Malaysia',
                 'currency.VND': 'Dong Vietnam',
                 'currency.INR': 'Rupee India',
+                
+                // Halaman pemilihan negara
+                'country.title': 'Pilih Negara',
+                'country.asia': 'Asia',
+                'country.americas': 'Amerika',
+                'country.europe': 'Eropa',
+                'country.other': 'Wilayah Lain',
+                'country.TW': 'Taiwan',
+                'country.CN': 'Tiongkok',
+                'country.JP': 'Jepang',
+                'country.KR': 'Korea Selatan',
+                'country.TH': 'Thailand',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapura',
+                'country.MY': 'Malaysia',
+                'country.PH': 'Filipina',
+                'country.ID': 'Indonesia',
+                'country.US': 'Amerika Serikat',
+                'country.CA': 'Kanada',
+                'country.MX': 'Meksiko',
+                'country.BR': 'Brasil',
+                'country.GB': 'Inggris Raya',
+                'country.DE': 'Jerman',
+                'country.FR': 'Prancis',
+                'country.ES': 'Spanyol',
+                'country.IT': 'Italia',
+                'country.PT': 'Portugal',
+                'country.NL': 'Belanda',
+                'country.BE': 'Belgia',
+                'country.AU': 'Australia',
+                'country.TR': 'Turki',
+                'country.AE': 'UEA',
+                'country.ZA': 'Afrika Selatan',
                 
                 'list.search': 'Cari foto',
                 'list.selectMode': 'Pilih',
@@ -9958,6 +10660,7 @@
                 'settings.support': 'Suporta',
                 'settings.language': 'Wika',
                 'settings.currency': 'Pera',
+                'settings.country': 'Bansa',
                 'settings.feedback': 'Feedback',
                 'settings.aboutVersion': 'Tungkol at Bersyon',
                 'settings.account': 'Account',
@@ -10001,6 +10704,39 @@
                 'currency.MYR': 'Malaysian Ringgit',
                 'currency.VND': 'Vietnamese Dong',
                 'currency.INR': 'Indian Rupee',
+                
+                // Pahina ng pagpili ng bansa
+                'country.title': 'Pumili ng Bansa',
+                'country.asia': 'Asya',
+                'country.americas': 'Amerika',
+                'country.europe': 'Europa',
+                'country.other': 'Iba pang Rehiyon',
+                'country.TW': 'Taiwan',
+                'country.CN': 'Tsina',
+                'country.JP': 'Japan',
+                'country.KR': 'South Korea',
+                'country.TH': 'Thailand',
+                'country.VN': 'Vietnam',
+                'country.SG': 'Singapore',
+                'country.MY': 'Malaysia',
+                'country.PH': 'Pilipinas',
+                'country.ID': 'Indonesia',
+                'country.US': 'Estados Unidos',
+                'country.CA': 'Canada',
+                'country.MX': 'Mexico',
+                'country.BR': 'Brazil',
+                'country.GB': 'United Kingdom',
+                'country.DE': 'Alemanya',
+                'country.FR': 'Pransya',
+                'country.ES': 'Espanya',
+                'country.IT': 'Italya',
+                'country.PT': 'Portugal',
+                'country.NL': 'Netherlands',
+                'country.BE': 'Belgium',
+                'country.AU': 'Australia',
+                'country.TR': 'Turkey',
+                'country.AE': 'UAE',
+                'country.ZA': 'South Africa',
                 
                 'list.search': 'Maghanap ng mga larawan',
                 'list.selectMode': 'Piliin',
@@ -10453,6 +11189,49 @@
             // 關閉幣別選擇器
             setTimeout(() => {
                 closeCurrencySelector();
+            }, 300);
+        }
+        
+        // 顯示國家選擇器
+        function showCountrySelector() {
+            const countryPage = document.getElementById('countrySelectorPage');
+            countryPage.classList.add('active');
+            
+            // 更新當前國家的勾選狀態
+            const currentCountry = localStorage.getItem('countryCode') || 'US';
+            document.querySelectorAll('.language-check[data-country]').forEach(check => {
+                check.classList.remove('active');
+            });
+            const currentCheck = document.querySelector(`.language-check[data-country="${currentCountry}"]`);
+            if (currentCheck) {
+                currentCheck.classList.add('active');
+            }
+        }
+        
+        // 關閉國家選擇器
+        function closeCountrySelector() {
+            const countryPage = document.getElementById('countrySelectorPage');
+            countryPage.classList.remove('active');
+        }
+        
+        // 改變國家
+        function changeCountry(countryCode) {
+            // 保存國家設置
+            localStorage.setItem('countryCode', countryCode);
+            localStorage.setItem('countryManuallySet', 'true');
+            
+            // 更新勾選狀態
+            document.querySelectorAll('.language-check[data-country]').forEach(check => {
+                check.classList.remove('active');
+            });
+            const newCheck = document.querySelector(`.language-check[data-country="${countryCode}"]`);
+            if (newCheck) {
+                newCheck.classList.add('active');
+            }
+            
+            // 關閉國家選擇器
+            setTimeout(() => {
+                closeCountrySelector();
             }, 300);
         }
         
