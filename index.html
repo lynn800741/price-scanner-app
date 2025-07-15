@@ -73,7 +73,8 @@
 
         /* 當有返回按鈕時，標題絕對定位置中 */
         .nav-header:has(.result-back-btn) .app-title,
-        .nav-header:has(.language-close-btn) .app-title {
+        .nav-header:has(.language-close-btn) .app-title,
+        .language-header:has(.language-close-btn) .app-title {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -2659,7 +2660,7 @@
                         <svg class="list-item-icon" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1.93.66 1.64 2.08 1.64 1.51 0 2.1-.75 2.1-1.7 0-1.06-.76-1.56-2.44-1.87-1.79-.33-3.64-1.07-3.64-3.21 0-1.88 1.52-2.97 3.09-3.26V4.23h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.75s3.74 1.27 3.74 3.49c0 1.93-1.37 3.12-3.68 3.51z"/>
                         </svg>
-                        <div class="list-item-title" data-i18n="settings.currency">幣別</div>
+                        <div class="list-item-title" data-i18n="settings.currency">貨幣</div>
                     </div>
                     <svg class="list-item-arrow" viewBox="0 0 24 24">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
@@ -2869,8 +2870,8 @@
 
         <!-- 幫助頁面 -->
         <div class="page help-page" id="helpPage">
-            <div class="nav-header">
-                <button class="result-back-btn" onclick="switchPage('settingsPage')">
+            <div class="language-header">
+                <button class="language-close-btn" onclick="switchPage('settingsPage')">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
@@ -2983,12 +2984,12 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" data-i18n="help.faq10.question">如何更改價格顯示的幣別？</div>
+                        <div class="faq-question" data-i18n="help.faq10.question">如何更改價格顯示的貨幣？</div>
                         <div class="faq-answer" data-i18n="help.faq10.answer">LENSY 支援多種貨幣顯示，更改步驟：
                             <ol>
                                 <li>開啟 LENSY 應用程式</li>
                                 <li>點擊右下角「設定」圖示</li>
-                                <li>在「支援」區塊中點擊「幣別」</li>
+                                <li>在「支援」區塊中點擊「貨幣」</li>
                                 <li>選擇您偏好的貨幣（如台幣、美元、人民幣等）</li>
                             </ol>
                         </div>
@@ -3336,13 +3337,13 @@
         
         <!-- AI上傳頁面 -->
         <div class="ai-upload-page" id="aiUploadPage">
-            <div class="ai-upload-header">
-                <button class="ai-upload-close-btn" onclick="closeAIUpload()">
+            <div class="language-header">
+                <button class="language-close-btn" onclick="closeAIUpload()">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="ai-upload-title" data-i18n="ai.title">AI智能服務</h1>
+                <h1 class="app-title" data-i18n="ai.title">AI智能服務</h1>
             </div>
             
             <div class="ai-upload-content">
@@ -3485,7 +3486,7 @@
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                     </svg>
                 </button>
-                <h1 class="app-title" data-i18n="currency.title">選擇幣別</h1>
+                <h1 class="app-title" data-i18n="currency.title">選擇貨幣</h1>
             </div>
             
             <div class="language-content">
@@ -5961,7 +5962,7 @@
                 'settings.theme': '深色主題',
                 'settings.support': '支援',
                 'settings.language': '語言',
-                'settings.currency': '幣別',
+                'settings.currency': '貨幣',
                 'settings.loginRegister': '登入/註冊',
                 'settings.contactUs': '聯絡我們',
                 'settings.help': '幫助中心',
@@ -5982,7 +5983,7 @@
                 'language.other': '其他',
                 
                 // 幣別選擇頁面
-                'currency.title': '選擇幣別',
+                'currency.title': '選擇貨幣',
                 'currency.common': '常用',
                 'currency.asia': '亞洲',
                 'currency.other': '其他',
