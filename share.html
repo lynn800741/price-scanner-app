@@ -1370,6 +1370,71 @@
             font-size: 14px;
             color: #666;
         }
+        
+        /* 新增分析結果頁面的樣式 */
+        .price-section {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .price-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .info-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .info-card-content {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .result-content {
+            padding: 0 20px 20px;
+        }
+        
+        .result-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .result-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .disclaimer-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -1482,8 +1547,8 @@
             let purchaseLinks = '';
             if (data.purchaseLinks && data.purchaseLinks.online && data.purchaseLinks.online.length > 0) {
                 purchaseLinks = `
-                    <div style="margin: 20px 0;">
-                        <h3 style="font-size: 18px; margin-bottom: 10px;">購買管道</h3>
+                    <div class="info-card">
+                        <h3 class="info-card-title">購買管道</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                             ${data.purchaseLinks.online.map(link => `
                                 <a href="${getPlatformUrl(link.platform, link.searchTerm)}" 
@@ -1498,31 +1563,43 @@
             }
             
             shareResult.innerHTML = `
-                <div class="share-result">
-                    <img src="${data.image}" alt="${data.name}" class="share-image">
+                <div class="result-content">
+                    <img src="${data.image}" alt="${data.name}" class="result-image">
                     
-                    <div class="share-info">
-                        <h2 class="share-name">${data.name}</h2>
-                        <div class="share-price">${formatPrice(data.price)}</div>
-                        <div class="share-price-note">${data.priceNote || ''}</div>
-                        <p class="share-description">${data.description}</p>
-                        
-                        ${purchaseLinks}
-                        
-                        <div class="share-meta">
-                            ${data.category ? `<div class="meta-item"><span class="meta-label">分類：</span>${data.category}</div>` : ''}
-                            ${data.brand && data.brand !== '未知' ? `<div class="meta-item"><span class="meta-label">品牌：</span>${data.brand}</div>` : ''}
-                            ${data.material ? `<div class="meta-item"><span class="meta-label">材質：</span>${data.material}</div>` : ''}
-                        </div>
-                        
-                        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h3 style="font-size: 18px; margin-bottom: 10px;">在哪裡買</h3>
-                            <p style="color: #666; line-height: 1.6;">${data.availability}</p>
-                        </div>
+                    <h2 class="result-name">${data.name}</h2>
+                    
+                    <div class="price-section">
+                        <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
+                        <div class="price-value">${formatPrice(data.price)}</div>
+                        <div style="font-size: 14px; opacity: 0.8;">${data.priceNote || ''}</div>
                     </div>
+                    
+                    ${purchaseLinks}
+                    
+                    <div class="info-card">
+                        <h3 class="info-card-title">基本資訊</h3>
+                        <p class="info-card-content">${data.description}</p>
+                    </div>
+                    
+                    ${data.category ? `
+                    <div class="info-card">
+                        <h3 class="info-card-title">分類</h3>
+                        <p class="info-card-content">${data.category}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${data.brand && data.brand !== '未知' ? `
+                    <div class="info-card">
+                        <h3 class="info-card-title">品牌</h3>
+                        <p class="info-card-content">${data.brand}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <p class="disclaimer-text" style="text-align: center; margin-top: 20px;">所有資訊皆由 GPT 產出</p>
+                    <p class="disclaimer-text" style="text-align: center;">ChatGPT 可能會發生錯誤。請查核重要資訊。</p>
                 </div>
                 
-                <div class="share-footer">
+                <div class="share-footer" style="margin-top: 40px;">
                     <div class="footer-logo">LENSY</div>
                     <p class="footer-text">萬物價格掃描器 - AI 智能識別與價格分析</p>
                     <button class="download-btn" onclick="goToApp()">
