@@ -6151,103 +6151,6 @@
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
         
-        // 生成多語言分享文字
-        function generateShareText(name, price, currency, description, shareUrl, isError = false) {
-            const currentLang = localStorage.getItem('selectedLanguage') || 'zh-TW';
-            
-            const shareTitle = {
-                'zh-TW': `我用 LENSY 發現了「${name}」`,
-                'zh-CN': `我用 LENSY 发现了「${name}」`,
-                'en': `I found "${name}" with LENSY`,
-                'ja': `LENSYで「${name}」を見つけました`,
-                'ko': `LENSY로 "${name}"을(를) 발견했습니다`,
-                'th': `ฉันค้นพบ "${name}" ด้วย LENSY`,
-                'vi': `Tôi đã tìm thấy "${name}" với LENSY`,
-                'es': `Encontré "${name}" con LENSY`,
-                'fr': `J'ai trouvé "${name}" avec LENSY`,
-                'de': `Ich habe "${name}" mit LENSY gefunden`,
-                'it': `Ho trovato "${name}" con LENSY`,
-                'pt': `Encontrei "${name}" com LENSY`,
-                'ar': `وجدت "${name}" باستخدام LENSY`,
-                'tr': `LENSY ile "${name}" buldum`,
-                'ru': `Я нашел "${name}" с помощью LENSY`,
-                'id': `Saya menemukan "${name}" dengan LENSY`,
-                'tl': `Natagpuan ko ang "${name}" gamit ang LENSY`
-            };
-            
-            const priceLabel = {
-                'zh-TW': '價格：',
-                'zh-CN': '价格：',
-                'en': 'Price: ',
-                'ja': '価格：',
-                'ko': '가격: ',
-                'th': 'ราคา: ',
-                'vi': 'Giá: ',
-                'es': 'Precio: ',
-                'fr': 'Prix : ',
-                'de': 'Preis: ',
-                'it': 'Prezzo: ',
-                'pt': 'Preço: ',
-                'ar': 'السعر: ',
-                'tr': 'Fiyat: ',
-                'ru': 'Цена: ',
-                'id': 'Harga: ',
-                'tl': 'Presyo: '
-            };
-            
-            const viewDetailsLabel = {
-                'zh-TW': '查看詳情：',
-                'zh-CN': '查看详情：',
-                'en': 'View details: ',
-                'ja': '詳細を見る：',
-                'ko': '자세히 보기: ',
-                'th': 'ดูรายละเอียด: ',
-                'vi': 'Xem chi tiết: ',
-                'es': 'Ver detalles: ',
-                'fr': 'Voir les détails : ',
-                'de': 'Details ansehen: ',
-                'it': 'Vedi dettagli: ',
-                'pt': 'Ver detalhes: ',
-                'ar': 'عرض التفاصيل: ',
-                'tr': 'Detayları görüntüle: ',
-                'ru': 'Посмотреть детали: ',
-                'id': 'Lihat detail: ',
-                'tl': 'Tingnan ang detalye: '
-            };
-            
-            const tryNowLabel = {
-                'zh-TW': '立即試用：',
-                'zh-CN': '立即试用：',
-                'en': 'Try now: ',
-                'ja': '今すぐ試す：',
-                'ko': '지금 사용해보기: ',
-                'th': 'ลองใช้เลย: ',
-                'vi': 'Dùng thử ngay: ',
-                'es': 'Pruébalo ahora: ',
-                'fr': 'Essayez maintenant : ',
-                'de': 'Jetzt ausprobieren: ',
-                'it': 'Prova ora: ',
-                'pt': 'Experimente agora: ',
-                'ar': 'جرب الآن: ',
-                'tr': 'Şimdi dene: ',
-                'ru': 'Попробуйте сейчас: ',
-                'id': 'Coba sekarang: ',
-                'tl': 'Subukan ngayon: '
-            };
-            
-            const title = shareTitle[currentLang] || shareTitle['en'];
-            const priceLabelText = priceLabel[currentLang] || priceLabel['en'];
-            const formattedPrice = formatPriceWithCurrency(price, currency);
-            
-            if (isError) {
-                const tryNow = tryNowLabel[currentLang] || tryNowLabel['en'];
-                return `${title}\n${priceLabelText}${formattedPrice}\n${description}\n\n${tryNow}${shareUrl}`;
-            } else {
-                const viewDetails = viewDetailsLabel[currentLang] || viewDetailsLabel['en'];
-                return `${title}\n${priceLabelText}${formattedPrice}\n${description}\n\n${viewDetails}${shareUrl}`;
-            }
-        }
-        
         // 分享結果
         async function shareResult() {
             if (!currentAnalysisData) {
@@ -6285,18 +6188,11 @@
                 
                 if (result.success) {
                     const shareUrl = `https://lynn800741.github.io/price-scanner-app/share.html?id=${result.shareId}`;
-                    const shareText = generateShareText(
-                        currentAnalysisData.name,
-                        currentAnalysisData.price,
-                        currentHistoryItem?.currency,
-                        currentAnalysisData.description,
-                        shareUrl,
-                        false
-                    );
+                    const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${formatPriceWithCurrency(currentAnalysisData.price, currentHistoryItem?.currency)}\n${currentAnalysisData.description}\n\n查看詳情：${shareUrl}`;
                     
                     if (navigator.share) {
                         navigator.share({
-                            title: t('app.title'),
+                            title: 'LENSY - 萬物價格掃描器',
                             text: shareText,
                             url: shareUrl
                         }).catch(err => console.log('分享取消'));
@@ -6313,18 +6209,11 @@
             } catch (error) {
                 console.error('分享錯誤:', error);
                 // 如果 API 還未實現，使用本地分享
-                const shareText = generateShareText(
-                    currentAnalysisData.name,
-                    currentAnalysisData.price,
-                    currentHistoryItem?.currency,
-                    currentAnalysisData.description,
-                    'https://lynn800741.github.io/price-scanner-app/',
-                    true
-                );
+                const shareText = `我用 LENSY 發現了「${currentAnalysisData.name}」\n價格：${formatPriceWithCurrency(currentAnalysisData.price, currentHistoryItem?.currency)}\n${currentAnalysisData.description}\n\n立即試用：https://lynn800741.github.io/price-scanner-app/`;
                 
                 if (navigator.share) {
                     navigator.share({
-                        title: t('app.title'),
+                        title: 'LENSY - 萬物價格掃描器',
                         text: shareText
                     }).catch(err => console.log('分享取消'));
                 } else {
