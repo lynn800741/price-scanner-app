@@ -1375,16 +1375,16 @@
         .price-section {
             background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
             color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
             text-align: center;
         }
         
         .price-value {
-            font-size: 48px;
+            font-size: 24px;
             font-weight: 700;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         
         .info-card {
@@ -1569,9 +1569,9 @@
                     <h2 class="result-name">${data.name}</h2>
                     
                     <div class="price-section">
-                        <div style="font-size: 16px; opacity: 0.9;">預估價格</div>
+                        <div style="font-size: 14px; opacity: 0.9;">預估價格</div>
                         <div class="price-value">${formatPrice(data.price)}</div>
-                        <div style="font-size: 14px; opacity: 0.8;">${data.priceNote || ''}</div>
+                        <div style="font-size: 12px; opacity: 0.8;">${data.priceNote || ''}</div>
                     </div>
                     
                     ${purchaseLinks}
